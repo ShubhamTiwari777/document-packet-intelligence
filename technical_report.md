@@ -385,10 +385,13 @@ The pattern is consistent — **low lexical overlap paraphrases**:
 LSA fitted on a mixed-language corpus produced a latent dimension that grouped unrelated
 administrative text. This is the concrete cost of a corpus-fitted encoder versus a pretrained one.
 
-### 6.4 Known dead code
+### 6.4 Resolved: removed dead code
 
-`src/stage2/llm_fallback.py` defines a fallback contract nothing calls. It should be wired to a
-real structure-confidence signal or deleted; it is currently neither.
+`src/stage2/llm_fallback.py` defined an LLM fallback contract that nothing ever called. It was
+deleted rather than wired up: the rule-based parser exposes no structure-confidence signal to
+trigger it, and PDF structure is deterministic enough that an LLM would add cost, latency and
+nondeterminism without addressing any measured failure. Removing it keeps the codebase honest
+about what it actually does.
 
 ---
 
@@ -425,7 +428,9 @@ real structure-confidence signal or deleted; it is currently neither.
 4. **Grow the retrieval evaluation set.** 35 queries gives ±0.07 confidence intervals; conclusions
    about ~0.05 differences are not statistically safe.
 5. **Persist the SVD index** rather than refitting per corpus (8 s today).
-6. **Resolve `llm_fallback.py`.**
+6. **Recover the visual signal.** `visual_delta` is a 16-bin grey histogram over 224×224
+   thumbnails and was constant on the RVL-CDIP packets — a downsampled ink-density grid would
+   capture layout rather than tone.
 
 ---
 

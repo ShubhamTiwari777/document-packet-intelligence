@@ -1,0 +1,18 @@
+{
+  "dataset": "rvl_cdip synthetic packets",
+  "packets": 604,
+  "train_packets": 362,
+  "val_packets": 121,
+  "test_packets": 121,
+  "adjacent_pairs": 943,
+  "positive_boundaries": 303,
+  "positive_rate": 0.3213,
+  "holdout_threshold": 0.5588857241630651,
+  "holdout_metrics": {
+    "precision": 0.4679144385026738,
+    "recall": 0.5775577557755776,
+    "f1": 0.51698670605613
+  },
+  "live_features": 18,
+  "total_features": 21
+}

@@ -1,0 +1,10 @@
+[
+  {
+    "process_rss_bytes": 153268224,
+    "model_disk_bytes": null,
+    "boundary_model_disk_bytes": 498439,
+    "tfidf_vectorizer_disk_bytes": 2012695,
+    "document_classifier_disk_bytes": 3320904,
+    "total_stage1_model_disk_bytes": 5832038
+  }
+]

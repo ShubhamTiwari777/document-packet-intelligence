@@ -1,0 +1,1968 @@
+[
+  {
+    "page_number": 1,
+    "text": "INVOICE\nTechNova Solutions Pvt. Ltd.\nPage 1\nBilling Details\nInvoice Number: INV-2026-004471\nBill To: Acme Digital Services\nDescription\nQty\nUnit Price\nAmount\nCloud Infrastructure Services\n1\n45,000\n45,000\nAI Model Development\n1\n32,500\n32,500\nTechnical Support\n2\n3,500\n7,000",
+    "blocks": [
+      {
+        "text": "INVOICE",
+        "bbox": [
+          72.0,
+          40.73999786376953,
+          146.0159912109375,
+          65.5260009765625
+        ],
+        "font_sizes": [
+          18.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "TechNova Solutions Pvt. Ltd.",
+        "bbox": [
+          72.0,
+          67.25,
+          200.94996643066406,
+          80.98999786376953
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Page 1",
+        "bbox": [
+          500.0,
+          781.4000244140625,
+          525.3519897460938,
+          792.3920288085938
+        ],
+        "font_sizes": [
+          8.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Billing Details",
+        "bbox": [
+          72.0,
+          107.16000366210938,
+          151.35598754882812,
+          123.68399810791016
+        ],
+        "font_sizes": [
+          12.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "Invoice Number: INV-2026-004471",
+        "bbox": [
+          72.0,
+          134.25,
+          226.5099639892578,
+          147.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Bill To: Acme Digital Services",
+        "bbox": [
+          72.0,
+          151.25,
+          202.57998657226562,
+          164.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Description\nQty\nUnit Price\nAmount",
+        "bbox": [
+          76.0,
+          194.3699951171875,
+          469.99298095703125,
+          206.76300048828125
+        ],
+        "font_sizes": [
+          9.0,
+          9.0,
+          9.0,
+          9.0
+        ],
+        "font_names": [
+          "Helvetica-Bold",
+          "Helvetica-Bold",
+          "Helvetica-Bold",
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16,
+          16,
+          16,
+          16
+        ]
+      },
+      {
+        "text": "Cloud Infrastructure Services\n1\n45,000\n45,000",
+        "bbox": [
+          76.0,
+          214.3249969482422,
+          463.5220031738281,
+          226.6909942626953
+        ],
+        "font_sizes": [
+          9.0,
+          9.0,
+          9.0,
+          9.0
+        ],
+        "font_names": [
+          "Helvetica",
+          "Helvetica",
+          "Helvetica",
+          "Helvetica"
+        ],
+        "flags": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "text": "AI Model Development\n1\n32,500\n32,500",
+        "bbox": [
+          76.0,
+          234.3249969482422,
+          463.5220031738281,
+          246.6909942626953
+        ],
+        "font_sizes": [
+          9.0,
+          9.0,
+          9.0,
+          9.0
+        ],
+        "font_names": [
+          "Helvetica",
+          "Helvetica",
+          "Helvetica",
+          "Helvetica"
+        ],
+        "flags": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "text": "Technical Support\n2\n3,500\n7,000",
+        "bbox": [
+          76.0,
+          254.3249969482422,
+          458.51800537109375,
+          266.6910095214844
+        ],
+        "font_sizes": [
+          9.0,
+          9.0,
+          9.0,
+          9.0
+        ],
+        "font_names": [
+          "Helvetica",
+          "Helvetica",
+          "Helvetica",
+          "Helvetica"
+        ],
+        "flags": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "fonts": [
+      {
+        "name": "Helvetica-Bold",
+        "size": 18.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 8.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 12.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 9.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 9.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 9.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 9.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      }
+    ],
+    "width": 612.0,
+    "height": 792.0,
+    "image_path": "outputs\\sample_packet_check\\rendered_pages\\page_0001.png",
+    "image_count": 0,
+    "extraction_method": "pymupdf",
+    "ocr_used": false,
+    "extraction_confidence": null
+  },
+  {
+    "page_number": 2,
+    "text": "INVOICE\nTechNova Solutions Pvt. Ltd.\nPage 2\nService Details\n- Cloud Infrastructure Services covering AWS compute and storage.\n- AI Model Development including training and evaluation.\n- Technical Support during business hours.",
+    "blocks": [
+      {
+        "text": "INVOICE",
+        "bbox": [
+          72.0,
+          40.73999786376953,
+          146.0159912109375,
+          65.5260009765625
+        ],
+        "font_sizes": [
+          18.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "TechNova Solutions Pvt. Ltd.",
+        "bbox": [
+          72.0,
+          67.25,
+          200.94996643066406,
+          80.98999786376953
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Page 2",
+        "bbox": [
+          500.0,
+          781.4000244140625,
+          525.3519897460938,
+          792.3920288085938
+        ],
+        "font_sizes": [
+          8.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Service Details",
+        "bbox": [
+          72.0,
+          107.16000366210938,
+          157.37997436523438,
+          123.68399810791016
+        ],
+        "font_sizes": [
+          12.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "- Cloud Infrastructure Services covering AWS compute and storage.",
+        "bbox": [
+          72.0,
+          139.25,
+          372.669921875,
+          152.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "- AI Model Development including training and evaluation.",
+        "bbox": [
+          72.0,
+          157.25,
+          327.6699523925781,
+          170.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "- Technical Support during business hours.",
+        "bbox": [
+          72.0,
+          175.25,
+          262.0799560546875,
+          188.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      }
+    ],
+    "fonts": [
+      {
+        "name": "Helvetica-Bold",
+        "size": 18.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 8.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 12.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      }
+    ],
+    "width": 612.0,
+    "height": 792.0,
+    "image_path": "outputs\\sample_packet_check\\rendered_pages\\page_0002.png",
+    "image_count": 0,
+    "extraction_method": "pymupdf",
+    "ocr_used": false,
+    "extraction_confidence": null
+  },
+  {
+    "page_number": 3,
+    "text": "INVOICE\nTechNova Solutions Pvt. Ltd.\nPage 3\nNotes and Terms\n1. Services are provided according to the agreed statement of work.\n2. Late payments may attract interest at 1.5% per month.\nSubtotal: 84,500\nGST (18%): 15,210\nTotal: 99,710",
+    "blocks": [
+      {
+        "text": "INVOICE",
+        "bbox": [
+          72.0,
+          40.73999786376953,
+          146.0159912109375,
+          65.5260009765625
+        ],
+        "font_sizes": [
+          18.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "TechNova Solutions Pvt. Ltd.",
+        "bbox": [
+          72.0,
+          67.25,
+          200.94996643066406,
+          80.98999786376953
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Page 3",
+        "bbox": [
+          500.0,
+          781.4000244140625,
+          525.3519897460938,
+          792.3920288085938
+        ],
+        "font_sizes": [
+          8.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Notes and Terms",
+        "bbox": [
+          72.0,
+          107.16000366210938,
+          169.35598754882812,
+          123.68399810791016
+        ],
+        "font_sizes": [
+          12.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "1. Services are provided according to the agreed statement of work.",
+        "bbox": [
+          72.0,
+          139.25,
+          372.139892578125,
+          152.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "2. Late payments may attract interest at 1.5% per month.",
+        "bbox": [
+          72.0,
+          157.25,
+          323.7899169921875,
+          170.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Subtotal: 84,500",
+        "bbox": [
+          72.0,
+          199.25,
+          144.82997131347656,
+          212.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "GST (18%): 15,210",
+        "bbox": [
+          72.0,
+          217.25,
+          158.1499786376953,
+          230.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Total: 99,710",
+        "bbox": [
+          72.0,
+          235.25,
+          130.36997985839844,
+          248.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      }
+    ],
+    "fonts": [
+      {
+        "name": "Helvetica-Bold",
+        "size": 18.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 8.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 12.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      }
+    ],
+    "width": 612.0,
+    "height": 792.0,
+    "image_path": "outputs\\sample_packet_check\\rendered_pages\\page_0003.png",
+    "image_count": 0,
+    "extraction_method": "pymupdf",
+    "ocr_used": false,
+    "extraction_confidence": null
+  },
+  {
+    "page_number": 4,
+    "text": "RESUME\nArjun Mehta - AI / Machine Learning Engineer\nPage 1\nProfessional Summary\nAI Engineer with experience building machine learning, NLP and\ndocument understanding pipelines in production environments.\nContact: arjun.mehta@example.com",
+    "blocks": [
+      {
+        "text": "RESUME",
+        "bbox": [
+          72.0,
+          40.73999786376953,
+          149.00399780273438,
+          65.5260009765625
+        ],
+        "font_sizes": [
+          18.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "Arjun Mehta - AI / Machine Learning Engineer",
+        "bbox": [
+          72.0,
+          67.25,
+          274.86993408203125,
+          80.98999786376953
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Page 1",
+        "bbox": [
+          500.0,
+          781.4000244140625,
+          525.3519897460938,
+          792.3920288085938
+        ],
+        "font_sizes": [
+          8.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Professional Summary",
+        "bbox": [
+          72.0,
+          107.16000366210938,
+          202.04397583007812,
+          123.68399810791016
+        ],
+        "font_sizes": [
+          12.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "AI Engineer with experience building machine learning, NLP and",
+        "bbox": [
+          72.0,
+          134.25,
+          357.12994384765625,
+          147.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "document understanding pipelines in production environments.",
+        "bbox": [
+          72.0,
+          151.25,
+          349.909912109375,
+          164.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Contact: arjun.mehta@example.com",
+        "bbox": [
+          72.0,
+          174.25,
+          234.42996215820312,
+          187.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      }
+    ],
+    "fonts": [
+      {
+        "name": "Helvetica-Bold",
+        "size": 18.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 8.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 12.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      }
+    ],
+    "width": 612.0,
+    "height": 792.0,
+    "image_path": "outputs\\sample_packet_check\\rendered_pages\\page_0004.png",
+    "image_count": 0,
+    "extraction_method": "pymupdf",
+    "ocr_used": false,
+    "extraction_confidence": null
+  },
+  {
+    "page_number": 5,
+    "text": "RESUME\nArjun Mehta - AI / Machine Learning Engineer\nPage 2\nTechnical Skills\n- Python, SQL, C++, Git, Docker\n- Machine Learning, NLP, Computer Vision\n- Retrieval systems and vector databases\n- Distributed training and model evaluation",
+    "blocks": [
+      {
+        "text": "RESUME",
+        "bbox": [
+          72.0,
+          40.73999786376953,
+          149.00399780273438,
+          65.5260009765625
+        ],
+        "font_sizes": [
+          18.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "Arjun Mehta - AI / Machine Learning Engineer",
+        "bbox": [
+          72.0,
+          67.25,
+          274.86993408203125,
+          80.98999786376953
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Page 2",
+        "bbox": [
+          500.0,
+          781.4000244140625,
+          525.3519897460938,
+          792.3920288085938
+        ],
+        "font_sizes": [
+          8.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Technical Skills",
+        "bbox": [
+          72.0,
+          107.16000366210938,
+          162.0479736328125,
+          123.68399810791016
+        ],
+        "font_sizes": [
+          12.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "- Python, SQL, C++, Git, Docker",
+        "bbox": [
+          72.0,
+          139.25,
+          214.8399658203125,
+          152.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "- Machine Learning, NLP, Computer Vision",
+        "bbox": [
+          72.0,
+          157.25,
+          262.0699768066406,
+          170.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "- Retrieval systems and vector databases",
+        "bbox": [
+          72.0,
+          175.25,
+          255.39996337890625,
+          188.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "- Distributed training and model evaluation",
+        "bbox": [
+          72.0,
+          193.25,
+          259.2999572753906,
+          206.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      }
+    ],
+    "fonts": [
+      {
+        "name": "Helvetica-Bold",
+        "size": 18.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 8.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 12.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      }
+    ],
+    "width": 612.0,
+    "height": 792.0,
+    "image_path": "outputs\\sample_packet_check\\rendered_pages\\page_0005.png",
+    "image_count": 0,
+    "extraction_method": "pymupdf",
+    "ocr_used": false,
+    "extraction_confidence": null
+  },
+  {
+    "page_number": 6,
+    "text": "TRAVEL DOCUMENT\nIdentity and Passport Information\nPage 1\nHolder Information\nPassport No: P9876543\nSurname: SHARMA\nGiven Names: ROHAN\nNationality: IND\nDate of Birth: 14 March 1992\nDate of Expiry: 21/06/2032",
+    "blocks": [
+      {
+        "text": "TRAVEL DOCUMENT",
+        "bbox": [
+          72.0,
+          40.73999786376953,
+          252.99000549316406,
+          65.5260009765625
+        ],
+        "font_sizes": [
+          18.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "Identity and Passport Information",
+        "bbox": [
+          72.0,
+          67.25,
+          218.73995971679688,
+          80.98999786376953
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Page 1",
+        "bbox": [
+          500.0,
+          781.4000244140625,
+          525.3519897460938,
+          792.3920288085938
+        ],
+        "font_sizes": [
+          8.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Holder Information",
+        "bbox": [
+          72.0,
+          107.16000366210938,
+          179.33999633789062,
+          123.68399810791016
+        ],
+        "font_sizes": [
+          12.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "Passport No: P9876543",
+        "bbox": [
+          72.0,
+          134.25,
+          178.1699676513672,
+          147.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Surname: SHARMA",
+        "bbox": [
+          72.0,
+          151.25,
+          160.9099884033203,
+          164.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Given Names: ROHAN",
+        "bbox": [
+          72.0,
+          168.25,
+          174.239990234375,
+          181.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Nationality: IND",
+        "bbox": [
+          72.0,
+          185.25,
+          141.45999145507812,
+          198.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Date of Birth: 14 March 1992",
+        "bbox": [
+          72.0,
+          202.25,
+          199.8399658203125,
+          215.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Date of Expiry: 21/06/2032",
+        "bbox": [
+          72.0,
+          219.25,
+          190.39996337890625,
+          232.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      }
+    ],
+    "fonts": [
+      {
+        "name": "Helvetica-Bold",
+        "size": 18.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 8.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 12.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      }
+    ],
+    "width": 612.0,
+    "height": 792.0,
+    "image_path": "outputs\\sample_packet_check\\rendered_pages\\page_0006.png",
+    "image_count": 0,
+    "extraction_method": "pymupdf",
+    "ocr_used": false,
+    "extraction_confidence": null
+  },
+  {
+    "page_number": 7,
+    "text": "TRAVEL DOCUMENT\nIdentity and Passport Information\nPage 2\nDocument Notes\n- Issuing authority: Regional Passport Office, Pune.\n- This page contains continuation information only.",
+    "blocks": [
+      {
+        "text": "TRAVEL DOCUMENT",
+        "bbox": [
+          72.0,
+          40.73999786376953,
+          252.99000549316406,
+          65.5260009765625
+        ],
+        "font_sizes": [
+          18.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "Identity and Passport Information",
+        "bbox": [
+          72.0,
+          67.25,
+          218.73995971679688,
+          80.98999786376953
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Page 2",
+        "bbox": [
+          500.0,
+          781.4000244140625,
+          525.3519897460938,
+          792.3920288085938
+        ],
+        "font_sizes": [
+          8.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Document Notes",
+        "bbox": [
+          72.0,
+          107.16000366210938,
+          167.33999633789062,
+          123.68399810791016
+        ],
+        "font_sizes": [
+          12.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "- Issuing authority: Regional Passport Office, Pune.",
+        "bbox": [
+          72.0,
+          139.25,
+          298.76995849609375,
+          152.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "- This page contains continuation information only.",
+        "bbox": [
+          72.0,
+          157.25,
+          294.87994384765625,
+          170.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      }
+    ],
+    "fonts": [
+      {
+        "name": "Helvetica-Bold",
+        "size": 18.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 8.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 12.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      }
+    ],
+    "width": 612.0,
+    "height": 792.0,
+    "image_path": "outputs\\sample_packet_check\\rendered_pages\\page_0007.png",
+    "image_count": 0,
+    "extraction_method": "pymupdf",
+    "ocr_used": false,
+    "extraction_confidence": null
+  },
+  {
+    "page_number": 8,
+    "text": "BANK STATEMENT\nSampleBank - Account Statement\nPage 1\nAccount Summary\nAccount Holder: Neha Kulkarni\nAccount Number: XXXXXX4521\nStatement Period: 01 August 2026 - 15 August 2026\nOpening Balance: 74,000",
+    "blocks": [
+      {
+        "text": "BANK STATEMENT",
+        "bbox": [
+          72.0,
+          40.73999786376953,
+          238.9860076904297,
+          65.5260009765625
+        ],
+        "font_sizes": [
+          18.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "SampleBank - Account Statement",
+        "bbox": [
+          72.0,
+          67.25,
+          222.06996154785156,
+          80.98999786376953
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Page 1",
+        "bbox": [
+          500.0,
+          781.4000244140625,
+          525.3519897460938,
+          792.3920288085938
+        ],
+        "font_sizes": [
+          8.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Account Summary",
+        "bbox": [
+          72.0,
+          107.16000366210938,
+          178.01998901367188,
+          123.68399810791016
+        ],
+        "font_sizes": [
+          12.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "Account Holder: Neha Kulkarni",
+        "bbox": [
+          72.0,
+          134.25,
+          208.719970703125,
+          147.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Account Number: XXXXXX4521",
+        "bbox": [
+          72.0,
+          151.25,
+          214.2899627685547,
+          164.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Statement Period: 01 August 2026 - 15 August 2026",
+        "bbox": [
+          72.0,
+          168.25,
+          303.8099365234375,
+          181.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Opening Balance: 74,000",
+        "bbox": [
+          72.0,
+          185.25,
+          184.84996032714844,
+          198.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      }
+    ],
+    "fonts": [
+      {
+        "name": "Helvetica-Bold",
+        "size": 18.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 8.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 12.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      }
+    ],
+    "width": 612.0,
+    "height": 792.0,
+    "image_path": "outputs\\sample_packet_check\\rendered_pages\\page_0008.png",
+    "image_count": 0,
+    "extraction_method": "pymupdf",
+    "ocr_used": false,
+    "extraction_confidence": null
+  },
+  {
+    "page_number": 9,
+    "text": "BANK STATEMENT\nSampleBank - Account Statement\nPage 2\nTransaction Summary\nDate\nDescription\nDebit\nCredit\n02 Aug\nSalary Credit\n65,000\n07 Aug\nRent Payment\n15,450\nClosing Balance: 1,24,550",
+    "blocks": [
+      {
+        "text": "BANK STATEMENT",
+        "bbox": [
+          72.0,
+          40.73999786376953,
+          238.9860076904297,
+          65.5260009765625
+        ],
+        "font_sizes": [
+          18.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "SampleBank - Account Statement",
+        "bbox": [
+          72.0,
+          67.25,
+          222.06996154785156,
+          80.98999786376953
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Page 2",
+        "bbox": [
+          500.0,
+          781.4000244140625,
+          525.3519897460938,
+          792.3920288085938
+        ],
+        "font_sizes": [
+          8.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      },
+      {
+        "text": "Transaction Summary",
+        "bbox": [
+          72.0,
+          107.16000366210938,
+          198.03598022460938,
+          123.68399810791016
+        ],
+        "font_sizes": [
+          12.0
+        ],
+        "font_names": [
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16
+        ]
+      },
+      {
+        "text": "Date\nDescription\nDebit\nCredit",
+        "bbox": [
+          76.0,
+          154.3699951171875,
+          472.0010070800781,
+          166.76300048828125
+        ],
+        "font_sizes": [
+          9.0,
+          9.0,
+          9.0,
+          9.0
+        ],
+        "font_names": [
+          "Helvetica-Bold",
+          "Helvetica-Bold",
+          "Helvetica-Bold",
+          "Helvetica-Bold"
+        ],
+        "flags": [
+          16,
+          16,
+          16,
+          16
+        ]
+      },
+      {
+        "text": "02 Aug\nSalary Credit\n65,000",
+        "bbox": [
+          76.0,
+          174.3249969482422,
+          473.5220031738281,
+          186.6909942626953
+        ],
+        "font_sizes": [
+          9.0,
+          9.0,
+          9.0
+        ],
+        "font_names": [
+          "Helvetica",
+          "Helvetica",
+          "Helvetica"
+        ],
+        "flags": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "text": "07 Aug\nRent Payment\n15,450",
+        "bbox": [
+          76.0,
+          194.3249969482422,
+          393.5220031738281,
+          206.6909942626953
+        ],
+        "font_sizes": [
+          9.0,
+          9.0,
+          9.0
+        ],
+        "font_names": [
+          "Helvetica",
+          "Helvetica",
+          "Helvetica"
+        ],
+        "flags": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "text": "Closing Balance: 1,24,550",
+        "bbox": [
+          72.0,
+          239.25,
+          188.72996520996094,
+          252.99000549316406
+        ],
+        "font_sizes": [
+          10.0
+        ],
+        "font_names": [
+          "Helvetica"
+        ],
+        "flags": [
+          0
+        ]
+      }
+    ],
+    "fonts": [
+      {
+        "name": "Helvetica-Bold",
+        "size": 18.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 8.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 12.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 9.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 9.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 9.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica-Bold",
+        "size": 9.0,
+        "flags": 16
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 9.0,
+        "flags": 0
+      },
+      {
+        "name": "Helvetica",
+        "size": 10.0,
+        "flags": 0
+      }
+    ],
+    "width": 612.0,
+    "height": 792.0,
+    "image_path": "outputs\\sample_packet_check\\rendered_pages\\page_0009.png",
+    "image_count": 0,
+    "extraction_method": "pymupdf",
+    "ocr_used": false,
+    "extraction_confidence": null
+  }
+]

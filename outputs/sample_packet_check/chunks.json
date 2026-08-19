@@ -1,0 +1,190 @@
+[
+  {
+    "chunk_id": "sample_packet_doc_001_s01_c01",
+    "doc_id": "sample_packet_doc_001",
+    "doc_type": "invoice",
+    "section_id": "sample_packet_doc_001_s01",
+    "page_refs": [
+      1
+    ],
+    "text": "Billing Details\n\nInvoice Number: INV-2026-004471\n\nBill To: Acme Digital Services",
+    "breadcrumb": [
+      "Billing Details"
+    ],
+    "element_types": [
+      "paragraph"
+    ],
+    "token_count": 10
+  },
+  {
+    "chunk_id": "sample_packet_doc_001_s01_c02",
+    "doc_id": "sample_packet_doc_001",
+    "doc_type": "invoice",
+    "section_id": "sample_packet_doc_001_s01",
+    "page_refs": [
+      1
+    ],
+    "text": "Billing Details\n\n| Description | Qty | Unit Price | Amount |\n| --- | --- | --- | --- |\n| Cloud Infrastructure Services | 1 | 45,000 | 45,000 |\n| AI Model Development | 1 | 32,500 | 32,500 |\n| Technical Support | 2 | 3,500 | 7,000 |",
+    "breadcrumb": [
+      "Billing Details"
+    ],
+    "element_types": [
+      "table"
+    ],
+    "token_count": 53
+  },
+  {
+    "chunk_id": "sample_packet_doc_001_s02_c01",
+    "doc_id": "sample_packet_doc_001",
+    "doc_type": "invoice",
+    "section_id": "sample_packet_doc_001_s02",
+    "page_refs": [
+      2
+    ],
+    "text": "Service Details\n\n- Cloud Infrastructure Services covering AWS compute and storage.\n- AI Model Development including training and evaluation.\n- Technical Support during business hours.",
+    "breadcrumb": [
+      "Service Details"
+    ],
+    "element_types": [
+      "list"
+    ],
+    "token_count": 25
+  },
+  {
+    "chunk_id": "sample_packet_doc_001_s03_c01",
+    "doc_id": "sample_packet_doc_001",
+    "doc_type": "invoice",
+    "section_id": "sample_packet_doc_001_s03",
+    "page_refs": [
+      3
+    ],
+    "text": "Notes and Terms\n\n1. Services are provided according to the agreed statement of work.\n2. Late payments may attract interest at 1.5% per month.\n\nSubtotal: 84,500\n\nGST (18%): 15,210\n\nTotal: 99,710",
+    "breadcrumb": [
+      "Notes and Terms"
+    ],
+    "element_types": [
+      "list",
+      "paragraph"
+    ],
+    "token_count": 31
+  },
+  {
+    "chunk_id": "sample_packet_doc_002_s01_c01",
+    "doc_id": "sample_packet_doc_002",
+    "doc_type": "resume",
+    "section_id": "sample_packet_doc_002_s01",
+    "page_refs": [
+      4
+    ],
+    "text": "Professional Summary\n\nAI Engineer with experience building machine learning, NLP and\n\ndocument understanding pipelines in production environments.\n\nContact: arjun.mehta@example.com",
+    "breadcrumb": [
+      "Professional Summary"
+    ],
+    "element_types": [
+      "paragraph"
+    ],
+    "token_count": 19
+  },
+  {
+    "chunk_id": "sample_packet_doc_002_s02_c01",
+    "doc_id": "sample_packet_doc_002",
+    "doc_type": "resume",
+    "section_id": "sample_packet_doc_002_s02",
+    "page_refs": [
+      5
+    ],
+    "text": "Technical Skills\n\n- Python, SQL, C++, Git, Docker\n- Machine Learning, NLP, Computer Vision\n- Retrieval systems and vector databases\n- Distributed training and model evaluation",
+    "breadcrumb": [
+      "Technical Skills"
+    ],
+    "element_types": [
+      "list"
+    ],
+    "token_count": 26
+  },
+  {
+    "chunk_id": "sample_packet_doc_003_s01_c01",
+    "doc_id": "sample_packet_doc_003",
+    "doc_type": "passport",
+    "section_id": "sample_packet_doc_003_s01",
+    "page_refs": [
+      6
+    ],
+    "text": "Holder Information\n\nPassport No: P9876543\n\nSurname: SHARMA\n\nGiven Names: ROHAN\n\nNationality: IND\n\nDate of Birth: 14 March 1992\n\nDate of Expiry: 21/06/2032",
+    "breadcrumb": [
+      "Holder Information"
+    ],
+    "element_types": [
+      "paragraph"
+    ],
+    "token_count": 22
+  },
+  {
+    "chunk_id": "sample_packet_doc_003_s02_c01",
+    "doc_id": "sample_packet_doc_003",
+    "doc_type": "passport",
+    "section_id": "sample_packet_doc_003_s02",
+    "page_refs": [
+      7
+    ],
+    "text": "Document Notes\n\n- Issuing authority: Regional Passport Office, Pune.\n- This page contains continuation information only.",
+    "breadcrumb": [
+      "Document Notes"
+    ],
+    "element_types": [
+      "list"
+    ],
+    "token_count": 16
+  },
+  {
+    "chunk_id": "sample_packet_doc_004_s01_c01",
+    "doc_id": "sample_packet_doc_004",
+    "doc_type": "bank_statement",
+    "section_id": "sample_packet_doc_004_s01",
+    "page_refs": [
+      8
+    ],
+    "text": "Account Summary\n\nAccount Holder: Neha Kulkarni\n\nAccount Number: XXXXXX4521\n\nStatement Period: 01 August 2026 - 15 August 2026\n\nOpening Balance: 74,000",
+    "breadcrumb": [
+      "Account Summary"
+    ],
+    "element_types": [
+      "paragraph"
+    ],
+    "token_count": 21
+  },
+  {
+    "chunk_id": "sample_packet_doc_004_s02_c01",
+    "doc_id": "sample_packet_doc_004",
+    "doc_type": "bank_statement",
+    "section_id": "sample_packet_doc_004_s02",
+    "page_refs": [
+      9
+    ],
+    "text": "Transaction Summary\n\n| Date | Description | Debit | Credit |\n| --- | --- | --- | --- |\n| 02 Aug | Salary Credit |  | 65,000 |\n| 07 Aug | Rent Payment | 15,450 |  |",
+    "breadcrumb": [
+      "Transaction Summary"
+    ],
+    "element_types": [
+      "table"
+    ],
+    "token_count": 40
+  },
+  {
+    "chunk_id": "sample_packet_doc_004_s02_c02",
+    "doc_id": "sample_packet_doc_004",
+    "doc_type": "bank_statement",
+    "section_id": "sample_packet_doc_004_s02",
+    "page_refs": [
+      9
+    ],
+    "text": "Transaction Summary\n\nClosing Balance: 1,24,550",
+    "breadcrumb": [
+      "Transaction Summary"
+    ],
+    "element_types": [
+      "paragraph"
+    ],
+    "token_count": 5
+  }
+]

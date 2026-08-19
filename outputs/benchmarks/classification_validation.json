@@ -1,0 +1,142 @@
+{
+  "method": "tfidf",
+  "dataset": "albertklorer/rvl_cdip_ocr",
+  "train_documents": 8887,
+  "holdout_documents": 2222,
+  "classes": [
+    "advertisement",
+    "budget",
+    "email",
+    "file_folder",
+    "form",
+    "handwritten",
+    "invoice",
+    "letter",
+    "memo",
+    "news_article",
+    "presentation",
+    "questionnaire",
+    "resume",
+    "scientific_publication",
+    "scientific_report",
+    "specification"
+  ],
+  "accuracy": 0.8069,
+  "macro_f1": 0.7862,
+  "per_class": {
+    "advertisement": {
+      "precision": 0.8393,
+      "recall": 0.7176,
+      "f1": 0.7737,
+      "support": 131
+    },
+    "budget": {
+      "precision": 0.7785,
+      "recall": 0.8056,
+      "f1": 0.7918,
+      "support": 144
+    },
+    "email": {
+      "precision": 0.964,
+      "recall": 0.8492,
+      "f1": 0.903,
+      "support": 126
+    },
+    "file_folder": {
+      "precision": 0.3256,
+      "recall": 0.5833,
+      "f1": 0.4179,
+      "support": 24
+    },
+    "form": {
+      "precision": 0.7627,
+      "recall": 0.6923,
+      "f1": 0.7258,
+      "support": 130
+    },
+    "handwritten": {
+      "precision": 0.6702,
+      "recall": 0.869,
+      "f1": 0.7568,
+      "support": 145
+    },
+    "invoice": {
+      "precision": 0.8903,
+      "recall": 0.879,
+      "f1": 0.8846,
+      "support": 157
+    },
+    "letter": {
+      "precision": 0.7794,
+      "recall": 0.726,
+      "f1": 0.7518,
+      "support": 146
+    },
+    "memo": {
+      "precision": 0.7725,
+      "recall": 0.7963,
+      "f1": 0.7842,
+      "support": 162
+    },
+    "news_article": {
+      "precision": 0.7296,
+      "recall": 0.8056,
+      "f1": 0.7657,
+      "support": 144
+    },
+    "presentation": {
+      "precision": 0.669,
+      "recall": 0.6738,
+      "f1": 0.6714,
+      "support": 141
+    },
+    "questionnaire": {
+      "precision": 0.9079,
+      "recall": 0.8903,
+      "f1": 0.899,
+      "support": 155
+    },
+    "resume": {
+      "precision": 0.9928,
+      "recall": 0.9139,
+      "f1": 0.9517,
+      "support": 151
+    },
+    "scientific_publication": {
+      "precision": 0.8581,
+      "recall": 0.875,
+      "f1": 0.8664,
+      "support": 152
+    },
+    "scientific_report": {
+      "precision": 0.7164,
+      "recall": 0.6713,
+      "f1": 0.6931,
+      "support": 143
+    },
+    "specification": {
+      "precision": 0.9691,
+      "recall": 0.9181,
+      "f1": 0.9429,
+      "support": 171
+    }
+  },
+  "train_label_counts": {
+    "specification": 613,
+    "email": 613,
+    "questionnaire": 609,
+    "form": 604,
+    "scientific_publication": 602,
+    "memo": 598,
+    "advertisement": 597,
+    "resume": 580,
+    "budget": 578,
+    "invoice": 576,
+    "letter": 569,
+    "scientific_report": 567,
+    "news_article": 558,
+    "handwritten": 553,
+    "presentation": 549,
+    "file_folder": 121
+  }
+}

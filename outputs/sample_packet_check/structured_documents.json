@@ -1,0 +1,797 @@
+[
+  {
+    "doc_id": "sample_packet_doc_001",
+    "doc_type": "invoice",
+    "pages": [
+      1,
+      2,
+      3
+    ],
+    "metadata": {
+      "schema_version": "1.0",
+      "source_file": "sample_packet.pdf",
+      "document_title": "INVOICE",
+      "packet_page_range": [
+        1,
+        2,
+        3
+      ],
+      "page_count": 3,
+      "extraction_method": "pymupdf",
+      "ocr_used": false,
+      "doc_type": "invoice",
+      "classification_confidence": 0.3980279809459974,
+      "classification_source": "trained",
+      "section_count": 3,
+      "element_counts": {
+        "paragraph": 5,
+        "table": 1,
+        "list": 2
+      },
+      "has_tables": true,
+      "boilerplate_lines": [
+        "invoice",
+        "page #",
+        "technova solutions pvt. ltd."
+      ],
+      "type_specific_fields": {
+        "invoice_number": "INV-2026-004471",
+        "total": "99,710",
+        "subtotal": "84,500"
+      }
+    },
+    "sections": [
+      {
+        "section_id": "sample_packet_doc_001_s01",
+        "title": "Billing Details",
+        "level": 1,
+        "content_md": "Invoice Number: INV-2026-004471\n\nBill To: Acme Digital Services\n\n| Description | Qty | Unit Price | Amount |\n| --- | --- | --- | --- |\n| Cloud Infrastructure Services | 1 | 45,000 | 45,000 |\n| AI Model Development | 1 | 32,500 | 32,500 |\n| Technical Support | 2 | 3,500 | 7,000 |",
+        "page_refs": [
+          1
+        ],
+        "elements": [
+          {
+            "type": "paragraph",
+            "text": "Invoice Number: INV-2026-004471",
+            "page": 1,
+            "bbox": [
+              72.0,
+              134.25,
+              226.5099639892578,
+              147.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_001_s01_e01"
+          },
+          {
+            "type": "paragraph",
+            "text": "Bill To: Acme Digital Services",
+            "page": 1,
+            "bbox": [
+              72.0,
+              151.25,
+              202.57998657226562,
+              164.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_001_s01_e02"
+          },
+          {
+            "type": "table",
+            "text": "| Description | Qty | Unit Price | Amount |\n| --- | --- | --- | --- |\n| Cloud Infrastructure Services | 1 | 45,000 | 45,000 |\n| AI Model Development | 1 | 32,500 | 32,500 |\n| Technical Support | 2 | 3,500 | 7,000 |",
+            "page": 1,
+            "bbox": [
+              72.0,
+              190.0,
+              522.0,
+              270.0
+            ],
+            "rows": [
+              [
+                "Description",
+                "Qty",
+                "Unit Price",
+                "Amount"
+              ],
+              [
+                "Cloud Infrastructure Services",
+                "1",
+                "45,000",
+                "45,000"
+              ],
+              [
+                "AI Model Development",
+                "1",
+                "32,500",
+                "32,500"
+              ],
+              [
+                "Technical Support",
+                "2",
+                "3,500",
+                "7,000"
+              ]
+            ],
+            "items": null,
+            "headers": [
+              "Description",
+              "Qty",
+              "Unit Price",
+              "Amount"
+            ],
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_001_s01_e03"
+          }
+        ],
+        "parent_section_id": null,
+        "breadcrumb": [
+          "Billing Details"
+        ]
+      },
+      {
+        "section_id": "sample_packet_doc_001_s02",
+        "title": "Service Details",
+        "level": 1,
+        "content_md": "- Cloud Infrastructure Services covering AWS compute and storage.\n- AI Model Development including training and evaluation.\n- Technical Support during business hours.",
+        "page_refs": [
+          2
+        ],
+        "elements": [
+          {
+            "type": "list",
+            "text": "- Cloud Infrastructure Services covering AWS compute and storage.\n- AI Model Development including training and evaluation.\n- Technical Support during business hours.",
+            "page": 2,
+            "bbox": [
+              72.0,
+              139.25,
+              372.669921875,
+              152.99000549316406
+            ],
+            "rows": null,
+            "items": [
+              "Cloud Infrastructure Services covering AWS compute and storage.",
+              "AI Model Development including training and evaluation.",
+              "Technical Support during business hours."
+            ],
+            "headers": null,
+            "ordered": false,
+            "label": null,
+            "element_id": "sample_packet_doc_001_s02_e01"
+          }
+        ],
+        "parent_section_id": null,
+        "breadcrumb": [
+          "Service Details"
+        ]
+      },
+      {
+        "section_id": "sample_packet_doc_001_s03",
+        "title": "Notes and Terms",
+        "level": 1,
+        "content_md": "1. Services are provided according to the agreed statement of work.\n2. Late payments may attract interest at 1.5% per month.\n\nSubtotal: 84,500\n\nGST (18%): 15,210\n\nTotal: 99,710",
+        "page_refs": [
+          3
+        ],
+        "elements": [
+          {
+            "type": "list",
+            "text": "1. Services are provided according to the agreed statement of work.\n2. Late payments may attract interest at 1.5% per month.",
+            "page": 3,
+            "bbox": [
+              72.0,
+              139.25,
+              372.139892578125,
+              152.99000549316406
+            ],
+            "rows": null,
+            "items": [
+              "Services are provided according to the agreed statement of work.",
+              "Late payments may attract interest at 1.5% per month."
+            ],
+            "headers": null,
+            "ordered": true,
+            "label": null,
+            "element_id": "sample_packet_doc_001_s03_e01"
+          },
+          {
+            "type": "paragraph",
+            "text": "Subtotal: 84,500",
+            "page": 3,
+            "bbox": [
+              72.0,
+              199.25,
+              144.82997131347656,
+              212.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_001_s03_e02"
+          },
+          {
+            "type": "paragraph",
+            "text": "GST (18%): 15,210",
+            "page": 3,
+            "bbox": [
+              72.0,
+              217.25,
+              158.1499786376953,
+              230.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_001_s03_e03"
+          },
+          {
+            "type": "paragraph",
+            "text": "Total: 99,710",
+            "page": 3,
+            "bbox": [
+              72.0,
+              235.25,
+              130.36997985839844,
+              248.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_001_s03_e04"
+          }
+        ],
+        "parent_section_id": null,
+        "breadcrumb": [
+          "Notes and Terms"
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "sample_packet_doc_002",
+    "doc_type": "resume",
+    "pages": [
+      4,
+      5
+    ],
+    "metadata": {
+      "schema_version": "1.0",
+      "source_file": "sample_packet.pdf",
+      "document_title": "RESUME",
+      "packet_page_range": [
+        4,
+        5
+      ],
+      "page_count": 2,
+      "extraction_method": "pymupdf",
+      "ocr_used": false,
+      "doc_type": "resume",
+      "classification_confidence": 0.6,
+      "classification_source": "lexicon_backoff",
+      "section_count": 2,
+      "element_counts": {
+        "paragraph": 3,
+        "list": 1
+      },
+      "has_tables": false,
+      "boilerplate_lines": [
+        "arjun mehta - ai / machine learning engineer",
+        "page #",
+        "resume"
+      ],
+      "type_specific_fields": {
+        "email": "arjun.mehta@example.com"
+      }
+    },
+    "sections": [
+      {
+        "section_id": "sample_packet_doc_002_s01",
+        "title": "Professional Summary",
+        "level": 1,
+        "content_md": "AI Engineer with experience building machine learning, NLP and\n\ndocument understanding pipelines in production environments.\n\nContact: arjun.mehta@example.com",
+        "page_refs": [
+          4
+        ],
+        "elements": [
+          {
+            "type": "paragraph",
+            "text": "AI Engineer with experience building machine learning, NLP and",
+            "page": 4,
+            "bbox": [
+              72.0,
+              134.25,
+              357.12994384765625,
+              147.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_002_s01_e01"
+          },
+          {
+            "type": "paragraph",
+            "text": "document understanding pipelines in production environments.",
+            "page": 4,
+            "bbox": [
+              72.0,
+              151.25,
+              349.909912109375,
+              164.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_002_s01_e02"
+          },
+          {
+            "type": "paragraph",
+            "text": "Contact: arjun.mehta@example.com",
+            "page": 4,
+            "bbox": [
+              72.0,
+              174.25,
+              234.42996215820312,
+              187.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_002_s01_e03"
+          }
+        ],
+        "parent_section_id": null,
+        "breadcrumb": [
+          "Professional Summary"
+        ]
+      },
+      {
+        "section_id": "sample_packet_doc_002_s02",
+        "title": "Technical Skills",
+        "level": 1,
+        "content_md": "- Python, SQL, C++, Git, Docker\n- Machine Learning, NLP, Computer Vision\n- Retrieval systems and vector databases\n- Distributed training and model evaluation",
+        "page_refs": [
+          5
+        ],
+        "elements": [
+          {
+            "type": "list",
+            "text": "- Python, SQL, C++, Git, Docker\n- Machine Learning, NLP, Computer Vision\n- Retrieval systems and vector databases\n- Distributed training and model evaluation",
+            "page": 5,
+            "bbox": [
+              72.0,
+              139.25,
+              214.8399658203125,
+              152.99000549316406
+            ],
+            "rows": null,
+            "items": [
+              "Python, SQL, C++, Git, Docker",
+              "Machine Learning, NLP, Computer Vision",
+              "Retrieval systems and vector databases",
+              "Distributed training and model evaluation"
+            ],
+            "headers": null,
+            "ordered": false,
+            "label": null,
+            "element_id": "sample_packet_doc_002_s02_e01"
+          }
+        ],
+        "parent_section_id": null,
+        "breadcrumb": [
+          "Technical Skills"
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "sample_packet_doc_003",
+    "doc_type": "passport",
+    "pages": [
+      6,
+      7
+    ],
+    "metadata": {
+      "schema_version": "1.0",
+      "source_file": "sample_packet.pdf",
+      "document_title": "TRAVEL DOCUMENT",
+      "packet_page_range": [
+        6,
+        7
+      ],
+      "page_count": 2,
+      "extraction_method": "pymupdf",
+      "ocr_used": false,
+      "doc_type": "passport",
+      "classification_confidence": 0.8222222222222222,
+      "classification_source": "lexicon_extension",
+      "section_count": 2,
+      "element_counts": {
+        "paragraph": 6,
+        "list": 1
+      },
+      "has_tables": false,
+      "boilerplate_lines": [
+        "identity and passport information",
+        "page #",
+        "travel document"
+      ],
+      "type_specific_fields": {
+        "passport_number": "P9876543",
+        "surname": "SHARMA",
+        "nationality": "IND",
+        "expiry_date": "21/06/2032"
+      }
+    },
+    "sections": [
+      {
+        "section_id": "sample_packet_doc_003_s01",
+        "title": "Holder Information",
+        "level": 1,
+        "content_md": "Passport No: P9876543\n\nSurname: SHARMA\n\nGiven Names: ROHAN\n\nNationality: IND\n\nDate of Birth: 14 March 1992\n\nDate of Expiry: 21/06/2032",
+        "page_refs": [
+          6
+        ],
+        "elements": [
+          {
+            "type": "paragraph",
+            "text": "Passport No: P9876543",
+            "page": 6,
+            "bbox": [
+              72.0,
+              134.25,
+              178.1699676513672,
+              147.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_003_s01_e01"
+          },
+          {
+            "type": "paragraph",
+            "text": "Surname: SHARMA",
+            "page": 6,
+            "bbox": [
+              72.0,
+              151.25,
+              160.9099884033203,
+              164.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_003_s01_e02"
+          },
+          {
+            "type": "paragraph",
+            "text": "Given Names: ROHAN",
+            "page": 6,
+            "bbox": [
+              72.0,
+              168.25,
+              174.239990234375,
+              181.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_003_s01_e03"
+          },
+          {
+            "type": "paragraph",
+            "text": "Nationality: IND",
+            "page": 6,
+            "bbox": [
+              72.0,
+              185.25,
+              141.45999145507812,
+              198.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_003_s01_e04"
+          },
+          {
+            "type": "paragraph",
+            "text": "Date of Birth: 14 March 1992",
+            "page": 6,
+            "bbox": [
+              72.0,
+              202.25,
+              199.8399658203125,
+              215.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_003_s01_e05"
+          },
+          {
+            "type": "paragraph",
+            "text": "Date of Expiry: 21/06/2032",
+            "page": 6,
+            "bbox": [
+              72.0,
+              219.25,
+              190.39996337890625,
+              232.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_003_s01_e06"
+          }
+        ],
+        "parent_section_id": null,
+        "breadcrumb": [
+          "Holder Information"
+        ]
+      },
+      {
+        "section_id": "sample_packet_doc_003_s02",
+        "title": "Document Notes",
+        "level": 1,
+        "content_md": "- Issuing authority: Regional Passport Office, Pune.\n- This page contains continuation information only.",
+        "page_refs": [
+          7
+        ],
+        "elements": [
+          {
+            "type": "list",
+            "text": "- Issuing authority: Regional Passport Office, Pune.\n- This page contains continuation information only.",
+            "page": 7,
+            "bbox": [
+              72.0,
+              139.25,
+              298.76995849609375,
+              152.99000549316406
+            ],
+            "rows": null,
+            "items": [
+              "Issuing authority: Regional Passport Office, Pune.",
+              "This page contains continuation information only."
+            ],
+            "headers": null,
+            "ordered": false,
+            "label": null,
+            "element_id": "sample_packet_doc_003_s02_e01"
+          }
+        ],
+        "parent_section_id": null,
+        "breadcrumb": [
+          "Document Notes"
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "sample_packet_doc_004",
+    "doc_type": "bank_statement",
+    "pages": [
+      8,
+      9
+    ],
+    "metadata": {
+      "schema_version": "1.0",
+      "source_file": "sample_packet.pdf",
+      "document_title": "BANK STATEMENT",
+      "packet_page_range": [
+        8,
+        9
+      ],
+      "page_count": 2,
+      "extraction_method": "pymupdf",
+      "ocr_used": false,
+      "doc_type": "bank_statement",
+      "classification_confidence": 0.8297872340425532,
+      "classification_source": "lexicon_extension",
+      "section_count": 2,
+      "element_counts": {
+        "paragraph": 5,
+        "table": 1
+      },
+      "has_tables": true,
+      "boilerplate_lines": [
+        "bank statement",
+        "page #",
+        "samplebank - account statement"
+      ],
+      "type_specific_fields": {
+        "closing_balance": "1,24,550",
+        "opening_balance": "74,000",
+        "account_number": "XXXXXX4521"
+      }
+    },
+    "sections": [
+      {
+        "section_id": "sample_packet_doc_004_s01",
+        "title": "Account Summary",
+        "level": 1,
+        "content_md": "Account Holder: Neha Kulkarni\n\nAccount Number: XXXXXX4521\n\nStatement Period: 01 August 2026 - 15 August 2026\n\nOpening Balance: 74,000",
+        "page_refs": [
+          8
+        ],
+        "elements": [
+          {
+            "type": "paragraph",
+            "text": "Account Holder: Neha Kulkarni",
+            "page": 8,
+            "bbox": [
+              72.0,
+              134.25,
+              208.719970703125,
+              147.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_004_s01_e01"
+          },
+          {
+            "type": "paragraph",
+            "text": "Account Number: XXXXXX4521",
+            "page": 8,
+            "bbox": [
+              72.0,
+              151.25,
+              214.2899627685547,
+              164.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_004_s01_e02"
+          },
+          {
+            "type": "paragraph",
+            "text": "Statement Period: 01 August 2026 - 15 August 2026",
+            "page": 8,
+            "bbox": [
+              72.0,
+              168.25,
+              303.8099365234375,
+              181.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_004_s01_e03"
+          },
+          {
+            "type": "paragraph",
+            "text": "Opening Balance: 74,000",
+            "page": 8,
+            "bbox": [
+              72.0,
+              185.25,
+              184.84996032714844,
+              198.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_004_s01_e04"
+          }
+        ],
+        "parent_section_id": null,
+        "breadcrumb": [
+          "Account Summary"
+        ]
+      },
+      {
+        "section_id": "sample_packet_doc_004_s02",
+        "title": "Transaction Summary",
+        "level": 1,
+        "content_md": "| Date | Description | Debit | Credit |\n| --- | --- | --- | --- |\n| 02 Aug | Salary Credit |  | 65,000 |\n| 07 Aug | Rent Payment | 15,450 |  |\n\nClosing Balance: 1,24,550",
+        "page_refs": [
+          9
+        ],
+        "elements": [
+          {
+            "type": "table",
+            "text": "| Date | Description | Debit | Credit |\n| --- | --- | --- | --- |\n| 02 Aug | Salary Credit |  | 65,000 |\n| 07 Aug | Rent Payment | 15,450 |  |",
+            "page": 9,
+            "bbox": [
+              72.0,
+              150.0,
+              522.0,
+              210.0
+            ],
+            "rows": [
+              [
+                "Date",
+                "Description",
+                "Debit",
+                "Credit"
+              ],
+              [
+                "02 Aug",
+                "Salary Credit",
+                "",
+                "65,000"
+              ],
+              [
+                "07 Aug",
+                "Rent Payment",
+                "15,450",
+                ""
+              ]
+            ],
+            "items": null,
+            "headers": [
+              "Date",
+              "Description",
+              "Debit",
+              "Credit"
+            ],
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_004_s02_e01"
+          },
+          {
+            "type": "paragraph",
+            "text": "Closing Balance: 1,24,550",
+            "page": 9,
+            "bbox": [
+              72.0,
+              239.25,
+              188.72996520996094,
+              252.99000549316406
+            ],
+            "rows": null,
+            "items": null,
+            "headers": null,
+            "ordered": null,
+            "label": null,
+            "element_id": "sample_packet_doc_004_s02_e02"
+          }
+        ],
+        "parent_section_id": null,
+        "breadcrumb": [
+          "Transaction Summary"
+        ]
+      }
+    ]
+  }
+]

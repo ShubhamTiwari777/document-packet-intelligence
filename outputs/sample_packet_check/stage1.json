@@ -1,0 +1,115 @@
+{
+  "packet_id": "sample_packet",
+  "documents": [
+    {
+      "doc_id": "sample_packet_doc_001",
+      "pages": [
+        1,
+        2,
+        3
+      ],
+      "doc_type": "invoice",
+      "classification_confidence": 0.3980279809459974,
+      "boundary_confidences": [
+        0.0,
+        0.0
+      ],
+      "classification_source": "trained",
+      "classification_alternatives": [
+        {
+          "label": "invoice",
+          "probability": 0.398
+        },
+        {
+          "label": "budget",
+          "probability": 0.2609
+        },
+        {
+          "label": "presentation",
+          "probability": 0.0552
+        }
+      ]
+    },
+    {
+      "doc_id": "sample_packet_doc_002",
+      "pages": [
+        4,
+        5
+      ],
+      "doc_type": "resume",
+      "classification_confidence": 0.6,
+      "boundary_confidences": [
+        0.0
+      ],
+      "classification_source": "lexicon_backoff",
+      "classification_alternatives": [
+        {
+          "label": "resume",
+          "probability": 1.0
+        },
+        {
+          "label": "invoice",
+          "probability": 0.0
+        },
+        {
+          "label": "passport",
+          "probability": 0.0
+        }
+      ]
+    },
+    {
+      "doc_id": "sample_packet_doc_003",
+      "pages": [
+        6,
+        7
+      ],
+      "doc_type": "passport",
+      "classification_confidence": 0.8222222222222222,
+      "boundary_confidences": [
+        0.0
+      ],
+      "classification_source": "lexicon_extension",
+      "classification_alternatives": [
+        {
+          "label": "passport",
+          "probability": 1.0
+        },
+        {
+          "label": "invoice",
+          "probability": 0.0
+        },
+        {
+          "label": "resume",
+          "probability": 0.0
+        }
+      ]
+    },
+    {
+      "doc_id": "sample_packet_doc_004",
+      "pages": [
+        8,
+        9
+      ],
+      "doc_type": "bank_statement",
+      "classification_confidence": 0.8297872340425532,
+      "boundary_confidences": [
+        0.0
+      ],
+      "classification_source": "lexicon_extension",
+      "classification_alternatives": [
+        {
+          "label": "bank_statement",
+          "probability": 1.0
+        },
+        {
+          "label": "invoice",
+          "probability": 0.0
+        },
+        {
+          "label": "resume",
+          "probability": 0.0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1597 @@
+{
+  "unresolved_queries": [],
+  "corpus_chunks": 515,
+  "per_configuration_misses": {
+    "bm25_only": [
+      {
+        "id": "q04",
+        "query": "Who is the invoice billed to?",
+        "type": "identifier",
+        "hit_rank": 2,
+        "top_result": "INVOICE > Notes and Terms\n\n1. Services are provided according to the agreed statement of work.\n2. Late payments may attract interest at 1.5% per month",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q05",
+        "query": "How much did the AI model development cost?",
+        "type": "table",
+        "hit_rank": 2,
+        "top_result": "INVOICE > Service Details\n\n- Cloud Infrastructure Services covering AWS compute and storage.\n- AI Model Development including training and evaluation.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      },
+      {
+        "id": "q06",
+        "query": "What quantity of technical support was billed?",
+        "type": "table",
+        "hit_rank": 2,
+        "top_result": "INVOICE > Service Details\n\n- Cloud Infrastructure Services covering AWS compute and storage.\n- AI Model Development including training and evaluation.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      },
+      {
+        "id": "q08",
+        "query": "What programming languages does the candidate know?",
+        "type": "list",
+        "hit_rank": null,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q09",
+        "query": "How can I contact the applicant by email?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q10",
+        "query": "What is the candidate's professional background?",
+        "type": "semantic",
+        "hit_rank": 3,
+        "top_result": "Introduction > 1.1 Background\n\nPage stream segmentation recovers original document boundaries.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q11",
+        "query": "What is the passport number?",
+        "type": "identifier",
+        "hit_rank": null,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q13",
+        "query": "When does the travel document expire?",
+        "type": "value",
+        "hit_rank": 4,
+        "top_result": "TRAVEL DOCUMENT > Document Notes\n\n- Issuing authority: Regional Passport Office, Pune.\n- This page contains continuation information only.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          7
+        ]
+      },
+      {
+        "id": "q31",
+        "query": "Why does suppressing repeated headers help?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "INVOICE\n\nTechNova Solutions Pvt. Ltd.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q34",
+        "query": "What is recommended for continued measurement?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Methodology > 3.3 Example Measurement Table\n\n| Metric | Baseline | Target | Unit |\n| --- | --- | --- | --- |\n| Text retention | 90% | >=95% | percent ",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      }
+    ],
+    "dense_hashed_only": [
+      {
+        "id": "q01",
+        "query": "What is the invoice number?",
+        "type": "identifier",
+        "hit_rank": null,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q02",
+        "query": "What is the total amount due on the invoice?",
+        "type": "value",
+        "hit_rank": null,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q03",
+        "query": "What is the subtotal before tax?",
+        "type": "value",
+        "hit_rank": null,
+        "top_result": "Stadionbuurt\n\nBespreekvoordracht / Hamervoordracht / Actualiteit (indien actualiteit, graag toelichten)",
+        "top_confidence": 1.0,
+        "top_pages": [
+          31
+        ]
+      },
+      {
+        "id": "q04",
+        "query": "Who is the invoice billed to?",
+        "type": "identifier",
+        "hit_rank": 3,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q05",
+        "query": "How much did the AI model development cost?",
+        "type": "table",
+        "hit_rank": null,
+        "top_result": "RESUME > Technical Skills\n\n- Python, SQL, C++, Git, Docker\n- Machine Learning, NLP, Computer Vision\n- Retrieval systems and vector databases\n- Distrib",
+        "top_confidence": 1.0,
+        "top_pages": [
+          5
+        ]
+      },
+      {
+        "id": "q06",
+        "query": "What quantity of technical support was billed?",
+        "type": "table",
+        "hit_rank": null,
+        "top_result": "Commentaar:\n\nJohan Crui\u0133ff heeft ongetwijfeld bijzondere verdiensten voor de (Amsterdamse) samenleving\nverricht, wat betreft voetbal, jeugd en sport. ",
+        "top_confidence": 1.0,
+        "top_pages": [
+          112
+        ]
+      },
+      {
+        "id": "q07",
+        "query": "What are the payment terms for late payment?",
+        "type": "semantic",
+        "hit_rank": 5,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q08",
+        "query": "What programming languages does the candidate know?",
+        "type": "list",
+        "hit_rank": null,
+        "top_result": "voorz\u00ectt\u00e8r W\u0133kra\u00e2d Zuid-West Amsterdam\n\nVan:\nDatum: 7 maart 2018 om 11:11:42 CET\nAan: \"Capel, Sebastiaa\nKopie:\nOnderwerp: Antw.:0 Stuk db over Cruyff ",
+        "top_confidence": 1.0,
+        "top_pages": [
+          93
+        ]
+      },
+      {
+        "id": "q09",
+        "query": "How can I contact the applicant by email?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q10",
+        "query": "What is the candidate's professional background?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Introduction > 1.1 Background\n\nPage stream segmentation recovers original document boundaries.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q11",
+        "query": "What is the passport number?",
+        "type": "identifier",
+        "hit_rank": null,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q12",
+        "query": "What is the holder's surname?",
+        "type": "identifier",
+        "hit_rank": null,
+        "top_result": "Scope\n\nThe scope covers structuring and retrieval readiness only.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q13",
+        "query": "When does the travel document expire?",
+        "type": "value",
+        "hit_rank": null,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q14",
+        "query": "Which office issued the document?",
+        "type": "semantic",
+        "hit_rank": 3,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q15",
+        "query": "What nationality is the passport holder?",
+        "type": "identifier",
+        "hit_rank": 3,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q16",
+        "query": "What is the closing balance on the account?",
+        "type": "value",
+        "hit_rank": null,
+        "top_result": "Onderbouwing\n\nDe naam Johann Cruijffplein doet recht aan de uitzonderlijke verdiensten van Johan\nCruijff in het bijzonder voor Amsterdam en algemeen v",
+        "top_confidence": 1.0,
+        "top_pages": [
+          25,
+          26
+        ]
+      },
+      {
+        "id": "q17",
+        "query": "What was the opening balance?",
+        "type": "value",
+        "hit_rank": null,
+        "top_result": "GVo0003847_NBooNB\n\nWas - Wordt Blijft gelijk",
+        "top_confidence": 1.0,
+        "top_pages": [
+          191
+        ]
+      },
+      {
+        "id": "q18",
+        "query": "Who holds the bank account?",
+        "type": "identifier",
+        "hit_rank": null,
+        "top_result": "Stadionbuurt\n\nBespreekvoordracht / Hamervoordracht / Actualiteit (indien actualiteit, graag toelichten)",
+        "top_confidence": 1.0,
+        "top_pages": [
+          31
+        ]
+      },
+      {
+        "id": "q19",
+        "query": "How much salary was credited?",
+        "type": "table",
+        "hit_rank": null,
+        "top_result": "Commentaar:\n\nJohan Crui\u0133ff heeft ongetwijfeld bijzondere verdiensten voor de (Amsterdamse) samenleving\nverricht, wat betreft voetbal, jeugd en sport. ",
+        "top_confidence": 1.0,
+        "top_pages": [
+          112
+        ]
+      },
+      {
+        "id": "q20",
+        "query": "What was paid for rent?",
+        "type": "table",
+        "hit_rank": null,
+        "top_result": "Onderwerp: Re: JC plein\n\nDankjewel, kan je de paragraaf over zuid nog even aan ons sturen, zodat we zorgen dat als we daar\nals zuid op aangesproken wo",
+        "top_confidence": 1.0,
+        "top_pages": [
+          149,
+          151
+        ]
+      },
+      {
+        "id": "q21",
+        "query": "What period does the statement cover?",
+        "type": "value",
+        "hit_rank": null,
+        "top_result": "Stadionplein wordt Johan Cruijffplein\n\nPersberichten van de gemeente Amsterdam zijn ook te vinden onder amsterdam.nl/persberichten.\nZie ook twitter.co",
+        "top_confidence": 1.0,
+        "top_pages": [
+          87,
+          89
+        ]
+      },
+      {
+        "id": "q22",
+        "query": "What is the target for heading recovery?",
+        "type": "table",
+        "hit_rank": null,
+        "top_result": "BEPERKT KABINET\n\nJ.J. van Aartsen\n\nr}\n/\nt\n\nGemeente Amsterdam ST F \\\nIntegrale staf A",
+        "top_confidence": 1.0,
+        "top_pages": [
+          63
+        ]
+      },
+      {
+        "id": "q23",
+        "query": "What is the baseline for table preservation?",
+        "type": "table",
+        "hit_rank": null,
+        "top_result": "Afdeling\n\nProgramma\nPortefeuille\nDB-lid\nGebied\n\nType voordracht\n\nTe publiceren tekst\n\nTe publiceren tekst\n\nKanttekeningen en risico's",
+        "top_confidence": 1.0,
+        "top_pages": [
+          47
+        ]
+      },
+      {
+        "id": "q25",
+        "query": "How many elements were counted for paragraphs?",
+        "type": "table",
+        "hit_rank": null,
+        "top_result": "RESUME > Professional Summary\n\nAI Engineer with experience building machine learning, NLP and\n\ndocument understanding pipelines in production environm",
+        "top_confidence": 1.0,
+        "top_pages": [
+          4
+        ]
+      },
+      {
+        "id": "q26",
+        "query": "What retention was measured for bullet lists?",
+        "type": "table",
+        "hit_rank": null,
+        "top_result": "Beste B\n\nHierbij de flap we bellen maandag even,\n\nMet vriendelijke groet,\n\nCo\u00f6rdinator naamgeving openbare ruimten\nBasisinformatie\n\nGemeente Amsterdam",
+        "top_confidence": 1.0,
+        "top_pages": [
+          39,
+          41
+        ]
+      },
+      {
+        "id": "q27",
+        "query": "What signals are used for extraction?",
+        "type": "list",
+        "hit_rank": null,
+        "top_result": "Commentaar:\n\nJohan Crui\u0133ff heeft ongetwijfeld bijzondere verdiensten voor de (Amsterdamse) samenleving\nverricht, wat betreft voetbal, jeugd en sport. ",
+        "top_confidence": 1.0,
+        "top_pages": [
+          112
+        ]
+      },
+      {
+        "id": "q28",
+        "query": "What are the processing steps in order?",
+        "type": "list",
+        "hit_rank": null,
+        "top_result": "INVOICE > Notes and Terms\n\n1. Services are provided according to the agreed statement of work.\n2. Late payments may attract interest at 1.5% per month",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q29",
+        "query": "What does the figure illustrate?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Conclusie:\n\nDe genoemde beslispunten in de voordracht hebben wel financi\u00eble consequenties en deze\nzijn reeds geraamd in de begroting (100% dekking).",
+        "top_confidence": 1.0,
+        "top_pages": [
+          70
+        ]
+      },
+      {
+        "id": "q31",
+        "query": "Why does suppressing repeated headers help?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Dag\n\nWelkom terug!!!\n\nBij deze een stafstuk dat beperkt kabinet is.\nMijn collega heeft het agendapunt gister vi :3aangemeld.\n\nIk hoop dat er voldoende",
+        "top_confidence": 1.0,
+        "top_pages": [
+          57
+        ]
+      },
+      {
+        "id": "q32",
+        "query": "What are the key objectives of the evaluation?",
+        "type": "list",
+        "hit_rank": null,
+        "top_result": "Het Stadionplein\n\nOp de grond die bestemnd was voor de stadsuitbreiding in het Plan- Zuid van Berlage werd een\nsportpark gebouwd, Het Nederlandsch Spo",
+        "top_confidence": 1.0,
+        "top_pages": [
+          210
+        ]
+      },
+      {
+        "id": "q34",
+        "query": "What is recommended for continued measurement?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Beste B\n\nHierbij de flap we bellen maandag even,\n\nMet vriendelijke groet,\n\nCo\u00f6rdinator naamgeving openbare ruimten\nBasisinformatie\n\nGemeente Amsterdam",
+        "top_confidence": 1.0,
+        "top_pages": [
+          39,
+          41
+        ]
+      },
+      {
+        "id": "q35",
+        "query": "What does page stream segmentation recover?",
+        "type": "semantic",
+        "hit_rank": 2,
+        "top_result": "Scope\n\nThe scope covers structuring and retrieval readiness only.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      }
+    ],
+    "dense_svd_only": [
+      {
+        "id": "q02",
+        "query": "What is the total amount due on the invoice?",
+        "type": "value",
+        "hit_rank": 2,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q03",
+        "query": "What is the subtotal before tax?",
+        "type": "value",
+        "hit_rank": 2,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q05",
+        "query": "How much did the AI model development cost?",
+        "type": "table",
+        "hit_rank": 2,
+        "top_result": "INVOICE > Service Details\n\n- Cloud Infrastructure Services covering AWS compute and storage.\n- AI Model Development including training and evaluation.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      },
+      {
+        "id": "q06",
+        "query": "What quantity of technical support was billed?",
+        "type": "table",
+        "hit_rank": 2,
+        "top_result": "INVOICE > Service Details\n\n- Cloud Infrastructure Services covering AWS compute and storage.\n- AI Model Development including training and evaluation.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      },
+      {
+        "id": "q08",
+        "query": "What programming languages does the candidate know?",
+        "type": "list",
+        "hit_rank": null,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q09",
+        "query": "How can I contact the applicant by email?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q10",
+        "query": "What is the candidate's professional background?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q11",
+        "query": "What is the passport number?",
+        "type": "identifier",
+        "hit_rank": null,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q12",
+        "query": "What is the holder's surname?",
+        "type": "identifier",
+        "hit_rank": 3,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q13",
+        "query": "When does the travel document expire?",
+        "type": "value",
+        "hit_rank": 4,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q17",
+        "query": "What was the opening balance?",
+        "type": "value",
+        "hit_rank": 2,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q18",
+        "query": "Who holds the bank account?",
+        "type": "identifier",
+        "hit_rank": 3,
+        "top_result": "BANK STATEMENT\n\nSampleBank - Account Statement",
+        "top_confidence": 1.0,
+        "top_pages": [
+          8
+        ]
+      },
+      {
+        "id": "q21",
+        "query": "What period does the statement cover?",
+        "type": "value",
+        "hit_rank": 3,
+        "top_result": "BANK STATEMENT\n\nSampleBank - Account Statement",
+        "top_confidence": 1.0,
+        "top_pages": [
+          8
+        ]
+      },
+      {
+        "id": "q29",
+        "query": "What does the figure illustrate?",
+        "type": "semantic",
+        "hit_rank": 3,
+        "top_result": "Scope\n\nThe scope covers structuring and retrieval readiness only.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q31",
+        "query": "Why does suppressing repeated headers help?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "INVOICE\n\nTechNova Solutions Pvt. Ltd.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q32",
+        "query": "What are the key objectives of the evaluation?",
+        "type": "list",
+        "hit_rank": 2,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q34",
+        "query": "What is recommended for continued measurement?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Methodology > 3.3 Example Measurement Table\n\n| Metric | Baseline | Target | Unit |\n| --- | --- | --- | --- |\n| Text retention | 90% | >=95% | percent ",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      }
+    ],
+    "rrf_hashed": [
+      {
+        "id": "q01",
+        "query": "What is the invoice number?",
+        "type": "identifier",
+        "hit_rank": 2,
+        "top_result": "INVOICE > Notes and Terms\n\n1. Services are provided according to the agreed statement of work.\n2. Late payments may attract interest at 1.5% per month",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q03",
+        "query": "What is the subtotal before tax?",
+        "type": "value",
+        "hit_rank": 5,
+        "top_result": "Scope\n\nThe scope covers structuring and retrieval readiness only.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q05",
+        "query": "How much did the AI model development cost?",
+        "type": "table",
+        "hit_rank": 4,
+        "top_result": "INVOICE > Service Details\n\n- Cloud Infrastructure Services covering AWS compute and storage.\n- AI Model Development including training and evaluation.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      },
+      {
+        "id": "q06",
+        "query": "What quantity of technical support was billed?",
+        "type": "table",
+        "hit_rank": null,
+        "top_result": "GVo0003847_NBooNB\n\nWas - Wordt Blijft gelijk",
+        "top_confidence": 1.0,
+        "top_pages": [
+          191
+        ]
+      },
+      {
+        "id": "q08",
+        "query": "What programming languages does the candidate know?",
+        "type": "list",
+        "hit_rank": null,
+        "top_result": "voorz\u00ectt\u00e8r W\u0133kra\u00e2d Zuid-West Amsterdam\n\nVan:\nDatum: 7 maart 2018 om 11:11:42 CET\nAan: \"Capel, Sebastiaa\nKopie:\nOnderwerp: Antw.:0 Stuk db over Cruyff ",
+        "top_confidence": 1.0,
+        "top_pages": [
+          93
+        ]
+      },
+      {
+        "id": "q09",
+        "query": "How can I contact the applicant by email?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q10",
+        "query": "What is the candidate's professional background?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Introduction > 1.1 Background\n\nPage stream segmentation recovers original document boundaries.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q11",
+        "query": "What is the passport number?",
+        "type": "identifier",
+        "hit_rank": 3,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q12",
+        "query": "What is the holder's surname?",
+        "type": "identifier",
+        "hit_rank": null,
+        "top_result": "Scope\n\nThe scope covers structuring and retrieval readiness only.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q13",
+        "query": "When does the travel document expire?",
+        "type": "value",
+        "hit_rank": null,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q15",
+        "query": "What nationality is the passport holder?",
+        "type": "identifier",
+        "hit_rank": 2,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q16",
+        "query": "What is the closing balance on the account?",
+        "type": "value",
+        "hit_rank": 4,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q17",
+        "query": "What was the opening balance?",
+        "type": "value",
+        "hit_rank": 3,
+        "top_result": "GVo0003847_NBooNB\n\nWas - Wordt Blijft gelijk",
+        "top_confidence": 1.0,
+        "top_pages": [
+          191
+        ]
+      },
+      {
+        "id": "q18",
+        "query": "Who holds the bank account?",
+        "type": "identifier",
+        "hit_rank": 4,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q19",
+        "query": "How much salary was credited?",
+        "type": "table",
+        "hit_rank": 5,
+        "top_result": "De Middenweg\n\nDit grenst aan Betondorp en hier was tussen 1934 en 1996 Stadion De Meer gevestigd, de\nthuisbasis van Ajax waar Johan vanaf 1959 ging vo",
+        "top_confidence": 1.0,
+        "top_pages": [
+          142
+        ]
+      },
+      {
+        "id": "q20",
+        "query": "What was paid for rent?",
+        "type": "table",
+        "hit_rank": 5,
+        "top_result": "GVo0003847_NBooNB\n\nWas - Wordt Blijft gelijk",
+        "top_confidence": 1.0,
+        "top_pages": [
+          191
+        ]
+      },
+      {
+        "id": "q21",
+        "query": "What period does the statement cover?",
+        "type": "value",
+        "hit_rank": null,
+        "top_result": "INVOICE > Service Details\n\n- Cloud Infrastructure Services covering AWS compute and storage.\n- AI Model Development including training and evaluation.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      },
+      {
+        "id": "q22",
+        "query": "What is the target for heading recovery?",
+        "type": "table",
+        "hit_rank": 2,
+        "top_result": "Discussion > 5.2 Risks\n\nBorderless tables remain the most fragile extraction case.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      },
+      {
+        "id": "q25",
+        "query": "How many elements were counted for paragraphs?",
+        "type": "table",
+        "hit_rank": 2,
+        "top_result": "RESUME > Professional Summary\n\nAI Engineer with experience building machine learning, NLP and\n\ndocument understanding pipelines in production environm",
+        "top_confidence": 1.0,
+        "top_pages": [
+          4
+        ]
+      },
+      {
+        "id": "q26",
+        "query": "What retention was measured for bullet lists?",
+        "type": "table",
+        "hit_rank": 4,
+        "top_result": "Van: Capel, Sebastiaan\n\nVerzonden: woensdag 7 maart 2018 08:47\nAan:\n\nG\n\nOnderwerp: Stuk db over Cruyff plein\n\nHa , <an je mij dat stuk mailen, was een",
+        "top_confidence": 1.0,
+        "top_pages": [
+          195
+        ]
+      },
+      {
+        "id": "q27",
+        "query": "What signals are used for extraction?",
+        "type": "list",
+        "hit_rank": 3,
+        "top_result": "Executive Summary\n\nThis report evaluates structured extraction quality across a document packet.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q28",
+        "query": "What are the processing steps in order?",
+        "type": "list",
+        "hit_rank": 5,
+        "top_result": "INVOICE > Notes and Terms\n\n1. Services are provided according to the agreed statement of work.\n2. Late payments may attract interest at 1.5% per month",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q29",
+        "query": "What does the figure illustrate?",
+        "type": "semantic",
+        "hit_rank": 4,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q31",
+        "query": "Why does suppressing repeated headers help?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Dag\n\nWelkom terug!!!\n\nBij deze een stafstuk dat beperkt kabinet is.\nMijn collega heeft het agendapunt gister vi :3aangemeld.\n\nIk hoop dat er voldoende",
+        "top_confidence": 1.0,
+        "top_pages": [
+          57
+        ]
+      },
+      {
+        "id": "q32",
+        "query": "What are the key objectives of the evaluation?",
+        "type": "list",
+        "hit_rank": 5,
+        "top_result": "INVOICE > Notes and Terms\n\n1. Services are provided according to the agreed statement of work.\n2. Late payments may attract interest at 1.5% per month",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q34",
+        "query": "What is recommended for continued measurement?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "2. Inte stemmen met:\n\nOverweging om de \u2018harde kern' bij de burgemeester uit te nodigen en in gesprek te\ngaan.\n\n2b. Advies communicatie\n\nDenken aan alt",
+        "top_confidence": 1.0,
+        "top_pages": [
+          124,
+          125
+        ]
+      }
+    ],
+    "rrf_svd": [
+      {
+        "id": "q03",
+        "query": "What is the subtotal before tax?",
+        "type": "value",
+        "hit_rank": 2,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q05",
+        "query": "How much did the AI model development cost?",
+        "type": "table",
+        "hit_rank": 2,
+        "top_result": "INVOICE > Service Details\n\n- Cloud Infrastructure Services covering AWS compute and storage.\n- AI Model Development including training and evaluation.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      },
+      {
+        "id": "q06",
+        "query": "What quantity of technical support was billed?",
+        "type": "table",
+        "hit_rank": 2,
+        "top_result": "INVOICE > Service Details\n\n- Cloud Infrastructure Services covering AWS compute and storage.\n- AI Model Development including training and evaluation.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      },
+      {
+        "id": "q08",
+        "query": "What programming languages does the candidate know?",
+        "type": "list",
+        "hit_rank": null,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q09",
+        "query": "How can I contact the applicant by email?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q10",
+        "query": "What is the candidate's professional background?",
+        "type": "semantic",
+        "hit_rank": 5,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q11",
+        "query": "What is the passport number?",
+        "type": "identifier",
+        "hit_rank": null,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q12",
+        "query": "What is the holder's surname?",
+        "type": "identifier",
+        "hit_rank": 2,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q13",
+        "query": "When does the travel document expire?",
+        "type": "value",
+        "hit_rank": 4,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q17",
+        "query": "What was the opening balance?",
+        "type": "value",
+        "hit_rank": 2,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q18",
+        "query": "Who holds the bank account?",
+        "type": "identifier",
+        "hit_rank": 2,
+        "top_result": "BANK STATEMENT\n\nSampleBank - Account Statement",
+        "top_confidence": 1.0,
+        "top_pages": [
+          8
+        ]
+      },
+      {
+        "id": "q29",
+        "query": "What does the figure illustrate?",
+        "type": "semantic",
+        "hit_rank": 2,
+        "top_result": "Scope\n\nThe scope covers structuring and retrieval readiness only.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q31",
+        "query": "Why does suppressing repeated headers help?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "INVOICE\n\nTechNova Solutions Pvt. Ltd.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q34",
+        "query": "What is recommended for continued measurement?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Methodology > 3.3 Example Measurement Table\n\n| Metric | Baseline | Target | Unit |\n| --- | --- | --- | --- |\n| Text retention | 90% | >=95% | percent ",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      }
+    ],
+    "rrf_svd_query_aware": [
+      {
+        "id": "q03",
+        "query": "What is the subtotal before tax?",
+        "type": "value",
+        "hit_rank": 2,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q04",
+        "query": "Who is the invoice billed to?",
+        "type": "identifier",
+        "hit_rank": 2,
+        "top_result": "INVOICE > Notes and Terms\n\n1. Services are provided according to the agreed statement of work.\n2. Late payments may attract interest at 1.5% per month",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q05",
+        "query": "How much did the AI model development cost?",
+        "type": "table",
+        "hit_rank": 2,
+        "top_result": "INVOICE > Service Details\n\n- Cloud Infrastructure Services covering AWS compute and storage.\n- AI Model Development including training and evaluation.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      },
+      {
+        "id": "q06",
+        "query": "What quantity of technical support was billed?",
+        "type": "table",
+        "hit_rank": 2,
+        "top_result": "INVOICE > Service Details\n\n- Cloud Infrastructure Services covering AWS compute and storage.\n- AI Model Development including training and evaluation.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      },
+      {
+        "id": "q08",
+        "query": "What programming languages does the candidate know?",
+        "type": "list",
+        "hit_rank": null,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q09",
+        "query": "How can I contact the applicant by email?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q10",
+        "query": "What is the candidate's professional background?",
+        "type": "semantic",
+        "hit_rank": 4,
+        "top_result": "Introduction > 1.1 Background\n\nPage stream segmentation recovers original document boundaries.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q11",
+        "query": "What is the passport number?",
+        "type": "identifier",
+        "hit_rank": null,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q13",
+        "query": "When does the travel document expire?",
+        "type": "value",
+        "hit_rank": 4,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q29",
+        "query": "What does the figure illustrate?",
+        "type": "semantic",
+        "hit_rank": 2,
+        "top_result": "Scope\n\nThe scope covers structuring and retrieval readiness only.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q31",
+        "query": "Why does suppressing repeated headers help?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "INVOICE\n\nTechNova Solutions Pvt. Ltd.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q34",
+        "query": "What is recommended for continued measurement?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Methodology > 3.3 Example Measurement Table\n\n| Metric | Baseline | Target | Unit |\n| --- | --- | --- | --- |\n| Text retention | 90% | >=95% | percent ",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      }
+    ],
+    "rrf_svd_reranked": [
+      {
+        "id": "q02",
+        "query": "What is the total amount due on the invoice?",
+        "type": "value",
+        "hit_rank": 2,
+        "top_result": "INVOICE > Billing Details\n\n| Description | Qty | Unit Price | Amount |\n| --- | --- | --- | --- |\n| Cloud Infrastructure Services | 1 | 45,000 | 45,000",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q06",
+        "query": "What quantity of technical support was billed?",
+        "type": "table",
+        "hit_rank": 2,
+        "top_result": "INVOICE > Service Details\n\n- Cloud Infrastructure Services covering AWS compute and storage.\n- AI Model Development including training and evaluation.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      },
+      {
+        "id": "q08",
+        "query": "What programming languages does the candidate know?",
+        "type": "list",
+        "hit_rank": null,
+        "top_result": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          3
+        ]
+      },
+      {
+        "id": "q09",
+        "query": "How can I contact the applicant by email?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "1033 JS Amsterdam\n\nWij zijn per openbaar vervoer te bereiken met de metrolijnen 51, 53 en 54 (halte Waterlooplein / uitgang\n\nStadhuis) en de tramlijne",
+        "top_confidence": 1.0,
+        "top_pages": [
+          139,
+          140
+        ]
+      },
+      {
+        "id": "q10",
+        "query": "What is the candidate's professional background?",
+        "type": "semantic",
+        "hit_rank": 2,
+        "top_result": "Introduction > 1.1 Background\n\nPage stream segmentation recovers original document boundaries.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q11",
+        "query": "What is the passport number?",
+        "type": "identifier",
+        "hit_rank": 4,
+        "top_result": "INVOICE > Billing Details\n\nInvoice Number: INV-2026-004471\n\nBill To: Acme Digital Services",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q31",
+        "query": "Why does suppressing repeated headers help?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "INVOICE > Billing Details\n\nInvoice Number: INV-2026-004471\n\nBill To: Acme Digital Services",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q34",
+        "query": "What is recommended for continued measurement?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Methodology > 3.3 Example Measurement Table\n\n| Metric | Baseline | Target | Unit |\n| --- | --- | --- | --- |\n| Text retention | 90% | >=95% | percent ",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      }
+    ],
+    "dense_bge_only": [
+      {
+        "id": "q08",
+        "query": "What programming languages does the candidate know?",
+        "type": "list",
+        "hit_rank": 2,
+        "top_result": "Afdeling\n\nProgramma\nPortefeuille\nDB-lid\nGebied\n\nType voordracht\n\nTe publiceren tekst\n\nTe publiceren tekst\n\nKanttekeningen en risico's",
+        "top_confidence": 1.0,
+        "top_pages": [
+          47
+        ]
+      },
+      {
+        "id": "q09",
+        "query": "How can I contact the applicant by email?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "E-mail\n\n| E |\nAdres\n\neosstraat 210",
+        "top_confidence": 1.0,
+        "top_pages": [
+          106
+        ]
+      },
+      {
+        "id": "q10",
+        "query": "What is the candidate's professional background?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "1 juni onthulling Johan Cruijffplein\n\nPubliciteit / communicatie\n\nIn overleg met de woordvoerder.\n\nWijze van voorbereiding\n\nn.v.t.\n\nResultaat overleg ",
+        "top_confidence": 1.0,
+        "top_pages": [
+          131
+        ]
+      },
+      {
+        "id": "q11",
+        "query": "What is the passport number?",
+        "type": "identifier",
+        "hit_rank": 3,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q13",
+        "query": "When does the travel document expire?",
+        "type": "value",
+        "hit_rank": 4,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q17",
+        "query": "What was the opening balance?",
+        "type": "value",
+        "hit_rank": null,
+        "top_result": "1. Intrekken van de navolgende openbare ruimte:\n\n\u00b0 Stadionplein (type weg in de basisregistraties adressen en gebouwen)(BAG)\n\nVaststellen van de navol",
+        "top_confidence": 1.0,
+        "top_pages": [
+          67
+        ]
+      },
+      {
+        "id": "q18",
+        "query": "Who holds the bank account?",
+        "type": "identifier",
+        "hit_rank": 3,
+        "top_result": "BANK STATEMENT\n\nSampleBank - Account Statement",
+        "top_confidence": 1.0,
+        "top_pages": [
+          8
+        ]
+      },
+      {
+        "id": "q21",
+        "query": "What period does the statement cover?",
+        "type": "value",
+        "hit_rank": null,
+        "top_result": "BANK STATEMENT > Transaction Summary\n\n| Date | Description | Debit | Credit |\n| --- | --- | --- | --- |\n| 02 Aug | Salary Credit |  | 65,000 |\n| 07 Au",
+        "top_confidence": 1.0,
+        "top_pages": [
+          9
+        ]
+      },
+      {
+        "id": "q22",
+        "query": "What is the target for heading recovery?",
+        "type": "table",
+        "hit_rank": 2,
+        "top_result": "Executive Summary > Key objectives\n\n- Preserve headings and their hierarchy.\n- Retain tables as structured rows.\n- Keep precise page provenance.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q26",
+        "query": "What retention was measured for bullet lists?",
+        "type": "table",
+        "hit_rank": 2,
+        "top_result": "Methodology > 3.3 Example Measurement Table\n\n| Metric | Baseline | Target | Unit |\n| --- | --- | --- | --- |\n| Text retention | 90% | >=95% | percent ",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      },
+      {
+        "id": "q32",
+        "query": "What are the key objectives of the evaluation?",
+        "type": "list",
+        "hit_rank": 2,
+        "top_result": "Introduction > 1.2 Evaluation Principles\n\nMetrics must be measured rather than asserted.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q34",
+        "query": "What is recommended for continued measurement?",
+        "type": "semantic",
+        "hit_rank": 2,
+        "top_result": "Methodology > 3.3 Example Measurement Table\n\n| Metric | Baseline | Target | Unit |\n| --- | --- | --- | --- |\n| Text retention | 90% | >=95% | percent ",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      }
+    ],
+    "rrf_bge": [
+      {
+        "id": "q09",
+        "query": "How can I contact the applicant by email?",
+        "type": "semantic",
+        "hit_rank": null,
+        "top_result": "Naam\n\nAD2018-045701\n\nCollege van B&W Voordracht (pdf)\n\nBehandelend ambtenaar (naam, telefoonnummer en e-mailadres)\n\nBesluit college van burgemeester e",
+        "top_confidence": 1.0,
+        "top_pages": [
+          167,
+          168
+        ]
+      },
+      {
+        "id": "q11",
+        "query": "What is the passport number?",
+        "type": "identifier",
+        "hit_rank": 4,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q13",
+        "query": "When does the travel document expire?",
+        "type": "value",
+        "hit_rank": 4,
+        "top_result": "TRAVEL DOCUMENT\n\nIdentity and Passport Information",
+        "top_confidence": 1.0,
+        "top_pages": [
+          6
+        ]
+      },
+      {
+        "id": "q17",
+        "query": "What was the opening balance?",
+        "type": "value",
+        "hit_rank": 2,
+        "top_result": "BANK STATEMENT > Transaction Summary\n\nClosing Balance: 1,24,550",
+        "top_confidence": 1.0,
+        "top_pages": [
+          9
+        ]
+      },
+      {
+        "id": "q18",
+        "query": "Who holds the bank account?",
+        "type": "identifier",
+        "hit_rank": 2,
+        "top_result": "BANK STATEMENT\n\nSampleBank - Account Statement",
+        "top_confidence": 1.0,
+        "top_pages": [
+          8
+        ]
+      },
+      {
+        "id": "q21",
+        "query": "What period does the statement cover?",
+        "type": "value",
+        "hit_rank": 3,
+        "top_result": "BANK STATEMENT\n\nSampleBank - Account Statement",
+        "top_confidence": 1.0,
+        "top_pages": [
+          8
+        ]
+      },
+      {
+        "id": "q34",
+        "query": "What is recommended for continued measurement?",
+        "type": "semantic",
+        "hit_rank": 2,
+        "top_result": "Methodology > 3.3 Example Measurement Table\n\n| Metric | Baseline | Target | Unit |\n| --- | --- | --- | --- |\n| Text retention | 90% | >=95% | percent ",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      }
+    ],
+    "rrf_bge_reranked": [
+      {
+        "id": "q02",
+        "query": "What is the total amount due on the invoice?",
+        "type": "value",
+        "hit_rank": 2,
+        "top_result": "INVOICE > Billing Details\n\n| Description | Qty | Unit Price | Amount |\n| --- | --- | --- | --- |\n| Cloud Infrastructure Services | 1 | 45,000 | 45,000",
+        "top_confidence": 1.0,
+        "top_pages": [
+          1
+        ]
+      },
+      {
+        "id": "q09",
+        "query": "How can I contact the applicant by email?",
+        "type": "semantic",
+        "hit_rank": 5,
+        "top_result": "Naam\n\nAD2018-045701\n\nCollege van B&W Voordracht (pdf)\n\nBehandelend ambtenaar (naam, telefoonnummer en e-mailadres)\n\nBesluit college van burgemeester e",
+        "top_confidence": 1.0,
+        "top_pages": [
+          167,
+          168
+        ]
+      },
+      {
+        "id": "q11",
+        "query": "What is the passport number?",
+        "type": "identifier",
+        "hit_rank": 2,
+        "top_result": "TRAVEL DOCUMENT > Document Notes\n\n- Issuing authority: Regional Passport Office, Pune.\n- This page contains continuation information only.",
+        "top_confidence": 1.0,
+        "top_pages": [
+          7
+        ]
+      },
+      {
+        "id": "q34",
+        "query": "What is recommended for continued measurement?",
+        "type": "semantic",
+        "hit_rank": 3,
+        "top_result": "Methodology > 3.3 Example Measurement Table\n\n| Metric | Baseline | Target | Unit |\n| --- | --- | --- | --- |\n| Text retention | 90% | >=95% | percent ",
+        "top_confidence": 1.0,
+        "top_pages": [
+          2
+        ]
+      }
+    ]
+  }
+}

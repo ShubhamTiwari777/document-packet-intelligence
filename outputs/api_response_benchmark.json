@@ -1,0 +1,1161 @@
+{
+  "packet_id": "tmpquct80nu",
+  "documents": [
+    {
+      "doc_id": "tmpquct80nu_doc_001",
+      "pages": [
+        1,
+        2,
+        3
+      ],
+      "doc_type": "unknown",
+      "classification_confidence": 0.30147109615010764,
+      "boundary_confidences": [
+        0.0,
+        0.0
+      ],
+      "classification_source": "abstained_low_confidence",
+      "classification_alternatives": [
+        {
+          "label": "scientific_report",
+          "probability": 0.3015
+        },
+        {
+          "label": "presentation",
+          "probability": 0.1229
+        },
+        {
+          "label": "form",
+          "probability": 0.1007
+        }
+      ]
+    }
+  ],
+  "chunk_count": 18,
+  "output_dir": "outputs\\benchmark_report",
+  "model_status": {
+    "boundary": "trained",
+    "document_classifier": {
+      "declared_kind": "tfidf_logistic_regression",
+      "min_confidence": 0.35,
+      "active": "hybrid_tfidf_lexicon",
+      "trained_model_loaded": true,
+      "model_path": "models\\document_classifier\\tfidf_lr.pkl",
+      "trained_labels": [
+        "advertisement",
+        "budget",
+        "email",
+        "file_folder",
+        "form",
+        "handwritten",
+        "invoice",
+        "letter",
+        "memo",
+        "news_article",
+        "presentation",
+        "questionnaire",
+        "resume",
+        "scientific_publication",
+        "scientific_report",
+        "specification"
+      ],
+      "extension_labels": [
+        "bank_statement",
+        "passport"
+      ]
+    }
+  },
+  "structured_documents": [
+    {
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "pages": [
+        1,
+        2,
+        3
+      ],
+      "metadata": {
+        "schema_version": "1.0",
+        "source_file": "tmpquct80nu.pdf",
+        "document_title": "Document Intelligence Evaluation Report",
+        "packet_page_range": [
+          1,
+          2,
+          3
+        ],
+        "page_count": 3,
+        "extraction_method": "pymupdf",
+        "ocr_used": false,
+        "doc_type": "unknown",
+        "classification_confidence": 0.30147109615010764,
+        "classification_source": "abstained_low_confidence",
+        "section_count": 22,
+        "element_counts": {
+          "paragraph": 12,
+          "list": 3,
+          "table": 2,
+          "caption": 1
+        },
+        "has_tables": true,
+        "boilerplate_lines": [
+          "document intelligence evaluation report",
+          "page #"
+        ],
+        "type_specific_fields": {}
+      },
+      "sections": [
+        {
+          "section_id": "tmpquct80nu_doc_001_s00",
+          "title": "Document",
+          "level": 1,
+          "content_md": "Stage 2 Structured Document Extraction Benchmark",
+          "page_refs": [
+            1
+          ],
+          "elements": [
+            {
+              "type": "paragraph",
+              "text": "Stage 2 Structured Document Extraction Benchmark",
+              "page": 1,
+              "bbox": [
+                72.0,
+                97.7874984741211,
+                292.7040710449219,
+                110.84049987792969
+              ],
+              "rows": null,
+              "items": null,
+              "headers": null,
+              "ordered": null,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s00_e01"
+            }
+          ],
+          "parent_section_id": null,
+          "breadcrumb": []
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s01",
+          "title": "Executive Summary",
+          "level": 1,
+          "content_md": "This report evaluates structured extraction quality across a document packet.",
+          "page_refs": [
+            1
+          ],
+          "elements": [
+            {
+              "type": "paragraph",
+              "text": "This report evaluates structured extraction quality across a document packet.",
+              "page": 1,
+              "bbox": [
+                72.0,
+                141.28750610351562,
+                395.6651306152344,
+                154.3404998779297
+              ],
+              "rows": null,
+              "items": null,
+              "headers": null,
+              "ordered": null,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s01_e01"
+            }
+          ],
+          "parent_section_id": null,
+          "breadcrumb": [
+            "Executive Summary"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s02",
+          "title": "Key objectives",
+          "level": 2,
+          "content_md": "- Preserve headings and their hierarchy.\n- Retain tables as structured rows.\n- Keep precise page provenance.",
+          "page_refs": [
+            1
+          ],
+          "elements": [
+            {
+              "type": "list",
+              "text": "- Preserve headings and their hierarchy.\n- Retain tables as structured rows.\n- Keep precise page provenance.",
+              "page": 1,
+              "bbox": [
+                82.0,
+                182.78750610351562,
+                250.43496704101562,
+                195.8404998779297
+              ],
+              "rows": null,
+              "items": [
+                "Preserve headings and their hierarchy.",
+                "Retain tables as structured rows.",
+                "Keep precise page provenance."
+              ],
+              "headers": null,
+              "ordered": false,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s02_e01"
+            }
+          ],
+          "parent_section_id": "tmpquct80nu_doc_001_s01",
+          "breadcrumb": [
+            "Executive Summary",
+            "Key objectives"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s03",
+          "title": "Introduction",
+          "level": 1,
+          "content_md": "Document packets combine unrelated documents into a single file.",
+          "page_refs": [
+            1
+          ],
+          "elements": [
+            {
+              "type": "paragraph",
+              "text": "Document packets combine unrelated documents into a single file.",
+              "page": 1,
+              "bbox": [
+                72.0,
+                255.28750610351562,
+                351.3190612792969,
+                268.34051513671875
+              ],
+              "rows": null,
+              "items": null,
+              "headers": null,
+              "ordered": null,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s03_e01"
+            }
+          ],
+          "parent_section_id": null,
+          "breadcrumb": [
+            "Introduction"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s04",
+          "title": "1.1 Background",
+          "level": 2,
+          "content_md": "Page stream segmentation recovers original document boundaries.",
+          "page_refs": [
+            1
+          ],
+          "elements": [
+            {
+              "type": "paragraph",
+              "text": "Page stream segmentation recovers original document boundaries.",
+              "page": 1,
+              "bbox": [
+                72.0,
+                296.7875061035156,
+                354.48260498046875,
+                309.84051513671875
+              ],
+              "rows": null,
+              "items": null,
+              "headers": null,
+              "ordered": null,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s04_e01"
+            }
+          ],
+          "parent_section_id": "tmpquct80nu_doc_001_s03",
+          "breadcrumb": [
+            "Introduction",
+            "1.1 Background"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s05",
+          "title": "1.2 Evaluation Principles",
+          "level": 2,
+          "content_md": "Metrics must be measured rather than asserted.",
+          "page_refs": [
+            1
+          ],
+          "elements": [
+            {
+              "type": "paragraph",
+              "text": "Metrics must be measured rather than asserted.",
+              "page": 1,
+              "bbox": [
+                72.0,
+                338.2875061035156,
+                274.2170104980469,
+                351.34051513671875
+              ],
+              "rows": null,
+              "items": null,
+              "headers": null,
+              "ordered": null,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s05_e01"
+            }
+          ],
+          "parent_section_id": "tmpquct80nu_doc_001_s03",
+          "breadcrumb": [
+            "Introduction",
+            "1.2 Evaluation Principles"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s06",
+          "title": "Scope",
+          "level": 1,
+          "content_md": "The scope covers structuring and retrieval readiness only.",
+          "page_refs": [
+            1
+          ],
+          "elements": [
+            {
+              "type": "paragraph",
+              "text": "The scope covers structuring and retrieval readiness only.",
+              "page": 1,
+              "bbox": [
+                72.0,
+                381.7875061035156,
+                315.3995666503906,
+                394.84051513671875
+              ],
+              "rows": null,
+              "items": null,
+              "headers": null,
+              "ordered": null,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s06_e01"
+            }
+          ],
+          "parent_section_id": null,
+          "breadcrumb": [
+            "Scope"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s07",
+          "title": "Methodology",
+          "level": 1,
+          "content_md": "",
+          "page_refs": [],
+          "elements": [],
+          "parent_section_id": null,
+          "breadcrumb": [
+            "Methodology"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s08",
+          "title": "3.1 Processing Steps",
+          "level": 2,
+          "content_md": "1. Parse pages and blocks.\n2. Detect boilerplate.\n3. Classify headings.\n4. Extract tables and lists.",
+          "page_refs": [
+            1
+          ],
+          "elements": [
+            {
+              "type": "list",
+              "text": "1. Parse pages and blocks.\n2. Detect boilerplate.\n3. Classify headings.\n4. Extract tables and lists.",
+              "page": 1,
+              "bbox": [
+                82.0,
+                452.2875061035156,
+                196.5889892578125,
+                465.34051513671875
+              ],
+              "rows": null,
+              "items": [
+                "Parse pages and blocks.",
+                "Detect boilerplate.",
+                "Classify headings.",
+                "Extract tables and lists."
+              ],
+              "headers": null,
+              "ordered": true,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s08_e01"
+            }
+          ],
+          "parent_section_id": "tmpquct80nu_doc_001_s07",
+          "breadcrumb": [
+            "Methodology",
+            "3.1 Processing Steps"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s09",
+          "title": "3.2 Extraction Signals",
+          "level": 2,
+          "content_md": "- Font size and weight.\n- Bounding box position.\n- Numbering patterns.",
+          "page_refs": [
+            1
+          ],
+          "elements": [
+            {
+              "type": "list",
+              "text": "- Font size and weight.\n- Bounding box position.\n- Numbering patterns.",
+              "page": 1,
+              "bbox": [
+                82.0,
+                537.2874755859375,
+                177.0474853515625,
+                550.3405151367188
+              ],
+              "rows": null,
+              "items": [
+                "Font size and weight.",
+                "Bounding box position.",
+                "Numbering patterns."
+              ],
+              "headers": null,
+              "ordered": false,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s09_e01"
+            }
+          ],
+          "parent_section_id": "tmpquct80nu_doc_001_s07",
+          "breadcrumb": [
+            "Methodology",
+            "3.2 Extraction Signals"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s10",
+          "title": "3.3 Example Measurement Table",
+          "level": 2,
+          "content_md": "| Metric | Baseline | Target | Unit |\n| --- | --- | --- | --- |\n| Text retention | 90% | >=95% | percent |\n| Heading recovery | 65% | >=85% | percent |\n| List recovery | 70% | >=90% | percent |\n| Table preservation | 60% | >=90% | percent |\n| Page-reference accuracy | 80% | >=95% | percent |",
+          "page_refs": [
+            2
+          ],
+          "elements": [
+            {
+              "type": "table",
+              "text": "| Metric | Baseline | Target | Unit |\n| --- | --- | --- | --- |\n| Text retention | 90% | >=95% | percent |\n| Heading recovery | 65% | >=85% | percent |\n| List recovery | 70% | >=90% | percent |\n| Table preservation | 60% | >=90% | percent |\n| Page-reference accuracy | 80% | >=95% | percent |",
+              "page": 2,
+              "bbox": [
+                76.0,
+                90.86300000000006,
+                446.01500000000004,
+                189.86300000000006
+              ],
+              "rows": [
+                [
+                  "Metric",
+                  "Baseline",
+                  "Target",
+                  "Unit"
+                ],
+                [
+                  "Text retention",
+                  "90%",
+                  ">=95%",
+                  "percent"
+                ],
+                [
+                  "Heading recovery",
+                  "65%",
+                  ">=85%",
+                  "percent"
+                ],
+                [
+                  "List recovery",
+                  "70%",
+                  ">=90%",
+                  "percent"
+                ],
+                [
+                  "Table preservation",
+                  "60%",
+                  ">=90%",
+                  "percent"
+                ],
+                [
+                  "Page-reference accuracy",
+                  "80%",
+                  ">=95%",
+                  "percent"
+                ]
+              ],
+              "items": null,
+              "headers": [
+                "Metric",
+                "Baseline",
+                "Target",
+                "Unit"
+              ],
+              "ordered": null,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s10_e01"
+            }
+          ],
+          "parent_section_id": "tmpquct80nu_doc_001_s07",
+          "breadcrumb": [
+            "Methodology",
+            "3.3 Example Measurement Table"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s11",
+          "title": "Results",
+          "level": 1,
+          "content_md": "",
+          "page_refs": [],
+          "elements": [],
+          "parent_section_id": null,
+          "breadcrumb": [
+            "Results"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s12",
+          "title": "4.1 Quantitative Findings",
+          "level": 2,
+          "content_md": "| Category | Documents | Elements | Retention |\n| --- | --- | --- | --- |\n| Headings | 12 | 28 | 93% |\n| Paragraphs | 12 | 86 | 98% |\n| Bullet lists | 12 | 16 | 100% |\n| Numbered lists | 12 | 12 | 100% |\n| Tables | 12 | 8 | 95% |",
+          "page_refs": [
+            2
+          ],
+          "elements": [
+            {
+              "type": "table",
+              "text": "| Category | Documents | Elements | Retention |\n| --- | --- | --- | --- |\n| Headings | 12 | 28 | 93% |\n| Paragraphs | 12 | 86 | 98% |\n| Bullet lists | 12 | 16 | 100% |\n| Numbered lists | 12 | 12 | 100% |\n| Tables | 12 | 8 | 95% |",
+              "page": 2,
+              "bbox": [
+                72.0,
+                268.0,
+                492.0,
+                376.0
+              ],
+              "rows": [
+                [
+                  "Category",
+                  "Documents",
+                  "Elements",
+                  "Retention"
+                ],
+                [
+                  "Headings",
+                  "12",
+                  "28",
+                  "93%"
+                ],
+                [
+                  "Paragraphs",
+                  "12",
+                  "86",
+                  "98%"
+                ],
+                [
+                  "Bullet lists",
+                  "12",
+                  "16",
+                  "100%"
+                ],
+                [
+                  "Numbered lists",
+                  "12",
+                  "12",
+                  "100%"
+                ],
+                [
+                  "Tables",
+                  "12",
+                  "8",
+                  "95%"
+                ]
+              ],
+              "items": null,
+              "headers": [
+                "Category",
+                "Documents",
+                "Elements",
+                "Retention"
+              ],
+              "ordered": null,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s12_e01"
+            }
+          ],
+          "parent_section_id": "tmpquct80nu_doc_001_s11",
+          "breadcrumb": [
+            "Results",
+            "4.1 Quantitative Findings"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s13",
+          "title": "4.2 Findings",
+          "level": 2,
+          "content_md": "Structured extraction improved retrieval precision in internal testing.",
+          "page_refs": [
+            2
+          ],
+          "elements": [
+            {
+              "type": "paragraph",
+              "text": "Structured extraction improved retrieval precision in internal testing.",
+              "page": 2,
+              "bbox": [
+                72.0,
+                404.7875061035156,
+                355.5180969238281,
+                417.84051513671875
+              ],
+              "rows": null,
+              "items": null,
+              "headers": null,
+              "ordered": null,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s13_e01"
+            }
+          ],
+          "parent_section_id": "tmpquct80nu_doc_001_s11",
+          "breadcrumb": [
+            "Results",
+            "4.2 Findings"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s14",
+          "title": "4.3 Figure Caption",
+          "level": 2,
+          "content_md": "Figure 1. Conceptual flow from source PDF to structured representation and retrieval-ready chunks.",
+          "page_refs": [
+            2
+          ],
+          "elements": [
+            {
+              "type": "caption",
+              "text": "Figure 1. Conceptual flow from source PDF to structured representation and retrieval-ready chunks.",
+              "page": 2,
+              "bbox": [
+                72.0,
+                446.2875061035156,
+                490.1618347167969,
+                459.34051513671875
+              ],
+              "rows": null,
+              "items": null,
+              "headers": null,
+              "ordered": null,
+              "label": "Figure 1",
+              "element_id": "tmpquct80nu_doc_001_s14_e01"
+            }
+          ],
+          "parent_section_id": "tmpquct80nu_doc_001_s11",
+          "breadcrumb": [
+            "Results",
+            "4.3 Figure Caption"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s15",
+          "title": "Discussion",
+          "level": 1,
+          "content_md": "",
+          "page_refs": [],
+          "elements": [],
+          "parent_section_id": null,
+          "breadcrumb": [
+            "Discussion"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s16",
+          "title": "5.1 Important Observations",
+          "level": 2,
+          "content_md": "Boilerplate suppression materially reduces duplicate retrieval candidates.",
+          "page_refs": [
+            2
+          ],
+          "elements": [
+            {
+              "type": "paragraph",
+              "text": "Boilerplate suppression materially reduces duplicate retrieval candidates.",
+              "page": 2,
+              "bbox": [
+                72.0,
+                516.7874755859375,
+                378.7551574707031,
+                529.8405151367188
+              ],
+              "rows": null,
+              "items": null,
+              "headers": null,
+              "ordered": null,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s16_e01"
+            }
+          ],
+          "parent_section_id": "tmpquct80nu_doc_001_s15",
+          "breadcrumb": [
+            "Discussion",
+            "5.1 Important Observations"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s17",
+          "title": "5.2 Risks",
+          "level": 2,
+          "content_md": "Borderless tables remain the most fragile extraction case.",
+          "page_refs": [
+            2
+          ],
+          "elements": [
+            {
+              "type": "paragraph",
+              "text": "Borderless tables remain the most fragile extraction case.",
+              "page": 2,
+              "bbox": [
+                72.0,
+                558.2874755859375,
+                313.8130187988281,
+                571.3405151367188
+              ],
+              "rows": null,
+              "items": null,
+              "headers": null,
+              "ordered": null,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s17_e01"
+            }
+          ],
+          "parent_section_id": "tmpquct80nu_doc_001_s15",
+          "breadcrumb": [
+            "Discussion",
+            "5.2 Risks"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s18",
+          "title": "5.3 Recommendations",
+          "level": 2,
+          "content_md": "Adopt dual table strategies and validate on held-out documents.",
+          "page_refs": [
+            2
+          ],
+          "elements": [
+            {
+              "type": "paragraph",
+              "text": "Adopt dual table strategies and validate on held-out documents.",
+              "page": 2,
+              "bbox": [
+                72.0,
+                599.7874755859375,
+                340.2611083984375,
+                612.8405151367188
+              ],
+              "rows": null,
+              "items": null,
+              "headers": null,
+              "ordered": null,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s18_e01"
+            }
+          ],
+          "parent_section_id": "tmpquct80nu_doc_001_s15",
+          "breadcrumb": [
+            "Discussion",
+            "5.3 Recommendations"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s19",
+          "title": "Conclusion",
+          "level": 1,
+          "content_md": "",
+          "page_refs": [],
+          "elements": [],
+          "parent_section_id": null,
+          "breadcrumb": [
+            "Conclusion"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s20",
+          "title": "6.1 Recommendations",
+          "level": 2,
+          "content_md": "Continue measuring structure quality against annotated ground truth.",
+          "page_refs": [
+            2
+          ],
+          "elements": [
+            {
+              "type": "paragraph",
+              "text": "Continue measuring structure quality against annotated ground truth.",
+              "page": 2,
+              "bbox": [
+                72.0,
+                670.2874755859375,
+                361.3700866699219,
+                683.3405151367188
+              ],
+              "rows": null,
+              "items": null,
+              "headers": null,
+              "ordered": null,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s20_e01"
+            }
+          ],
+          "parent_section_id": "tmpquct80nu_doc_001_s19",
+          "breadcrumb": [
+            "Conclusion",
+            "6.1 Recommendations"
+          ]
+        },
+        {
+          "section_id": "tmpquct80nu_doc_001_s21",
+          "title": "Appendix - Expected Structure",
+          "level": 1,
+          "content_md": "The appendix enumerates the expected structural elements.",
+          "page_refs": [
+            3
+          ],
+          "elements": [
+            {
+              "type": "paragraph",
+              "text": "The appendix enumerates the expected structural elements.",
+              "page": 3,
+              "bbox": [
+                72.0,
+                98.7874984741211,
+                324.9281005859375,
+                111.84049987792969
+              ],
+              "rows": null,
+              "items": null,
+              "headers": null,
+              "ordered": null,
+              "label": null,
+              "element_id": "tmpquct80nu_doc_001_s21_e01"
+            }
+          ],
+          "parent_section_id": null,
+          "breadcrumb": [
+            "Appendix - Expected Structure"
+          ]
+        }
+      ]
+    }
+  ],
+  "chunks": [
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s00_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s00",
+      "page_refs": [
+        1
+      ],
+      "text": "Document\n\nStage 2 Structured Document Extraction Benchmark",
+      "breadcrumb": [],
+      "element_types": [
+        "paragraph"
+      ],
+      "token_count": 7
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s01_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s01",
+      "page_refs": [
+        1
+      ],
+      "text": "Executive Summary\n\nThis report evaluates structured extraction quality across a document packet.",
+      "breadcrumb": [
+        "Executive Summary"
+      ],
+      "element_types": [
+        "paragraph"
+      ],
+      "token_count": 12
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s02_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s02",
+      "page_refs": [
+        1
+      ],
+      "text": "Executive Summary > Key objectives\n\n- Preserve headings and their hierarchy.\n- Retain tables as structured rows.\n- Keep precise page provenance.",
+      "breadcrumb": [
+        "Executive Summary",
+        "Key objectives"
+      ],
+      "element_types": [
+        "list"
+      ],
+      "token_count": 22
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s03_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s03",
+      "page_refs": [
+        1
+      ],
+      "text": "Introduction\n\nDocument packets combine unrelated documents into a single file.",
+      "breadcrumb": [
+        "Introduction"
+      ],
+      "element_types": [
+        "paragraph"
+      ],
+      "token_count": 10
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s04_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s04",
+      "page_refs": [
+        1
+      ],
+      "text": "Introduction > 1.1 Background\n\nPage stream segmentation recovers original document boundaries.",
+      "breadcrumb": [
+        "Introduction",
+        "1.1 Background"
+      ],
+      "element_types": [
+        "paragraph"
+      ],
+      "token_count": 11
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s05_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s05",
+      "page_refs": [
+        1
+      ],
+      "text": "Introduction > 1.2 Evaluation Principles\n\nMetrics must be measured rather than asserted.",
+      "breadcrumb": [
+        "Introduction",
+        "1.2 Evaluation Principles"
+      ],
+      "element_types": [
+        "paragraph"
+      ],
+      "token_count": 12
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s06_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s06",
+      "page_refs": [
+        1
+      ],
+      "text": "Scope\n\nThe scope covers structuring and retrieval readiness only.",
+      "breadcrumb": [
+        "Scope"
+      ],
+      "element_types": [
+        "paragraph"
+      ],
+      "token_count": 9
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s08_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s08",
+      "page_refs": [
+        1
+      ],
+      "text": "Methodology > 3.1 Processing Steps\n\n1. Parse pages and blocks.\n2. Detect boilerplate.\n3. Classify headings.\n4. Extract tables and lists.",
+      "breadcrumb": [
+        "Methodology",
+        "3.1 Processing Steps"
+      ],
+      "element_types": [
+        "list"
+      ],
+      "token_count": 21
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s09_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s09",
+      "page_refs": [
+        1
+      ],
+      "text": "Methodology > 3.2 Extraction Signals\n\n- Font size and weight.\n- Bounding box position.\n- Numbering patterns.",
+      "breadcrumb": [
+        "Methodology",
+        "3.2 Extraction Signals"
+      ],
+      "element_types": [
+        "list"
+      ],
+      "token_count": 17
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s10_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s10",
+      "page_refs": [
+        2
+      ],
+      "text": "Methodology > 3.3 Example Measurement Table\n\n| Metric | Baseline | Target | Unit |\n| --- | --- | --- | --- |\n| Text retention | 90% | >=95% | percent |\n| Heading recovery | 65% | >=85% | percent |\n| List recovery | 70% | >=90% | percent |\n| Table preservation | 60% | >=90% | percent |\n| Page-reference accuracy | 80% | >=95% | percent |",
+      "breadcrumb": [
+        "Methodology",
+        "3.3 Example Measurement Table"
+      ],
+      "element_types": [
+        "table"
+      ],
+      "token_count": 74
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s12_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s12",
+      "page_refs": [
+        2
+      ],
+      "text": "Results > 4.1 Quantitative Findings\n\n| Category | Documents | Elements | Retention |\n| --- | --- | --- | --- |\n| Headings | 12 | 28 | 93% |\n| Paragraphs | 12 | 86 | 98% |\n| Bullet lists | 12 | 16 | 100% |\n| Numbered lists | 12 | 12 | 100% |\n| Tables | 12 | 8 | 95% |",
+      "breadcrumb": [
+        "Results",
+        "4.1 Quantitative Findings"
+      ],
+      "element_types": [
+        "table"
+      ],
+      "token_count": 70
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s13_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s13",
+      "page_refs": [
+        2
+      ],
+      "text": "Results > 4.2 Findings\n\nStructured extraction improved retrieval precision in internal testing.",
+      "breadcrumb": [
+        "Results",
+        "4.2 Findings"
+      ],
+      "element_types": [
+        "paragraph"
+      ],
+      "token_count": 12
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s14_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s14",
+      "page_refs": [
+        2
+      ],
+      "text": "Results > 4.3 Figure Caption\n\nFigure 1. Conceptual flow from source PDF to structured representation and retrieval-ready chunks.",
+      "breadcrumb": [
+        "Results",
+        "4.3 Figure Caption"
+      ],
+      "element_types": [
+        "caption"
+      ],
+      "token_count": 18
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s16_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s16",
+      "page_refs": [
+        2
+      ],
+      "text": "Discussion > 5.1 Important Observations\n\nBoilerplate suppression materially reduces duplicate retrieval candidates.",
+      "breadcrumb": [
+        "Discussion",
+        "5.1 Important Observations"
+      ],
+      "element_types": [
+        "paragraph"
+      ],
+      "token_count": 12
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s17_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s17",
+      "page_refs": [
+        2
+      ],
+      "text": "Discussion > 5.2 Risks\n\nBorderless tables remain the most fragile extraction case.",
+      "breadcrumb": [
+        "Discussion",
+        "5.2 Risks"
+      ],
+      "element_types": [
+        "paragraph"
+      ],
+      "token_count": 12
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s18_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s18",
+      "page_refs": [
+        2
+      ],
+      "text": "Discussion > 5.3 Recommendations\n\nAdopt dual table strategies and validate on held-out documents.",
+      "breadcrumb": [
+        "Discussion",
+        "5.3 Recommendations"
+      ],
+      "element_types": [
+        "paragraph"
+      ],
+      "token_count": 13
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s20_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s20",
+      "page_refs": [
+        2
+      ],
+      "text": "Conclusion > 6.1 Recommendations\n\nContinue measuring structure quality against annotated ground truth.",
+      "breadcrumb": [
+        "Conclusion",
+        "6.1 Recommendations"
+      ],
+      "element_types": [
+        "paragraph"
+      ],
+      "token_count": 12
+    },
+    {
+      "chunk_id": "tmpquct80nu_doc_001_s21_c01",
+      "doc_id": "tmpquct80nu_doc_001",
+      "doc_type": "unknown",
+      "section_id": "tmpquct80nu_doc_001_s21",
+      "page_refs": [
+        3
+      ],
+      "text": "Appendix - Expected Structure\n\nThe appendix enumerates the expected structural elements.",
+      "breadcrumb": [
+        "Appendix - Expected Structure"
+      ],
+      "element_types": [
+        "paragraph"
+      ],
+      "token_count": 11
+    }
+  ]
+}

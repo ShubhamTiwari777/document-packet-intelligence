@@ -1,0 +1,32 @@
+[
+  {
+    "experiment": "hist_gradient_boosting_calibrated_openpss",
+    "task": "boundary_detection",
+    "dataset": "nutrientdocs/openpss-mirror (SHORT)",
+    "train_pages": 15906,
+    "train_streams": 95,
+    "held_out_streams": 12,
+    "held_out_pairs": 2488,
+    "boundary_precision": 0.13114754098360656,
+    "boundary_recall": 0.5217391304347826,
+    "boundary_f1": 0.20960698689956334,
+    "decision_threshold": 0.6030339952900109,
+    "sample_packet_boundary_accuracy": "4/4 documents correctly split (data/samples/sample_packet.pdf)",
+    "inference_latency_ms_per_8page_packet": 89.38,
+    "status": "measured on OpenPSS SHORT held-out test streams (DocSplit-v2 has no public train/val split; see technical_report.md)"
+  },
+  {
+    "experiment": "tfidf_logistic_regression_rvlcdip",
+    "task": "document_type_classification",
+    "dataset": "albertklorer/rvl_cdip_ocr (OCR text, 16 classes)",
+    "train_documents": 8887,
+    "holdout_documents": 2222,
+    "classification_accuracy": 0.8069,
+    "classification_macro_f1": 0.7862,
+    "invoice_f1": 0.8846,
+    "resume_f1": 0.9517,
+    "extension_classes_via_lexicon": "passport, bank_statement (absent from the RVL-CDIP taxonomy)",
+    "abstention": "predictions below classification.min_confidence are reported as 'unknown'",
+    "status": "measured on a held-out RVL-CDIP split; extension classes are lexicon-scored and not covered by these figures"
+  }
+]

@@ -4,5 +4,20 @@ __pycache__/
 data/raw/
 data/processed/
 models/
-outputs/
+
+# Generated outputs are excluded by default, except the submission deliverables: the benchmark
+# reports (Deliverable 6) and representative sample outputs (Deliverable 7). Note `outputs/*`
+# rather than `outputs/` -- git cannot re-include a child of an excluded directory, so the
+# directory itself must stay traversable for the negations below to apply.
+outputs/*
 !outputs/.gitkeep
+!outputs/benchmarks/
+!outputs/error_analysis/
+!outputs/benchmark_status.md
+!outputs/api_response_benchmark.json
+
+# Sample outputs: keep the structured artifacts, drop the bulky intermediates (page renders and
+# the dense vector dump) which are reproducible and carry no review value.
+!outputs/sample_packet_check/
+outputs/sample_packet_check/rendered_pages/
+outputs/sample_packet_check/index/

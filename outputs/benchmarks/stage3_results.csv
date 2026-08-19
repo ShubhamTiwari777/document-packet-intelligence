@@ -1,0 +1,11 @@
+corpus_chunks,encoder,experiment,fixture_chunks,index_peak_memory_mb,indexing_seconds,mean_latency_ms,mrr,ndcg,p95_latency_ms,precision@1,precision@3,precision@5,queries,query_aware,recall@1,recall@3,recall@5,reranked,status
+515,hashed,bm25_only,38,9.1,1.004,45.53,0.7738,0.7761,52.03,0.7143,0.2762,0.1714,35,False,0.7143,0.8286,0.8571,False,measured
+515,hashed,dense_hashed_only,38,9.09,1.139,44.92,0.1343,0.152,50.88,0.0857,0.0667,0.0514,35,False,0.0857,0.2,0.2286,False,measured
+515,svd,dense_svd_only,38,112.36,8.402,57.73,0.6452,0.673,66.18,0.5143,0.2667,0.1657,35,False,0.5143,0.8,0.8286,False,measured
+515,hashed,rrf_hashed,38,9.09,1.13,47.91,0.4071,0.477,57.02,0.2571,0.1524,0.1486,35,False,0.2571,0.4571,0.7429,False,measured
+515,svd,rrf_svd,38,112.34,8.006,69.49,0.7129,0.7307,79.37,0.6,0.2667,0.1714,35,False,0.6,0.8,0.8571,False,measured
+515,svd,rrf_svd_query_aware,38,112.34,8.947,54.78,0.7429,0.753,65.01,0.6571,0.2667,0.1714,35,True,0.6571,0.8,0.8571,False,measured
+515,svd,rrf_svd_reranked,38,112.34,7.491,57.87,0.8214,0.8189,64.81,0.7714,0.2857,0.1771,35,False,0.7714,0.8571,0.8857,True,measured
+515,transformer,dense_bge_only,38,13.63,70.06,85.94,0.7548,0.7693,92.99,0.6571,0.2857,0.1771,35,False,0.6571,0.8571,0.8857,False,measured
+515,transformer,rrf_bge,38,13.63,67.17,95.37,0.8667,0.8741,109.82,0.8,0.3048,0.1943,35,False,0.8,0.9143,0.9714,False,measured
+515,transformer,rrf_bge_reranked,38,13.62,67.037,117.97,0.9295,0.9282,128.95,0.8857,0.3238,0.2,35,False,0.8857,0.9714,1.0,True,measured
