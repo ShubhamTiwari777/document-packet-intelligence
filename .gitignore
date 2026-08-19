@@ -21,3 +21,6 @@ outputs/*
 !outputs/sample_packet_check/
 outputs/sample_packet_check/rendered_pages/
 outputs/sample_packet_check/index/
+
+# CatBoost writes training logs to the working directory
+catboost_info/
