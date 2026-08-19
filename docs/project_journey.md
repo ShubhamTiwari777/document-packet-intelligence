@@ -231,48 +231,100 @@ was +0.031, against the baseline's +0.191. The higher-scoring model was substant
 
 We added `lift_over_trivial` to the metric set at that point. It immediately paid for itself.
 
-### The DocSplit result
+### The DocSplit result, and the bug it exposed
 
-Scoring the shipped model against the actual DocSplit benchmark:
+Scoring against the actual benchmark produced the sharpest lesson of the project — in two stages,
+because our first reading of it was wrong.
 
-| Model | F1 | Trivial F1 | **Lift** |
+**First reading.** Boundary F1 came out at 0.823, which looked like the best number in the project.
+It was not: at DocSplit's 72% boundary density, a classifier that marks *every* pair a boundary
+already scores 0.815. Lift over that trivial baseline was **+0.008**. Reported as raw F1 this would
+have been our headline result; measured as lift it was nothing.
+
+**Second reading — the one that mattered.** Asked whether the system would actually perform if
+Parakit evaluated it, we measured what an evaluator would *see* rather than what our benchmark
+script reported. The 0.823 had been obtained at a threshold refitted on DocSplit. At the **shipped**
+threshold the same model scored:
+
+| Decision rule | Boundary F1 | Page grouping accuracy | Documents found vs actual |
 |---|---|---|---|
-| Shipped (OpenPSS-trained) | 0.823 | 0.815 | **+0.008** |
-| RVL-CDIP-trained | 0.815 | 0.815 | **+0.000** |
+| Fixed threshold 0.633 (shipped at the time) | 0.110 | 0.216 | 1.2 vs 3.5 |
+| **Expected-count (shipped now)** | **0.537** | **0.615** | 2.2 vs 3.5 |
+| Threshold refitted on DocSplit itself | 0.851 | 0.868 | 4.2 vs 3.5 |
 
-**F1 0.823 is not a good result on that benchmark. It is the trivial result.** Recall 0.99 with
-precision equal to the base rate means the model marks nearly every pair a boundary. Reported as raw
-F1, this would have been the strongest number in our report.
+The shipped configuration recovered **6% of boundaries** and merged 3.5 documents into 1.2. The
+threshold had been fitted on OpenPSS, where 11% of adjacent pairs are boundaries; DocSplit packets
+are short and 72% of pairs are. One global threshold cannot serve both regimes, and refitting it on
+the target corpus would be benchmark-fitting.
 
-The cause is a **regime inversion**, not a tuning fault:
+The fix used something already in the system. The model is isotonic-calibrated, so **for calibrated
+probabilities their sum over a packet estimates the expected number of boundaries in it**. Splitting
+at the highest-scoring K pairs, K = round(sum(p)), adapts per packet from the model's own output —
+no threshold, no target labels. Page grouping accuracy on the target regime rose **0.216 → 0.615**,
+against a cost of 0.012 on the training regime.
+
+We tried a length-based adaptive threshold first and rejected it on evidence: OpenPSS's 2–6 page
+streams average 22.8% boundary density against 17.1% for its longest — nowhere near 72%. The
+training corpus carries no signal that would let a length prior anticipate the target regime, which
+is exactly why the calibration-based rule, needing no such prior, was the right choice.
+
+The underlying cause is a **regime inversion**:
 
 | Corpus | Median pages/stream | Boundary rate | Rare, informative class |
 |---|---|---|---|
 | OpenPSS (trained on) | 21 | 11.4% | boundary |
 | DocSplit (target) | 4 | 72.3% | **continuation** |
 
-OpenPSS packets are long streams where boundaries are rare, so the model learned that a boundary
-requires strong evidence. DocSplit packets are short, mostly one-page documents, so the rare and
-informative event is a *continuation*. The model was trained to detect the opposite minority class.
-No threshold repairs that.
+The model learned that boundaries need strong evidence, because in its training corpus they are
+rare. In the target corpus the rare and informative event is a *continuation*. The decision rule
+mitigates this; only retraining in the target regime removes it.
 
----
+### Was the learner ever the problem?
+
+Late on, we were asked why the boundary model used scikit-learn's HistGradientBoosting rather than
+XGBoost, LightGBM or CatBoost. The honest answer was that it had been **inherited, not chosen** —
+and that `xgboost` had been sitting in `requirements.txt` imported by nothing, the same
+declared-but-unused pattern we had been correcting everywhere else.
+
+So we measured all four on identical features, calibration, packet split and decision rule:
+
+| Learner | Boundary F1 | Lift | Page grouping | Train time | Model size |
+|---|---|---|---|---|---|
+| **scikit-learn HistGradientBoosting** *(shipped)* | 0.582 | +0.163 | 0.825 | 9.6 s | 0.8 MB |
+| XGBoost | 0.581 | +0.163 | 0.829 | 1.5 s | 0.8 MB |
+| LightGBM | 0.586 | +0.168 | 0.828 | 0.7 s | 0.8 MB |
+| CatBoost | 0.586 | +0.168 | 0.806 | 2.9 s | 0.5 MB |
+
+All four land within **0.005 F1 and 0.005 lift**. This was the third independent confirmation that
+the Stage 1 ceiling is representational: changing features did not move it, changing calibration did
+not move it, and changing the model family does not move it either.
+
+scikit-learn was retained — the differences are inside noise, it is already a dependency, and
+`HistGradientBoostingClassifier` is itself a histogram GBM modelled on LightGBM. The one real
+difference is that LightGBM fits 13× faster, which matters for frequent retraining and not for a
+one-off. `xgboost` was removed from the dependency list, and all three alternatives are recorded
+there commented with their measured numbers.
 
 ## 8. Where the system honestly stands
 
 | Stage | Measurement | Result |
 |---|---|---|
-| 1 — boundaries | OpenPSS, 108 held-out streams | F1 0.379, **lift +0.191** |
-| 1 — boundaries | DocSplit `our200` (target task) | F1 0.823, **lift +0.008** |
+| 1 — boundaries | OpenPSS, 108 held-out streams | F1 0.379, grouping accuracy 0.772 |
+| 1 — boundaries | DocSplit `our200` (target task) | F1 0.537, grouping accuracy 0.615 |
 | 1 — classification | RVL-CDIP held-out, 16 classes | 0.807 acc / 0.786 macro-F1 |
 | 2 — structure | annotated fixtures | heading/table/list/caption F1 1.00 |
 | 2 — coverage | 2,500 real OpenPSS pages | 97.7% text retention, 1,250 pages/s |
 | 3 — retrieval | 35 queries, 515 chunks | R@1 0.771, MRR 0.821 |
 | Resources | full pipeline | **5.8 MB models**, 153 MB RSS, CPU-only |
 
-Stated plainly: **the system segments long page streams meaningfully and short packets not at all.**
-Both numbers appear in the report because reporting only the first would overstate it and reporting
-only the second would flatter it.
+Read **page grouping accuracy, not boundary F1**, on any corpus whose boundary density differs from
+training: at DocSplit's 72% density a classifier marking every pair a boundary scores F1 0.815, so
+F1 there is dominated by the base rate. Grouping accuracy separates the shipped configuration from
+the one it replaced by 0.615 against 0.216, and is the honest signal.
+
+Stated plainly: **the system segments long page streams well and short packets partially.** Both
+numbers appear because reporting only the first would overstate it and only the second would
+understate what the decision rule recovered.
 
 Three areas carry no measurement, and we say so rather than filling them in:
 
@@ -310,7 +362,10 @@ Three areas carry no measurement, and we say so rather than filling them in:
 - **Report what a metric cannot tell you.** Raw F1 is not comparable across corpora with different
   class balance. Adding lift-over-trivial reversed the apparent ranking of two models and exposed
   that our best-looking score was the do-nothing baseline.
-- **A negative result is a result.** Five experiments failed here. Each one narrowed where the real
+- **Interrogate inherited choices.** The boundary learner and three dependencies arrived with the
+  codebase and went unexamined until someone asked. Measuring settled it in minutes and removed a
+  dead dependency; assuming would have left an unjustifiable answer in an interview.
+- **A negative result is a result.** Six experiments failed here. Each one narrowed where the real
   problem lives, which is why the future-work list is specific rather than speculative.
 
 ---
