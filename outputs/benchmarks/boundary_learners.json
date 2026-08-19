@@ -1,0 +1,59 @@
+{
+  "features": 21,
+  "train_pairs": 9703,
+  "test_pairs": 6202,
+  "results": [
+    {
+      "learner": "sklearn_hist_gbm",
+      "train_seconds": 9.6,
+      "model_bytes": 815918,
+      "precision": 0.4594977007428369,
+      "recall": 0.7920731707317074,
+      "f1": 0.5815983881799865,
+      "base_rate": 0.2644,
+      "trivial_f1": 0.4183,
+      "lift_over_trivial": 0.1633,
+      "grouping_accuracy": 0.8248,
+      "status": "measured"
+    },
+    {
+      "learner": "xgboost",
+      "train_seconds": 1.52,
+      "model_bytes": 768587,
+      "precision": 0.4590106007067138,
+      "recall": 0.7920731707317074,
+      "f1": 0.5812080536912753,
+      "base_rate": 0.2644,
+      "trivial_f1": 0.4183,
+      "lift_over_trivial": 0.1629,
+      "grouping_accuracy": 0.8287,
+      "status": "measured"
+    },
+    {
+      "learner": "lightgbm",
+      "train_seconds": 0.74,
+      "model_bytes": 803384,
+      "precision": 0.4641080312722104,
+      "recall": 0.7963414634146342,
+      "f1": 0.5864391558149978,
+      "base_rate": 0.2644,
+      "trivial_f1": 0.4183,
+      "lift_over_trivial": 0.1682,
+      "grouping_accuracy": 0.8281,
+      "status": "measured"
+    },
+    {
+      "learner": "catboost",
+      "train_seconds": 2.89,
+      "model_bytes": 531405,
+      "precision": 0.46216121084125306,
+      "recall": 0.800609756097561,
+      "f1": 0.5860299040392769,
+      "base_rate": 0.2644,
+      "trivial_f1": 0.4183,
+      "lift_over_trivial": 0.1678,
+      "grouping_accuracy": 0.806,
+      "status": "measured"
+    }
+  ]
+}

@@ -2,7 +2,6 @@ PyMuPDF>=1.24,<2
 numpy>=1.26,<3
 scikit-learn>=1.4,<2
 Pillow>=10,<12
-xgboost>=2.0,<4
 PyYAML>=6.0,<7
 fastapi>=0.110,<1
 uvicorn[standard]>=0.27,<1
@@ -12,6 +11,13 @@ psutil>=5.9,<8
 pytest>=8,<10
 pytesseract>=0.3,<1
 pdfplumber>=0.11,<1
+
+# Alternative gradient-boosting learners. Measured against the shipped scikit-learn
+# HistGradientBoosting on identical features: all within 0.005 F1 and 0.005 lift, so none is
+# installed by default. LightGBM fits 13x faster if you retrain often.
+# lightgbm>=4,<5
+# xgboost>=2,<4
+# catboost>=1.2,<2
 
 # Optional: transformer embeddings for Stage 3 retrieval.
 # Measured on data/samples/retrieval_queries.json (35 queries / 2.6k chunks):

@@ -82,7 +82,30 @@ Alternatives considered: a sequence model (CRF/BiLSTM) and a similarity-threshol
 Per-pair classification was chosen because it needs no sequence-labelling infrastructure, trains
 in seconds on CPU, and yields the per-boundary probability the brief asks for. Isotonic
 calibration was added because raw GBM probabilities on an imbalanced split compress toward zero,
-making any fixed threshold unreliable.
+making any fixed threshold unreliable -- and it later proved load-bearing for a second reason,
+since the calibrated probabilities are what the expected-count decision rule sums (§5.1).
+
+**Which gradient-boosting implementation?** The learner was initially inherited rather than chosen,
+so all four common implementations were measured on identical features, calibration, packet split
+and decision rule (`scripts/compare_boundary_learners.py`):
+
+| Learner | Boundary F1 | Lift | Page grouping | Train time | Model size |
+|---|---|---|---|---|---|
+| **scikit-learn HistGradientBoosting** *(shipped)* | 0.582 | +0.163 | 0.825 | 9.6 s | 0.8 MB |
+| XGBoost | 0.581 | +0.163 | 0.829 | 1.5 s | 0.8 MB |
+| LightGBM | 0.586 | +0.168 | 0.828 | 0.7 s | 0.8 MB |
+| CatBoost | 0.586 | +0.168 | 0.806 | 2.9 s | 0.5 MB |
+
+All four land within **0.005 F1 and 0.005 lift** of each other. That is a second, independent
+confirmation that the Stage 1 ceiling is representational rather than a property of the learner --
+swapping the model family changes nothing, exactly as swapping features and calibration did not.
+
+scikit-learn is retained because the accuracy differences are inside noise, it is already a
+dependency (LightGBM, XGBoost and CatBoost each add install surface, which has been a real cost in
+this environment), and `HistGradientBoostingClassifier` is itself a histogram-based GBM modelled on
+LightGBM. The one genuine difference is training speed: LightGBM fits 13x faster, which would
+matter for frequent retraining and does not for a one-off. `xgboost` was consequently removed from
+`requirements.txt`, where it had been declared without ever being imported.
 
 One deliberately non-learned addition: **a printed page number resetting is a near-conclusive
 boundary cue and is domain-invariant**, unlike the learned score which reflects whichever corpus
