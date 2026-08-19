@@ -369,6 +369,45 @@ install attempts and a DLL failure to get working in this environment. A submiss
 install is worth less than 0.115 R@1. The transformer is one config line away and its numbers are
 recorded above and in `requirements.txt`.
 
+#### Reranker ablation
+
+Rank fusion knows only *positions* and discards how well a candidate actually matches, so a second
+pass rescores the shortlist on deterministic features. It is the best value in Stage 3: **+0.171
+R@1 and +0.140 MRR for roughly 2 ms** (27.6 ms to 29.6 ms mean query latency), with no model and
+no dependency. It runs on the top ~20 fused candidates rather than the corpus, which is what keeps
+it cheap.
+
+Ablating each feature (leave-one-out, and each alone) shows the contributions are far from equal:
+
+| Variant | R@1 | R@5 | MRR | nDCG |
+|---|---|---|---|---|
+| No reranker | 0.600 | 0.857 | 0.689 | 0.712 |
+| **All features** | **0.771** | **0.914** | **0.829** | **0.831** |
+| without `coverage` | 0.771 | 0.914 | 0.824 | 0.828 |
+| without `phrase` | 0.743 | 0.914 | 0.814 | 0.821 |
+| without `exactness` | 0.771 | 0.914 | 0.829 | 0.831 |
+| without `structure` | 0.714 | 0.914 | 0.800 | 0.810 |
+| `coverage` alone | 0.714 | 0.914 | 0.800 | 0.810 |
+| `phrase` alone | 0.714 | 0.914 | 0.788 | 0.801 |
+| `exactness` alone | 0.600 | 0.686 | 0.636 | 0.630 |
+| `structure` alone | 0.571 | 0.629 | 0.593 | 0.583 |
+
+Three findings, none of which the aggregate score showed:
+
+1. **`exactness` is inert.** Removing it changes every metric by exactly zero — it never altered a
+   ranking decision. The explanation is redundancy rather than a bad feature: BM25 already ranks an
+   exact identifier match first, so by the time the shortlist is rescored the identifier chunk is
+   already on top. It is **retained rather than deleted**, because the query set contains only ~6
+   identifier queries and removing a feature on that much evidence would be fitting to 35 queries.
+2. **`structure` matters most in combination and is worst alone** — removing it costs the most
+   (−0.057 R@1) while by itself it scores *below* the no-reranker baseline. It is a tie-breaker,
+   not a ranker.
+3. **`coverage` and `phrase` are substantially redundant with each other**: either alone reaches
+   0.714, and dropping `coverage` while keeping `phrase` costs nothing at rank 1.
+
+The reranker is therefore doing real work, but through feature *interaction* rather than any single
+strong signal — and a leaner three-feature version would likely perform identically.
+
 #### Retrieval-side RAG concerns
 
 Stage 3 is the retrieval half of a retrieval-augmented generation system. Generation is
