@@ -65,6 +65,10 @@ class RetrievalConfig:
     # Dense encoder: "hashed" (bag-of-words baseline), "svd" (TF-IDF+LSA), or "transformer".
     encoder: str = "svd"
     embedding_model: str = "BAAI/bge-small-en-v1.5"
+    # MMR diversity: 1.0 is pure relevance (no reordering), lower trades relevance for coverage.
+    mmr_lambda: float = 1.0
+    # Token budget for assembled RAG context.
+    context_token_budget: int = 1500
 
 
 @dataclass

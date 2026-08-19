@@ -17,6 +17,7 @@ from src.stage1.grouping import group_pages
 from src.stage2.chunker import chunk_document
 from src.stage2.markdown_renderer import render_markdown
 from src.stage2.structure_parser import structure_document
+from src.stage3.context import assemble_context
 from src.stage3.retriever import HybridRetriever
 
 
@@ -83,3 +84,15 @@ class DocumentPipeline:
 
     def retrieve_from_dir(self, query: str, processed_dir: str | Path, top_k: int | None = None, query_aware: bool = False) -> list[dict[str, Any]]:
         return [asdict(result) for result in self._retriever_for(processed_dir).retrieve(query, top_k, query_aware)]
+
+    def context_from_dir(self, query: str, processed_dir: str | Path, top_k: int | None = None,
+                         query_aware: bool = False, token_budget: int | None = None) -> dict[str, Any]:
+        """Retrieve and assemble a grounded, citation-carrying context block.
+
+        This is the hand-off a RAG generator would consume. No text is generated here: the brief
+        requires evidence retrieval rather than answers, so the stage stops at the point where a
+        model would be called.
+        """
+        results = self._retriever_for(processed_dir).retrieve(query, top_k, query_aware)
+        assembled = assemble_context(results, token_budget or self.config.retrieval.context_token_budget)
+        return {"query": query, **asdict(assembled)}

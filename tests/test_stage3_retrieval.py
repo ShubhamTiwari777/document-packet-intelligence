@@ -159,3 +159,59 @@ class RetrieverCacheTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class RagContextTests(unittest.TestCase):
+    """The retrieval-side half of a RAG hand-off: dedup, token budget, inline citations."""
+
+    def _results(self):
+        return HybridRetriever(CORPUS, _config(rerank=True).retrieval, SvdEncoder()).retrieve(
+            "closing balance", top_k=4)
+
+    def test_context_carries_citations_with_document_and_page(self):
+        from src.stage3.context import assemble_context
+        assembled = assemble_context(self._results(), token_budget=500)
+        self.assertTrue(assembled.context)
+        self.assertEqual(assembled.chunks_used, len(assembled.citations))
+        for index, citation in enumerate(assembled.citations, 1):
+            self.assertEqual(citation["marker"], f"[{index}]")
+            self.assertTrue(citation["doc_id"])
+            self.assertTrue(citation["page_ref"], "every citation must be traceable to a page")
+            self.assertIn(citation["marker"], assembled.context)
+
+    def test_token_budget_is_respected_and_drops_lowest_ranked_first(self):
+        from src.stage3.context import assemble_context
+        full = assemble_context(self._results(), token_budget=10_000)
+        tight = assemble_context(self._results(), token_budget=12)
+        self.assertLess(tight.chunks_used, full.chunks_used)
+        self.assertLessEqual(tight.token_count, 12)
+        self.assertGreater(tight.chunks_dropped_budget, 0)
+        # the highest-ranked evidence survives truncation
+        self.assertEqual(tight.citations[0]["chunk_id"], full.citations[0]["chunk_id"])
+
+    def test_near_duplicate_evidence_is_dropped(self):
+        from src.stage3.context import assemble_context
+        from src.domain import EvidenceResult
+        text = "Transaction Summary Closing Balance 1,24,550"
+        results = [
+            EvidenceResult(text, "bank", [9], 0.9, confidence=1.0, chunk_id="a"),
+            EvidenceResult(text, "bank", [9], 0.8, confidence=0.9, chunk_id="b"),
+        ]
+        assembled = assemble_context(results, token_budget=500)
+        self.assertEqual(assembled.chunks_used, 1)
+        self.assertEqual(assembled.chunks_dropped_duplicate, 1)
+
+    def test_mmr_is_a_noop_at_lambda_one(self):
+        from src.stage3.mmr import mmr_reorder
+        pairs = [(CORPUS[0], 0.9), (CORPUS[1], 0.8), (CORPUS[2], 0.7)]
+        self.assertEqual([c.chunk_id for c, _ in mmr_reorder(pairs, 3, 1.0)], ["c1", "c2", "c3"])
+
+    def test_mmr_demotes_a_near_duplicate_of_the_top_result(self):
+        from src.stage3.mmr import mmr_reorder
+        from src.domain import Chunk as C
+        top = C("t1", "d", "t", "s", [1], "Closing balance of the account is 1,24,550")
+        dupe = C("t2", "d", "t", "s", [1], "Closing balance of the account is 1,24,550 exactly")
+        other = C("t3", "d", "t", "s", [2], "Technical skills include Python and SQL")
+        order = [c.chunk_id for c, _ in mmr_reorder([(top, 0.9), (dupe, 0.85), (other, 0.4)], 2, 0.5)]
+        self.assertEqual(order[0], "t1")
+        self.assertEqual(order[1], "t3", "the near-duplicate should lose to the diverse chunk")

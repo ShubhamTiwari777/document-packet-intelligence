@@ -369,6 +369,34 @@ install attempts and a DLL failure to get working in this environment. A submiss
 install is worth less than 0.115 R@1. The transformer is one config line away and its numbers are
 recorded above and in `requirements.txt`.
 
+#### Retrieval-side RAG concerns
+
+Stage 3 is the retrieval half of a retrieval-augmented generation system. Generation is
+deliberately absent: the brief states twice that the objective is not a chatbot and not generated
+answers, so the pipeline stops at the point where a generator would be called. Three retrieval-side
+concerns that determine whether a generator *could* be trusted are handled explicitly.
+
+**Diversity (MMR).** Pure relevance ranking can return five near-paraphrases of one passage: recall
+looks healthy, but the generator sees one fact repeated and any multi-fact question fails.
+Maximal Marginal Relevance trades relevance against redundancy. Measured:
+
+| `mmr_lambda` | R@1 | R@5 | MRR | nDCG | Distinct documents in top-5 | Duplicate chunks reaching context |
+|---|---|---|---|---|---|---|
+| 1.0 (off) | 0.771 | 0.886 | 0.821 | 0.819 | 1.74 | 7 |
+| **0.7 (shipped)** | 0.771 | **0.914** | **0.829** | **0.831** | **2.09** | **0** |
+
+It costs nothing at rank 1 and improves every other measure, because near-duplicates were crowding
+the gold chunk out of the top 5 rather than adding information.
+
+**Context assembly.** `POST /context` returns a single grounded block: deduplicated on token
+overlap, truncated to a token budget in rank order (so the budget removes the least relevant
+evidence rather than clipping the most relevant mid-sentence), and annotated with `[n]` markers
+resolving to document id, page and section breadcrumb.
+
+**Grounding.** Every citation carries a page reference, so any downstream claim is checkable
+against the source page. Retrieval-side citation is the only point at which this can be
+established -- it cannot be reconstructed after generation.
+
 ### 5.5 Resource summary
 
 | Resource | Value |

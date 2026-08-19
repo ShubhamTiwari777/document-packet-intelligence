@@ -12,6 +12,7 @@ from src.domain import Chunk, EvidenceResult
 from src.stage3.bm25_index import BM25Index
 from src.stage3.dense_index import DenseIndex
 from src.stage3.encoders import Encoder, build_encoder
+from src.stage3.mmr import mmr_reorder
 from src.stage3.query_classifier import classify_query
 from src.stage3.reranker import rerank
 from src.stage3.rrf import reciprocal_rank_fusion
@@ -51,7 +52,16 @@ class HybridRetriever:
         # Rerank a shortlist rather than the whole fusion output: the features are cheap but the
         # candidate set is what keeps them cheap.
         shortlist = [(chunk, score) for chunk, score, _ in fused[: max(limit * 4, limit)]]
-        reranked = rerank(query, shortlist, self.config.rerank)[:limit]
+        ordered = rerank(query, shortlist, self.config.rerank)
+        # MMR trades a little relevance for diversity, which matters when the evidence feeds a
+        # generator: five paraphrases of one passage fill a context window with one fact.
+        if self.config.mmr_lambda < 1.0:
+            pairs = mmr_reorder([(chunk, score if r is None else r) for chunk, score, r in ordered],
+                                limit, self.config.mmr_lambda)
+            keep = {chunk.chunk_id: index for index, (chunk, _) in enumerate(pairs)}
+            ordered = sorted((item for item in ordered if item[0].chunk_id in keep),
+                             key=lambda item: keep[item[0].chunk_id])
+        reranked = ordered[:limit]
 
         dense_scores = {chunk.chunk_id: score for chunk, score in dense}
         bm25_scores = {chunk.chunk_id: score for chunk, score in lexical}

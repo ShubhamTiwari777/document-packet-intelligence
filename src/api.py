@@ -21,6 +21,13 @@ if BaseModel is not None:
         top_k: int = 5
         query_aware: bool = False
 
+    class ContextRequest(BaseModel):
+        query: str
+        processed_dir: str
+        top_k: int = 8
+        query_aware: bool = False
+        token_budget: int | None = None
+
 
 def create_app(config_path: str | None = None):
     if FastAPI is None or BaseModel is None:
@@ -58,5 +65,16 @@ def create_app(config_path: str | None = None):
 
     @app.post("/retrieve")
     def retrieve(request: RetrieveRequest): return {"query": request.query, "results": pipeline.retrieve_from_dir(request.query, request.processed_dir, request.top_k, request.query_aware)}
+
+    @app.post("/context")
+    def context(request: ContextRequest):
+        """Grounded, citation-carrying context for a retrieval-augmented generator.
+
+        Deduplicated, budgeted to a context window, and annotated with document and page markers.
+        No text is generated: the brief requires evidence retrieval rather than answers, so this
+        is the hand-off point where a generator would be called.
+        """
+        return pipeline.context_from_dir(request.query, request.processed_dir, request.top_k,
+                                         request.query_aware, request.token_budget)
 
     return app
