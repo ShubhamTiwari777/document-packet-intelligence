@@ -109,6 +109,32 @@ def materialize_stream(stream_rows: list[dict[str, Any]], images_dir: Path, work
     return {"stream_id": stream_id, "page_count": len(ordered), "boundary_labels": boundary_labels, "pages": ordered}
 
 
+def pages_from_stream(stream: dict[str, Any], synthesize_blocks_from_text: bool = True) -> list:
+    """Build PageRepresentations for one manifest stream.
+
+    OpenPSS supplies OCR text and a page image but no blocks or fonts, so eight of the fourteen
+    boundary features -- including header_similarity and footer_similarity, two of the strongest
+    published page-stream-segmentation signals -- were constant zero across the entire training
+    set and could carry no information. Reconstructing pseudo-blocks from the text (the same
+    routine Stage 2 uses for OCR-only input) gives those features real values at both training
+    and inference time.
+    """
+    from dataclasses import replace as _replace
+    from src.domain import PageRepresentation
+    from src.stage2.text_structure import synthesize_blocks
+
+    pages = [
+        PageRepresentation(
+            page_number=page["position"], text=page["text"], blocks=[], fonts=[],
+            width=float(page["width"]), height=float(page["height"]), image_path=page["image_path"],
+        )
+        for page in stream["pages"]
+    ]
+    if not synthesize_blocks_from_text:
+        return pages
+    return [_replace(page, blocks=synthesize_blocks(page)) for page in pages]
+
+
 def fetch_openpss_manifest(
     output_dir: str | Path,
     config: str = "SHORT",

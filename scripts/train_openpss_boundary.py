@@ -8,7 +8,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.config import load_config
-from src.domain import PageRepresentation
+from src.openpss_dataset import pages_from_stream
 from src.features.extractor import packet_feature_rows, save_feature_cache
 from src.features.text_features import TfidfTextEmbedder
 from src.stage1.boundary_classifier import SklearnBoundaryModel
@@ -19,25 +19,14 @@ parser.add_argument("--output", required=True, help="Model directory, e.g. model
 parser.add_argument("--config", default="config/default.yaml")
 parser.add_argument("--calibrate", action="store_true")
 parser.add_argument("--no-tfidf", action="store_true", help="Fall back to the hashed bag-of-words text_delta")
+parser.add_argument("--no-synthetic-blocks", action="store_true", help="Disable text-derived pseudo-blocks (ablation)")
 parser.add_argument("--cache", default=None, help="Optional path to cache the extracted feature rows")
 args = parser.parse_args()
 
 config = load_config(args.config)
 manifest = json.loads(Path(args.manifest).read_text(encoding="utf-8"))
 
-streams = [
-    (
-        stream,
-        [
-            PageRepresentation(
-                page_number=page["position"], text=page["text"], blocks=[], fonts=[],
-                width=float(page["width"]), height=float(page["height"]), image_path=page["image_path"],
-            )
-            for page in stream["pages"]
-        ],
-    )
-    for stream in manifest["streams"]
-]
+streams = [(stream, pages_from_stream(stream, not args.no_synthetic_blocks)) for stream in manifest["streams"]]
 
 text_embedder = None
 if not args.no_tfidf:
@@ -69,7 +58,11 @@ model.save(args.output, {
     "dataset": manifest.get("dataset"), "config": manifest.get("config"), "split": manifest.get("split"),
     "training_config": config.to_dict(), "stream_count": manifest["stream_count"] - len(skipped),
     "feature_row_count": len(rows), "positive_boundaries": sum(labels), "calibrated": args.calibrate,
-    "tfidf_text_delta": text_embedder is not None, "skipped": skipped,
+    "tfidf_text_delta": text_embedder is not None,
+    # Recorded so evaluation and inference reproduce the exact feature construction used in
+    # training; a mismatch here silently changes 4 of the 14 features.
+    "synthetic_blocks": not args.no_synthetic_blocks,
+    "skipped": skipped,
 })
 print(f"Trained boundary model on {len(rows)} adjacent page pairs ({sum(labels)} positive) from "
       f"{manifest['stream_count'] - len(skipped)} streams -> {args.output}")

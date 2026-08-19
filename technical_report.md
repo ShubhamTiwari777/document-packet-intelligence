@@ -167,9 +167,33 @@ Verification packet (4 documents / 9 pages): **4/4 documents split correctly**.
 
 F1 0.377 on OpenPSS is a modest score and I am not dressing it up. OpenPSS is scanned Dutch
 government material supplied as OCR text with no layout metadata, so the layout half of the
-feature set is inert there — `header_similarity` and `footer_similarity` are constant zero
-throughout training. The features that carry the signal on native PDFs are unavailable on exactly
-the corpus used to measure it.
+feature set is inert there. Inspecting the training matrix confirms it: **8 of the 14 features are
+constant across all 15,905 training rows**, including `header_similarity` and `footer_similarity`
+— two of the strongest signals in the page-stream-segmentation literature. The model effectively
+learns from six features.
+
+#### Ablation: reconstructing pseudo-layout — a negative result
+
+The obvious fix is to synthesise pseudo-blocks from the OCR text (the routine Stage 2 already
+uses for OCR-only input) so those features gain values. I implemented and measured it
+(`--no-synthetic-blocks` toggles the ablation):
+
+| Variant | Live features | Precision | Recall | F1 |
+|---|---|---|---|---|
+| Baseline (no pseudo-blocks) | 6 / 14 | 0.298 | 0.512 | **0.377** |
+| With pseudo-blocks | 10 / 14 | 0.287 | 0.478 | 0.359 |
+
+**It did not help — F1 fell by 0.018.** With 205 positive boundaries the standard error on recall
+is ≈0.035, so the two are statistically indistinguishable; the honest reading is *no effect*, not
+*worse*. The likely cause is that blank-line grouping over noisy OCR produces arbitrary block
+divisions, so the four newly-live features carry noise rather than the header/footer structure
+they are meant to capture. Real gains would need genuine word-level bounding boxes from the OCR
+engine, not positions inferred from a text blob.
+
+The baseline model is therefore retained. Because the two variants construct features differently,
+the training script records `synthetic_blocks` in the model metadata and the evaluation script
+reads it — evaluating a model under the other setting silently changes 4 of 14 features and
+produces a number that describes no real deployment.
 
 ### 5.2 Stage 1 — document classification
 
@@ -314,9 +338,11 @@ real structure-confidence signal or deleted; it is currently neither.
 
 1. **A labelled corpus for `passport`/`bank_statement`.** The largest unmeasured area; every claim
    about those classes currently rests on a 4-document fixture.
-2. **Boundary features that survive OCR-only input.** Header/footer similarity is constant zero
-   during OpenPSS training, so the model cannot learn from it. Reconstructing pseudo-layout from
-   OCR word boxes (as Stage 2 already does for structure) should lift F1 above 0.377.
+2. **Boundary features that survive OCR-only input — via real word boxes, not inferred ones.**
+   Eight of fourteen features are constant during OpenPSS training. Inferring pseudo-layout from
+   text was measured and did not help (§5.1), so the next attempt should use genuine word-level
+   bounding boxes — RVL-CDIP already ships them, and an OCR engine emits them directly — to give
+   `header_similarity` and `footer_similarity` real geometry rather than guessed positions.
 3. **Transformer embeddings as default**, once dependency installation is reliable — worth
    +0.115 R@1 and a perfect R@5 on the current evaluation set.
 4. **Grow the retrieval evaluation set.** 35 queries gives ±0.07 confidence intervals; conclusions
