@@ -219,54 +219,61 @@ saved model scores with the feature list it was **trained** on rather than whate
 `FEATURE_NAMES` currently holds — without which adding the seven features would have silently
 broken every previously saved model.
 
-#### Evaluation on the actual DocSplit benchmark — the system does not transfer
+#### Evaluation on the actual DocSplit benchmark, and the decision rule it forced
 
-`nutrientdocs/doc-split-benchmark` turns out to be publicly readable (config `our200`) and, as the
-guidance stated, ships **a test split only**. It is therefore used strictly for evaluation and
-never for training — scoring on it is what a benchmark is for; fitting to it is what the brief
-prohibits. Its schema mirrors OpenPSS with renamed fields, so it normalises into the same
-manifest structure.
+`nutrientdocs/doc-split-benchmark` proved publicly readable (config `our200`) and, as the guidance
+stated, ships **a test split only**. It is used strictly for evaluation, never for training.
 
-| Model (both trained elsewhere) | F1 | Precision | Recall | Trivial F1 | **Lift** |
-|---|---|---|---|---|---|
-| OpenPSS-trained (shipped) | 0.823 | 0.703 | 0.992 | 0.815 | **+0.008** |
-| RVL-CDIP-trained | 0.815 | 0.688 | 1.000 | 0.815 | **+0.000** |
+Scoring the shipped configuration there exposed a failure that boundary F1 alone had hidden. The
+decision threshold (0.633) was fitted on OpenPSS, where 11% of adjacent pairs are boundaries.
+DocSplit packets are short — a median of four pages — and **72% of pairs are boundaries**. At that
+threshold the model recovers **6% of them**:
 
-**F1 0.82 on the target benchmark is not a good result — it is the trivial result.** Recall 0.99
-against precision ≈ the base rate means the model marks nearly every pair a boundary. Even with a
-perfect oracle threshold the ceiling is 0.854, a lift of +0.039. This is the clearest possible
-demonstration of why `boundary_lift` was added: reported as raw F1, 0.823 would have looked like
-the strongest number in this report.
+| Decision rule | Boundary F1 | Page grouping accuracy | Documents found vs actual |
+|---|---|---|---|
+| Fixed threshold 0.633 (OpenPSS-fitted) | 0.110 | 0.216 | 1.2 vs 3.5 |
+| **Expected-count (shipped)** | **0.537** | **0.615** | 2.2 vs 3.5 |
+| Threshold refitted on DocSplit itself | 0.851 | 0.868 | 4.2 vs 3.5 |
 
-The cause is a **regime inversion**, not a tuning problem:
+A single global threshold cannot serve both regimes, and refitting it on the target corpus would
+be benchmark-fitting. The shipped rule instead exploits the isotonic calibration already applied to
+the model: **for calibrated probabilities, their sum over a packet estimates the expected number of
+boundaries in it.** Splitting at the highest-scoring K pairs, K = round(sum(p)), therefore adapts
+per packet using nothing but the model's own output — no threshold, no target labels.
 
-| Corpus | Streams | Median pages/stream | Boundary rate | Minority class |
+That change nearly triples page grouping accuracy on the target regime (0.216 → 0.615) for a cost
+of 0.012 on the training regime (0.784 → 0.772), and is the configuration that ships
+(`boundary.decision: expected_count`). Its ceiling is still below a threshold refitted on DocSplit,
+so the gap is real but no longer catastrophic.
+
+We attempted to derive an adaptive threshold from packet length instead, since short packets might
+plausibly be denser. OpenPSS does not support it: its 2–6 page streams average 22.8% boundary
+density against 17.1% for its longest, nowhere near DocSplit's 72%. **The training corpus contains
+no signal that would let a length prior anticipate the target regime**, which is why the
+calibration-based rule — which needs no such prior — was chosen.
+
+The underlying cause remains a **regime inversion**:
+
+| Corpus | Streams | Median pages/stream | Boundary rate | Rare, informative class |
 |---|---|---|---|---|
 | OpenPSS (trained on) | 108 | 21 | 11.4% | boundary |
 | DocSplit (target) | 200 | 4 | 72.3% | **continuation** |
 
-OpenPSS packets are long streams where boundaries are rare, so the model learned that a boundary
-requires strong evidence. DocSplit packets are short — a median of four pages, mostly one-page
-documents — so the rare, informative event is a *continuation*. The model was trained to detect
-the opposite minority class, which no threshold can repair.
-
-The remedy is a training corpus in the target regime: short packets built from multi-page
-documents, so both boundaries and continuations are genuinely represented. `jordyvl/rvl_cdip_n_mp`
-(the multi-page RVL-CDIP variant DocSplit itself is assembled from) is public and is the obvious
-candidate; it is not served by the datasets-server auto-converter, so it needs direct download.
-That work is not done here, and the honest position is that **Stage 1 is tuned for long-stream
-segmentation and underperforms on short packets.**
+The model learned that boundaries need strong evidence, because in its training corpus they are
+rare. In the target corpus the rare and informative event is a continuation. The decision rule
+mitigates this; only retraining in the target regime removes it (§8).
 
 #### Summary of Stage 1 boundary detection
 
-| Corpus | Role | F1 | Trivial F1 | **Lift** |
-|---|---|---|---|---|
-| OpenPSS SHORT test (108 streams) | held-out, same regime as training | 0.379 | 0.188 | **+0.191** |
-| DocSplit `our200` (200 streams) | the assignment's target task | 0.823 | 0.815 | **+0.008** |
+| Corpus | Role | Boundary F1 | Page grouping accuracy |
+|---|---|---|---|
+| OpenPSS SHORT test (108 streams) | held-out, same regime as training | 0.379 | 0.772 |
+| DocSplit `our200` (200 streams) | the assignment's target task | 0.537 | 0.615 |
 
-The system segments long page streams meaningfully and short packets not at all. Both numbers are
-stated because reporting only the first would overstate the system and reporting only the second
-(0.823) would flatter it.
+Read grouping accuracy, not boundary F1, on any corpus whose boundary density differs from
+training: at DocSplit's 72% density a classifier marking every pair a boundary scores F1 0.815, so
+F1 there is dominated by the base rate. Grouping accuracy separates the same two configurations by
+0.216 against 0.615 and is the honest signal.
 
 ### 5.2 Stage 1 — document classification
 

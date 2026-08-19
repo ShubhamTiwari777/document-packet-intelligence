@@ -34,6 +34,8 @@ class IngestionConfig:
 
 @dataclass
 class BoundaryConfig:
+    # "expected_count" (calibration-driven, adapts per packet) or "threshold" (fixed cut-off).
+    decision: str = "expected_count"
     threshold: float = 0.5
     model_kind: str = "hist_gradient_boosting"
     calibration: bool = False

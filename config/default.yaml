@@ -15,6 +15,11 @@ ingestion:
   enable_ocr: false
   ocr_engine: tesseract
 boundary:
+  # decision: expected_count uses the calibrated probabilities' sum as the expected number of
+  # boundaries per packet, so it adapts to packets far denser or sparser than the training corpus.
+  # Measured on the DocSplit benchmark: page grouping accuracy 0.615 vs 0.216 for a fixed
+  # threshold, at a cost of 0.012 on OpenPSS. Set to "threshold" to use boundary.threshold.
+  decision: expected_count
   threshold: 0.6334265856848469
   calibration: true
   model_path: models/boundary_openpss

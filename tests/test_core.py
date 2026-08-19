@@ -135,3 +135,28 @@ class Stage2StructureTests(unittest.TestCase):
 
 
 if __name__ == "__main__": unittest.main()
+
+
+class BoundaryDecisionTests(unittest.TestCase):
+    def test_expected_count_adapts_to_a_dense_packet(self):
+        """Regression: a fixed threshold tuned on sparse-boundary streams recovered only 6% of
+        boundaries on dense short packets, merging 3.5 documents into 1.2."""
+        from src.stage1.grouping import decide_boundaries
+        probabilities = [0.30, 0.28, 0.05, 0.31]  # sums to ~0.94 -> one boundary expected
+        self.assertEqual(sum(decide_boundaries(probabilities, 0.6334, "threshold")), 0)
+        self.assertEqual(sum(decide_boundaries(probabilities, 0.6334, "expected_count")), 1)
+        # expected_count is the default, so a dense packet is not silently merged
+        self.assertEqual(sum(decide_boundaries(probabilities, 0.6334)), 1)
+
+    def test_expected_count_picks_the_highest_scoring_pairs(self):
+        from src.stage1.grouping import decide_boundaries
+        self.assertEqual(decide_boundaries([0.9, 0.1, 0.95, 0.05], 0.5, "expected_count"), [1, 0, 1, 0])
+
+    def test_threshold_mode_is_still_available(self):
+        from src.stage1.grouping import decide_boundaries
+        self.assertEqual(decide_boundaries([0.9, 0.1], 0.5, "threshold"), [1, 0])
+
+    def test_unknown_mode_is_rejected(self):
+        from src.stage1.grouping import decide_boundaries
+        with self.assertRaises(ValueError):
+            decide_boundaries([0.5], 0.5, "guess")

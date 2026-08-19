@@ -35,7 +35,7 @@ class DocumentPipeline:
         features = packet_feature_rows(pages, packet, text_embedder); save_feature_cache(features, target / "boundary_features.json")
         model = SklearnBoundaryModel.load(selected_boundary_model) if selected_boundary_model else WeightedFusionBoundary()
         probabilities = model.predict_proba(features)
-        groups = group_pages(packet, [page.page_number for page in pages], probabilities, self.config.boundary.threshold)
+        groups = group_pages(packet, [page.page_number for page in pages], probabilities, self.config.boundary.threshold, self.config.boundary.decision)
         selected_document_model = document_model or self.config.classification.model_path
         classifier, classifier_status = build_document_classifier(selected_document_model, self.config.classification.min_confidence, self.config.classification.model_kind)
         if classifier_status.get("warning"):
