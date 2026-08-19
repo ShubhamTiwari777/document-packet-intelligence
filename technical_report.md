@@ -9,21 +9,20 @@ could not be measured honestly it is reported as **not measured** rather than fi
 ## 1. Problem understanding
 
 A packet is a single PDF holding several unrelated documents concatenated together. Three
-questions must be answered in order, and each depends on the previous answer being right:
+questions must be answered in order, each depending on the previous answer being right:
 
-1. **Where does one document end and the next begin?** This is a decision on the *N−1 adjacent
-   page pairs*, not on pages. Framing it this way makes grouping a deterministic consequence of
-   boundary decisions rather than a second model that can disagree with the first.
-2. **What is each document, and how sure are we?** Type prediction needs an abstention path;
-   a confident wrong label is worse than an explicit `unknown` for downstream filtering.
-3. **What is inside each document, and where exactly?** Retrieval must cite a document and a
-   page, so structure and page provenance are not presentation concerns — they are the substrate
-   the retrieval answer is built from.
+1. **Where does one document end and the next begin?** A decision over the *N−1 adjacent page
+   pairs*, not over pages — which makes grouping a deterministic consequence of boundary
+   decisions rather than a second model that can disagree with the first.
+2. **What is each document, and how sure are we?** Type prediction needs an abstention path: a
+   confident wrong label is worse than an explicit `unknown`.
+3. **What is inside it, and where exactly?** Retrieval must cite a document and a page, so
+   structure and page provenance are the substrate the answer is built from, not presentation.
 
-I structured the solution as three stages with dataclass contracts between them
-(`PageRepresentation → DocumentGroup → Chunk → EvidenceResult`). The contracts are the design:
-each stage can be replaced without touching its neighbours, which is what allowed the Stage 3
-dense encoder to be swapped three times with no change to Stages 1 or 2.
+The solution is three stages with dataclass contracts between them (`PageRepresentation →
+DocumentGroup → Chunk → EvidenceResult`). The contracts are the design: each stage is replaceable
+without touching its neighbours, which is what let the Stage 3 dense encoder be swapped three
+times with no change to Stages 1 or 2.
 
 ### Dataset decision
 
@@ -31,6 +30,11 @@ The brief named DocSplit v2, but that dataset is an evaluation benchmark with no
 train/validation split. Following the clarification, **OpenPSS** (`nutrientdocs/openpss-mirror`,
 SHORT config) is used for boundary detection: Dutch FOIA page streams with per-page
 `label = 1` marking a document start.
+
+`nutrientdocs/doc-split-benchmark` did prove publicly readable (test split only, as the guidance
+said). It is therefore **evaluated on but never trained on** — that is what a benchmark is for,
+and fitting to it is what the brief prohibits. Scoring against it turned out to be the single most
+informative measurement in this project (§5.1).
 
 OpenPSS carries **no document-type labels**, so it cannot train a type classifier. I added
 **RVL-CDIP OCR text** (`albertklorer/rvl_cdip_ocr`) — the standard 16-class document-type
@@ -55,7 +59,7 @@ PDF → PDFParser (PyMuPDF) → [Stage 1] pairwise features → calibrated GBM �
                           → FastAPI /process, /retrieve
 ```
 
-**Stage 1** computes 14 features per adjacent page pair (text delta, visual delta, page-number
+**Stage 1** computes 21 features per adjacent page pair (text delta, visual delta, page-number
 reset/continuation, header/footer similarity, font and layout deltas), scores them with a
 calibrated gradient-boosted tree, and splits where `p ≥ 0.633`. Grouping is deterministic from
 those decisions. Types come from a hybrid classifier described in §3.2.
@@ -74,12 +78,11 @@ reranks the shortlist on deterministic match features, and normalises a confiden
 
 ### 3.1 Boundary detection as calibrated pairwise classification
 
-Alternatives considered: a sequence model over the page stream (CRF/BiLSTM), and a
-similarity-threshold heuristic. I chose per-pair classification because it needs no sequence
-labelling infrastructure, trains in seconds on CPU, and produces a per-boundary probability that
-the assignment explicitly asks for. Isotonic calibration was added because raw GBM probabilities
-on an imbalanced boundary/non-boundary split are compressed toward zero, which makes any fixed
-threshold unreliable.
+Alternatives considered: a sequence model (CRF/BiLSTM) and a similarity-threshold heuristic.
+Per-pair classification was chosen because it needs no sequence-labelling infrastructure, trains
+in seconds on CPU, and yields the per-boundary probability the brief asks for. Isotonic
+calibration was added because raw GBM probabilities on an imbalanced split compress toward zero,
+making any fixed threshold unreliable.
 
 One deliberately non-learned addition: **a printed page number resetting is a near-conclusive
 boundary cue and is domain-invariant**, unlike the learned score which reflects whichever corpus
@@ -104,11 +107,9 @@ rather than **invoice @ 0.2**.
 ### 3.3 Structure is layout-driven, with a text-only fallback
 
 Every structural signal — heading size, boilerplate position, table regions — derives from
-bounding boxes and font sizes. On OCR-only sources those are absent, and the engine originally
-produced *zero* structure on 2,500 real OpenPSS pages: one section per document, no elements.
-A text-only path reconstructs pseudo-blocks from blank-line grouping and infers headings from
-typographic convention (numbering, capitalisation, single-line shape). Both paths converge on one
-downstream code path.
+bounding boxes and font sizes, which OCR-only sources lack: the engine originally produced *zero*
+structure on 2,500 real OpenPSS pages. A text-only path reconstructs pseudo-blocks from blank-line
+grouping and infers headings from typographic convention. Both paths converge downstream.
 
 ### 3.4 Retrieval: measure the encoder rather than assume it
 
@@ -171,72 +172,52 @@ Verification packet (4 documents / 9 pages): **4/4 documents split correctly**.
 
 #### How this number was corrected
 
-The first version of this evaluation was wrong in two ways, and both were found by inspection
-rather than by the score looking suspicious.
-
-1. **The threshold was selected on the data it was scored on.** The script chose the F1-optimal
-   threshold over the test probabilities and then reported F1 at that threshold.
-2. **The test set was far too small to measure anything.** It held 12 streams. Splitting it in
-   half gave F1 **0.21** on one half and **0.44** on the other — for the same model.
-
-Enlarging the test set to the full split and separating threshold selection from scoring fixes
-both. The optimism gap collapses from 0.167 to 0.027, and the honest figure (0.379) lands close
-to the originally reported 0.377 — which was therefore roughly right by luck, not by method.
+The first version of this evaluation was wrong twice: the threshold was selected on the data it
+was then scored on, and the test set held only 12 streams — splitting it in half gave F1 **0.21**
+on one half and **0.44** on the other, for the same model. Enlarging to the full split and
+separating threshold selection from scoring fixes both; the optimism gap collapses from 0.167 to
+0.027, and the honest figure lands close to the originally reported 0.377, which was therefore
+roughly right by luck rather than by method.
 
 | Test set | Honest held-out F1 | Threshold-on-test F1 | Gap |
 |---|---|---|---|
 | 12 streams | 0.210 | 0.377 | 0.167 |
 | 108 streams | **0.379** | 0.406 | 0.027 |
 
-#### Three attempts to raise F1 — all negative
+#### Four attempts to raise F1 — all negative
 
-The training matrix showed **8 of 14 features constant** across all 15,905 rows, so three
+The training matrix showed **8 of 14 features constant** across all 15,905 rows, including
+`header_similarity` and `footer_similarity`, so the model effectively learned from six. Four
 hypotheses were tested against the corrected protocol:
 
-| Variant | Live features | Precision | Recall | F1 |
-|---|---|---|---|---|
-| Baseline | 6 / 14 | 0.289 | 0.551 | **0.379** |
-| Pseudo-blocks reconstructed from text | 10 / 14 | 0.287 | 0.478 | 0.359 |
-| Natural class prior (no `balanced` weighting) | 6 / 14 | 0.301 | 0.486 | 0.371 |
-| + 7 sentence-flow features | 13 / 21 | 0.311 | 0.458 | 0.371 |
+| Variant | Live features | Precision | Recall | F1 | Lift |
+|---|---|---|---|---|---|
+| **Baseline (retained)** | 6 / 14 | 0.289 | 0.551 | **0.379** | **+0.191** |
+| Pseudo-blocks reconstructed from OCR text | 10 / 14 | 0.287 | 0.478 | 0.359 | +0.171 |
+| Natural class prior (no `balanced` weighting) | 6 / 14 | 0.301 | 0.486 | 0.371 | +0.183 |
+| + 7 sentence-flow features | 13 / 21 | 0.311 | 0.458 | 0.371 | +0.183 |
+| Synthetic RVL-CDIP packets *(different corpus)* | 18 / 21 | 0.468 | 0.578 | *0.517* | *+0.031* |
 
-None improved F1, and the *shape* of the failures is the useful result: every variant traded
-precision up against recall down and landed on the same F1. They are moving **along one
-precision/recall curve**, not shifting the curve. The decision threshold already exposes that
-trade-off, so recalibration and these feature families cannot help — the limit is the model's
+The first three moved **along one precision/recall curve** rather than shifting it — every variant
+traded precision up against recall down and landed on the same F1. The threshold already exposes
+that trade-off, so recalibration and these feature families cannot help; the limit is the model's
 ability to separate boundary from non-boundary pairs at all.
 
-Two defects were fixed while running these experiments, both of the same class: training now
-records `synthetic_blocks` and `class_weight` in the model metadata and evaluation reads them
-back, and a saved model now scores with the feature list it was **trained** on rather than
-whatever `FEATURE_NAMES` currently holds. Without the latter, adding the seven new features
-would have silently broken every previously saved model.
+The fourth is the instructive one. RVL-CDIP ships word-level bounding boxes, so synthetic packets
+built from it carry real geometry and lifted live features from 6/14 to 18/21 — apparently
+producing **F1 0.517 against 0.379**. It is not a gain: at that corpus's 32.1% boundary density a
+trivial always-boundary classifier already scores 0.486, so the lift is +0.031 against the
+baseline's +0.191. The cause is the corpus, not the model — **RVL-CDIP rows are independent
+single-page documents** (5,449 pages, 5,449 distinct filenames), so grouping same-class pages into
+a "document" fabricates continuity that does not exist. DocSplit avoids this by building on
+RVL-CDIP-N-MP, the multi-page variant, which is public (`jordyvl/rvl_cdip_n_mp`) and is taken up
+in §8. `boundary_lift` entered the metric set here.
 
-#### Fourth attempt: a different training corpus, and why F1 alone misled
-
-Since OpenPSS supplies no geometry, the natural move is a corpus that does. RVL-CDIP ships
-word-level bounding boxes, so synthetic packets were assembled from it — word boxes grouped into
-lines and blocks, documents of differing types concatenated, a boundary defined as a document
-change. This raised live features from 6/14 to **18/21** and produced **F1 0.517**, apparently a
-large gain over 0.379.
-
-**It is not a gain.** F1 cannot be compared across corpora with different boundary densities.
-Predicting *every* pair a boundary scores precision = base rate and recall = 1:
-
-| Corpus | Base rate | Trivial all-boundary F1 | Model F1 | **Lift** |
-|---|---|---|---|---|
-| OpenPSS | 10.4% | 0.188 | 0.379 | **+0.191** |
-| RVL-CDIP synthetic packets | 32.1% | 0.486 | 0.517 | **+0.031** |
-
-The higher-scoring model is barely better than doing nothing. The cause is a flaw in the corpus,
-not the model: **RVL-CDIP rows are independent single-page documents** — 5,449 pages carry 5,449
-distinct filenames — so grouping several same-class pages into a "document" fabricates continuity
-that does not exist. There is no genuine within-document signal to learn, which is precisely what
-the near-zero lift reports. (DocSplit avoids this by building on RVL-CDIP-N-MP, the multi-page
-variant, which is not publicly available; the benchmark itself is gated.)
-
-`boundary_lift` is now part of the metric set, and OpenPSS is retained as the training corpus.
-Reported honestly, the shipped model's lift over trivial is **+0.191**.
+Three latent defects were fixed while running these: models now record the feature construction
+they were trained with (`synthetic_blocks`, `class_weight`) and evaluation reads it back; and a
+saved model scores with the feature list it was **trained** on rather than whatever
+`FEATURE_NAMES` currently holds — without which adding the seven features would have silently
+broken every previously saved model.
 
 #### Evaluation on the actual DocSplit benchmark — the system does not transfer
 
@@ -276,35 +257,16 @@ candidate; it is not served by the datasets-server auto-converter, so it needs d
 That work is not done here, and the honest position is that **Stage 1 is tuned for long-stream
 segmentation and underperforms on short packets.**
 
-F1 0.377 on OpenPSS is a modest score and I am not dressing it up. OpenPSS is scanned Dutch
-government material supplied as OCR text with no layout metadata, so the layout half of the
-feature set is inert there. Inspecting the training matrix confirms it: **8 of the 14 features are
-constant across all 15,905 training rows**, including `header_similarity` and `footer_similarity`
-— two of the strongest signals in the page-stream-segmentation literature. The model effectively
-learns from six features.
+#### Summary of Stage 1 boundary detection
 
-#### Ablation: reconstructing pseudo-layout — a negative result
-
-The obvious fix is to synthesise pseudo-blocks from the OCR text (the routine Stage 2 already
-uses for OCR-only input) so those features gain values. I implemented and measured it
-(`--no-synthetic-blocks` toggles the ablation):
-
-| Variant | Live features | Precision | Recall | F1 |
+| Corpus | Role | F1 | Trivial F1 | **Lift** |
 |---|---|---|---|---|
-| Baseline (no pseudo-blocks) | 6 / 14 | 0.298 | 0.512 | **0.377** |
-| With pseudo-blocks | 10 / 14 | 0.287 | 0.478 | 0.359 |
+| OpenPSS SHORT test (108 streams) | held-out, same regime as training | 0.379 | 0.188 | **+0.191** |
+| DocSplit `our200` (200 streams) | the assignment's target task | 0.823 | 0.815 | **+0.008** |
 
-**It did not help — F1 fell by 0.018.** With 205 positive boundaries the standard error on recall
-is ≈0.035, so the two are statistically indistinguishable; the honest reading is *no effect*, not
-*worse*. The likely cause is that blank-line grouping over noisy OCR produces arbitrary block
-divisions, so the four newly-live features carry noise rather than the header/footer structure
-they are meant to capture. Real gains would need genuine word-level bounding boxes from the OCR
-engine, not positions inferred from a text blob.
-
-The baseline model is therefore retained. Because the two variants construct features differently,
-the training script records `synthetic_blocks` in the model metadata and the evaluation script
-reads it — evaluating a model under the other setting silently changes 4 of 14 features and
-produces a number that describes no real deployment.
+The system segments long page streams meaningfully and short packets not at all. Both numbers are
+stated because reporting only the first would overstate the system and reporting only the second
+(0.823) would flatter it.
 
 ### 5.2 Stage 1 — document classification
 
@@ -400,9 +362,11 @@ Everything runs CPU-only. No GPU, no external API, no network call at inference.
 
 Dominant failure is **recall on visually similar adjacent documents** — two same-template forms
 concatenated share fonts, margins and header text, so every layout feature reads "continuation".
-Precision 0.298 means roughly two false splits per true one at the F1-optimal threshold; the
-threshold is tuned for recall because an over-split document is recoverable downstream whereas a
-merged one loses a document entirely.
+Precision 0.289 means roughly two false splits per true one; the threshold favours recall
+because an over-split document is recoverable downstream whereas a merged one loses a document
+entirely. The larger failure is structural rather than per-pair: on short packets (§5.1) the model
+is at the trivial baseline, because it was trained where boundaries are rare and the target has
+them common.
 
 ### 6.2 Classification
 
@@ -422,17 +386,16 @@ The pattern is consistent — **low lexical overlap paraphrases**:
 | "What is the total amount due on the invoice?" | rank 2 | rank 2 | competing Subtotal/GST chunk |
 | "What is the passport number?" | rank 4 | rank 2 | identifier appears in several documents |
 
-**False positives** are instructive: for the email query, SVD returned a Dutch OpenPSS distractor —
-LSA fitted on a mixed-language corpus produced a latent dimension that grouped unrelated
-administrative text. This is the concrete cost of a corpus-fitted encoder versus a pretrained one.
+**False positives** are instructive: for the email query SVD returned a Dutch OpenPSS distractor —
+LSA fitted on a mixed-language corpus produced a latent dimension grouping unrelated administrative
+text. That is the concrete cost of a corpus-fitted encoder versus a pretrained one.
 
 ### 6.4 Resolved: removed dead code
 
-`src/stage2/llm_fallback.py` defined an LLM fallback contract that nothing ever called. It was
-deleted rather than wired up: the rule-based parser exposes no structure-confidence signal to
-trigger it, and PDF structure is deterministic enough that an LLM would add cost, latency and
-nondeterminism without addressing any measured failure. Removing it keeps the codebase honest
-about what it actually does.
+`src/stage2/llm_fallback.py` defined an LLM fallback contract nothing called. Deleted rather than
+wired up: the parser exposes no structure-confidence signal to trigger it, and PDF structure is
+deterministic enough that an LLM would add cost, latency and nondeterminism without addressing any
+measured failure.
 
 ---
 
@@ -492,29 +455,34 @@ model, because no training data exists for two required classes and a confident 
 worse than `unknown`. (c) Pluggable retrieval encoders measured by ablation, which is the only
 reason the harmful default (§5.4) was found.
 
-**3. Technology selection.** PyMuPDF (fast, gives fonts and bboxes), pdfplumber (dual table
-strategies), scikit-learn (HistGradientBoosting, TF-IDF, LR, SVD — CPU-only, no GPU),
-rank-bm25-style BM25 implemented directly, FastAPI. Evaluated and rejected: `datasets`/`pyarrow`
-(no Python 3.14 wheel), Camelot (heavier than pdfplumber for equivalent results),
-sentence-transformers (measured and better, but ~1 GB — kept as a documented option).
+**3. Technology selection.** PyMuPDF (fonts + bboxes), pdfplumber (dual ruled/borderless table
+strategies), scikit-learn (HistGradientBoosting, TF-IDF, LogisticRegression, TruncatedSVD — all
+CPU-only), BM25 implemented directly, FastAPI. Rejected: `datasets`/`pyarrow` (no Python 3.14
+wheel), Camelot (heavier than pdfplumber for equivalent output), sentence-transformers (measured
+better but ~1 GB — kept as a documented option).
 
 **4. Evaluation methodology.** See §4. Held-out splits where dataset labels exist; authored
 fixtures where no public annotations exist, clearly separated from label-free coverage on real
 data; retrieval judgments anchored to answer strings; ablations rather than single aggregate
 scores.
 
-**5. Failure analysis.** See §6. Biggest limitations: boundary recall on visually similar adjacent
-documents; unmeasured extension classes; SVD's weakness on low-overlap paraphrases.
+**5. Failure analysis.** See §6. The biggest limitation by far: on the DocSplit benchmark the
+system scores F1 0.823 against a trivial baseline of 0.815 — a lift of +0.008, i.e. no better than
+marking every pair a boundary. It was trained on long streams where boundaries are rare (11%) and
+the target has them common (72%), inverting which class is informative. Secondary limitations:
+`passport`/`bank_statement` have no held-out measurement, and the SVD encoder misses low-overlap
+paraphrases.
 
-**6. Resource & performance.** See §5.5 — 5.8 MB of models, 153 MB RSS, CPU-only. To reduce
-further: drop SVD for BM25 + reranker (R@1 0.714 → index in 1 s, 9 MB peak), and quantise the
-TF-IDF vocabulary. To scale up: replace the brute-force dense scan with an ANN index; it is O(N)
-per query today, which is fine at 515 chunks and will not be at 10⁶.
+**6. Resource & performance.** See §5.5 — 5.8 MB of models, 153 MB RSS, CPU-only. To shrink
+further: drop SVD for BM25 + reranker (1 s index, 9 MB peak). To scale up: the dense scan is O(N)
+per query, fine at 515 chunks and not at 10⁶ — it needs an ANN index.
 
 **7. Trade-offs.** See §7.
 
-**8. Two more weeks.** Items 1–3 of §8: label the extension classes, make boundary features work
-on OCR-only input, and make the transformer path the reliable default.
+**8. Two more weeks.** §8 item 1 first and alone if necessary: rebuild training packets from
+`jordyvl/rvl_cdip_n_mp` so the model is trained in the target regime, since every other Stage 1
+improvement is worth less than closing a +0.008 lift. Then labelling the extension classes, and
+sequence modelling over page pairs.
 
 **9. AI usage declaration.**
 > **This section must be reviewed and edited by the submitting engineer before submission — only
@@ -534,17 +502,9 @@ on OCR-only input, and make the transformer path the reliable default.
 
 ## Reproducing every number
 
-```bash
-pip install -r requirements.txt
-python scripts/fetch_openpss.py --config SHORT --split train --output data/raw/openpss/train --max-rows 16000
-python scripts/fetch_openpss.py --config SHORT --split test  --output data/raw/openpss/test  --max-rows 2500
-python scripts/train_openpss_boundary.py --manifest data/raw/openpss/train/manifest.json --output models/boundary_openpss --calibrate
-python scripts/evaluate_openpss_boundary.py --manifest data/raw/openpss/test/manifest.json --model models/boundary_openpss
-python scripts/fetch_rvlcdip_text.py --output data/raw/rvlcdip/train_text.json --max-rows 12000
-python scripts/train_document_classifier.py --training_json data/raw/rvlcdip/train_text.json --output models/document_classifier/tfidf_lr.pkl
-python scripts/generate_sample_packet.py && python scripts/generate_benchmark_report.py
-python scripts/evaluate_stage2.py --packet data/samples/benchmark_report.pdf --ground-truth data/samples/benchmark_ground_truth.json
-python scripts/evaluate_stage3.py --distractors data/raw/openpss/test/manifest.json --distractor-streams 2
-python scripts/generate_stage1_report.py
-pytest tests/ -q     # 35 tests
-```
+Full command sequence in [README.md](README.md). In short: fetch OpenPSS (train + full test) and
+RVL-CDIP text, train the boundary and classifier models, generate the two annotated fixtures, then
+run `evaluate_openpss_boundary.py` (against both the OpenPSS and DocSplit manifests),
+`evaluate_stage2.py` and `evaluate_stage3.py`. Every table above is written to
+`outputs/benchmarks/`. The negative results reproduce via `--no-synthetic-blocks`,
+`--class-weight none`, and `train_rvlcdip_boundary.py`. `pytest tests/ -q` runs 35 tests.
