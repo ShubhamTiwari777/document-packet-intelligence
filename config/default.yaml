@@ -1,0 +1,46 @@
+paths:
+  data_dir: data
+  models_dir: models
+  outputs_dir: outputs
+  cache_dir: data/processed/cache
+runtime:
+  device: cpu
+  random_seed: 42
+  render_dpi: 150
+  max_render_pixels: 30000000
+  log_level: INFO
+ingestion:
+  min_native_characters: 20
+  min_text_density: 0.00005
+  enable_ocr: false
+  ocr_engine: tesseract
+features:
+  embedding_model: BAAI/bge-small-en-v1.5
+  visual_model: openai/clip-vit-base-patch32
+  use_optional_models: false
+boundary:
+  threshold: 0.6334265856848469
+  model_kind: hist_gradient_boosting
+  calibration: true
+  model_path: models/boundary_openpss
+classification:
+  model_kind: tfidf_logistic_regression
+  min_confidence: 0.35
+  model_path: models/document_classifier/tfidf_lr.pkl
+chunking:
+  max_tokens: 256
+  overlap_tokens: 32
+retrieval:
+  top_k: 5
+  dense_top_k: 20
+  bm25_top_k: 20
+  rrf_k: 60
+  # Measured on data/samples/retrieval_queries.json (35 queries, 2.6k-chunk corpus):
+  #   rrf_hashed  R@1 0.257   <- previous default; WORSE than bm25 alone (0.714)
+  #   rrf_svd + rerank  R@1 0.771  MRR 0.821   index 7.5s   no heavy dependency
+  #   rrf_bge  + rerank  R@1 0.886  MRR 0.929   index 67s    requires torch (~1GB)
+  # Defaulting to svd: it needs nothing beyond requirements.txt, so the pipeline reproduces
+  # anywhere. Set encoder: transformer for the best scores when torch is available.
+  rerank: true
+  encoder: svd
+  embedding_model: BAAI/bge-small-en-v1.5

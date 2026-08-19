@@ -1,0 +1,185 @@
+{
+  "packet": "benchmark_report.pdf",
+  "page_count": 3,
+  "document_title": "Document Intelligence Evaluation Report",
+  "note": "Numbers inside the measurement table are TARGETS authored into the PDF, not measured results.",
+  "documents": [
+    {
+      "pages": [
+        1,
+        2,
+        3
+      ],
+      "doc_type": "report",
+      "title": "Document Intelligence Evaluation Report",
+      "headings": [
+        "Executive Summary",
+        "Key objectives",
+        "Introduction",
+        "1.1 Background",
+        "1.2 Evaluation Principles",
+        "Scope",
+        "Methodology",
+        "3.1 Processing Steps",
+        "3.2 Extraction Signals",
+        "3.3 Example Measurement Table",
+        "Results",
+        "4.1 Quantitative Findings",
+        "4.2 Findings",
+        "4.3 Figure Caption",
+        "Discussion",
+        "5.1 Important Observations",
+        "5.2 Risks",
+        "5.3 Recommendations",
+        "Conclusion",
+        "6.1 Recommendations",
+        "Appendix - Expected Structure"
+      ],
+      "heading_details": [
+        {
+          "title": "Executive Summary",
+          "level": 1,
+          "page": 1
+        },
+        {
+          "title": "Key objectives",
+          "level": 2,
+          "page": 1
+        },
+        {
+          "title": "Introduction",
+          "level": 1,
+          "page": 1
+        },
+        {
+          "title": "1.1 Background",
+          "level": 2,
+          "page": 1
+        },
+        {
+          "title": "1.2 Evaluation Principles",
+          "level": 2,
+          "page": 1
+        },
+        {
+          "title": "Scope",
+          "level": 1,
+          "page": 1
+        },
+        {
+          "title": "Methodology",
+          "level": 1,
+          "page": 1
+        },
+        {
+          "title": "3.1 Processing Steps",
+          "level": 2,
+          "page": 1
+        },
+        {
+          "title": "3.2 Extraction Signals",
+          "level": 2,
+          "page": 1
+        },
+        {
+          "title": "3.3 Example Measurement Table",
+          "level": 2,
+          "page": 1
+        },
+        {
+          "title": "Results",
+          "level": 1,
+          "page": 2
+        },
+        {
+          "title": "4.1 Quantitative Findings",
+          "level": 2,
+          "page": 2
+        },
+        {
+          "title": "4.2 Findings",
+          "level": 2,
+          "page": 2
+        },
+        {
+          "title": "4.3 Figure Caption",
+          "level": 2,
+          "page": 2
+        },
+        {
+          "title": "Discussion",
+          "level": 1,
+          "page": 2
+        },
+        {
+          "title": "5.1 Important Observations",
+          "level": 2,
+          "page": 2
+        },
+        {
+          "title": "5.2 Risks",
+          "level": 2,
+          "page": 2
+        },
+        {
+          "title": "5.3 Recommendations",
+          "level": 2,
+          "page": 2
+        },
+        {
+          "title": "Conclusion",
+          "level": 1,
+          "page": 2
+        },
+        {
+          "title": "6.1 Recommendations",
+          "level": 2,
+          "page": 2
+        },
+        {
+          "title": "Appendix - Expected Structure",
+          "level": 1,
+          "page": 3
+        }
+      ],
+      "tables": [
+        {
+          "page": 2,
+          "rows": 6,
+          "columns": 4,
+          "ruled": false
+        },
+        {
+          "page": 2,
+          "rows": 6,
+          "columns": 4,
+          "ruled": true
+        }
+      ],
+      "lists": [
+        {
+          "page": 1,
+          "items": 3,
+          "ordered": false
+        },
+        {
+          "page": 1,
+          "items": 4,
+          "ordered": true
+        },
+        {
+          "page": 1,
+          "items": 3,
+          "ordered": false
+        }
+      ],
+      "captions": [
+        {
+          "page": 2,
+          "text": "Figure 1. Conceptual flow from source PDF to structured representation and retrieval-ready chunks."
+        }
+      ],
+      "fields": {}
+    }
+  ]
+}

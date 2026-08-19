@@ -1,0 +1,23 @@
+PyMuPDF>=1.24,<2
+numpy>=1.26,<3
+scikit-learn>=1.4,<2
+Pillow>=10,<12
+xgboost>=2.0,<4
+PyYAML>=6.0,<7
+fastapi>=0.110,<1
+uvicorn[standard]>=0.27,<1
+python-multipart>=0.0.9,<1
+rank-bm25>=0.2,<1
+psutil>=5.9,<8
+pytest>=8,<10
+pytesseract>=0.3,<1
+pdfplumber>=0.11,<1
+
+# Optional: transformer embeddings for Stage 3 retrieval.
+# Measured on data/samples/retrieval_queries.json (35 queries / 2.6k chunks):
+#   default (encoder: svd)      R@1 0.771  MRR 0.821  index  7.5s   no extra dependency
+#   with these (encoder: bge)   R@1 0.886  MRR 0.929  index 67.0s   adds ~1GB of dependencies
+# Install these, then set retrieval.encoder: transformer in config/default.yaml.
+# sentence-transformers>=3,<7
+# torch>=2.2,<3
+# camelot-py>=0.11,<2

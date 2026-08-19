@@ -1,0 +1,53 @@
+{
+  "description": "Stage 3 retrieval evaluation set. Gold chunks are resolved at evaluation time by matching `answer_contains` against chunk text, so judgments survive re-chunking rather than pinning fragile chunk ids.",
+  "corpora": ["data/samples/sample_packet.pdf", "data/samples/benchmark_report.pdf"],
+  "query_classes": {
+    "identifier": "exact identifier lookup; favours lexical matching",
+    "value": "numeric/field value lookup",
+    "table": "answer lives inside a table row",
+    "list": "answer lives inside a list item",
+    "semantic": "paraphrased; shares few or no content words with the target chunk"
+  },
+  "queries": [
+    {"id": "q01", "query": "What is the invoice number?", "answer_contains": ["INV-2026-004471"], "type": "identifier"},
+    {"id": "q02", "query": "What is the total amount due on the invoice?", "answer_contains": ["99,710"], "type": "value"},
+    {"id": "q03", "query": "What is the subtotal before tax?", "answer_contains": ["84,500"], "type": "value"},
+    {"id": "q04", "query": "Who is the invoice billed to?", "answer_contains": ["Acme Digital Services"], "type": "identifier"},
+    {"id": "q05", "query": "How much did the AI model development cost?", "answer_contains": ["AI Model Development", "32,500"], "type": "table"},
+    {"id": "q06", "query": "What quantity of technical support was billed?", "answer_contains": ["Technical Support", "3,500"], "type": "table"},
+    {"id": "q07", "query": "What are the payment terms for late payment?", "answer_contains": ["Late payments"], "type": "semantic"},
+
+    {"id": "q08", "query": "What programming languages does the candidate know?", "answer_contains": ["Python, SQL, C++"], "type": "list"},
+    {"id": "q09", "query": "How can I contact the applicant by email?", "answer_contains": ["arjun.mehta@example.com"], "type": "semantic"},
+    {"id": "q10", "query": "What is the candidate's professional background?", "answer_contains": ["AI Engineer with experience"], "type": "semantic"},
+
+    {"id": "q11", "query": "What is the passport number?", "answer_contains": ["P9876543"], "type": "identifier"},
+    {"id": "q12", "query": "What is the holder's surname?", "answer_contains": ["SHARMA"], "type": "identifier"},
+    {"id": "q13", "query": "When does the travel document expire?", "answer_contains": ["21/06/2032"], "type": "value"},
+    {"id": "q14", "query": "Which office issued the document?", "answer_contains": ["Regional Passport Office"], "type": "semantic"},
+    {"id": "q15", "query": "What nationality is the passport holder?", "answer_contains": ["IND"], "type": "identifier"},
+
+    {"id": "q16", "query": "What is the closing balance on the account?", "answer_contains": ["1,24,550"], "type": "value"},
+    {"id": "q17", "query": "What was the opening balance?", "answer_contains": ["74,000"], "type": "value"},
+    {"id": "q18", "query": "Who holds the bank account?", "answer_contains": ["Neha Kulkarni"], "type": "identifier"},
+    {"id": "q19", "query": "How much salary was credited?", "answer_contains": ["Salary Credit", "65,000"], "type": "table"},
+    {"id": "q20", "query": "What was paid for rent?", "answer_contains": ["Rent Payment", "15,450"], "type": "table"},
+    {"id": "q21", "query": "What period does the statement cover?", "answer_contains": ["01 August 2026"], "type": "value"},
+
+    {"id": "q22", "query": "What is the target for heading recovery?", "answer_contains": ["Heading recovery", ">=85%"], "type": "table"},
+    {"id": "q23", "query": "What is the baseline for table preservation?", "answer_contains": ["Table preservation", "60%"], "type": "table"},
+    {"id": "q24", "query": "Which metric targets at least 95 percent page reference accuracy?", "answer_contains": ["Page-reference accuracy", ">=95%"], "type": "table"},
+    {"id": "q25", "query": "How many elements were counted for paragraphs?", "answer_contains": ["Paragraphs", "86"], "type": "table"},
+    {"id": "q26", "query": "What retention was measured for bullet lists?", "answer_contains": ["Bullet lists", "100%"], "type": "table"},
+
+    {"id": "q27", "query": "What signals are used for extraction?", "answer_contains": ["Font size and weight"], "type": "list"},
+    {"id": "q28", "query": "What are the processing steps in order?", "answer_contains": ["Parse pages and blocks"], "type": "list"},
+    {"id": "q29", "query": "What does the figure illustrate?", "answer_contains": ["Conceptual flow"], "type": "semantic"},
+    {"id": "q30", "query": "What is the most fragile extraction case?", "answer_contains": ["Borderless tables"], "type": "semantic"},
+    {"id": "q31", "query": "Why does suppressing repeated headers help?", "answer_contains": ["duplicate retrieval candidates"], "type": "semantic"},
+    {"id": "q32", "query": "What are the key objectives of the evaluation?", "answer_contains": ["Preserve headings"], "type": "list"},
+    {"id": "q33", "query": "What does the scope of the report cover?", "answer_contains": ["scope covers structuring"], "type": "semantic"},
+    {"id": "q34", "query": "What is recommended for continued measurement?", "answer_contains": ["annotated ground truth"], "type": "semantic"},
+    {"id": "q35", "query": "What does page stream segmentation recover?", "answer_contains": ["original document boundaries"], "type": "semantic"}
+  ]
+}

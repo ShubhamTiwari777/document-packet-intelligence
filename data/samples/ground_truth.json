@@ -1,0 +1,113 @@
+{
+  "packet": "sample_packet.pdf",
+  "page_count": 9,
+  "documents": [
+    {
+      "pages": [
+        1,
+        2,
+        3
+      ],
+      "doc_type": "invoice",
+      "title": "INVOICE",
+      "headings": [
+        "Billing Details",
+        "Service Details",
+        "Notes and Terms"
+      ],
+      "tables": [
+        {
+          "page": 1,
+          "rows": 4,
+          "columns": 4
+        }
+      ],
+      "lists": [
+        {
+          "page": 2,
+          "items": 3
+        },
+        {
+          "page": 3,
+          "items": 2
+        }
+      ],
+      "fields": {
+        "invoice_number": "INV-2026-004471",
+        "total": "99,710",
+        "subtotal": "84,500"
+      }
+    },
+    {
+      "pages": [
+        4,
+        5
+      ],
+      "doc_type": "resume",
+      "title": "RESUME",
+      "headings": [
+        "Professional Summary",
+        "Technical Skills"
+      ],
+      "tables": [],
+      "lists": [
+        {
+          "page": 5,
+          "items": 4
+        }
+      ],
+      "fields": {
+        "email": "arjun.mehta@example.com"
+      }
+    },
+    {
+      "pages": [
+        6,
+        7
+      ],
+      "doc_type": "passport",
+      "title": "TRAVEL DOCUMENT",
+      "headings": [
+        "Holder Information",
+        "Document Notes"
+      ],
+      "tables": [],
+      "lists": [
+        {
+          "page": 7,
+          "items": 2
+        }
+      ],
+      "fields": {
+        "passport_number": "P9876543",
+        "surname": "SHARMA",
+        "nationality": "IND"
+      }
+    },
+    {
+      "pages": [
+        8,
+        9
+      ],
+      "doc_type": "bank_statement",
+      "title": "BANK STATEMENT",
+      "headings": [
+        "Account Summary",
+        "Transaction Summary"
+      ],
+      "tables": [
+        {
+          "page": 9,
+          "rows": 3,
+          "columns": 4
+        }
+      ],
+      "lists": [],
+      "fields": {
+        "closing_balance": "1,24,550",
+        "opening_balance": "74,000",
+        "account_number": "XXXXXX4521"
+      }
+    }
+  ]
+}
