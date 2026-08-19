@@ -14,13 +14,8 @@ ingestion:
   min_text_density: 0.00005
   enable_ocr: false
   ocr_engine: tesseract
-features:
-  embedding_model: BAAI/bge-small-en-v1.5
-  visual_model: openai/clip-vit-base-patch32
-  use_optional_models: false
 boundary:
   threshold: 0.6334265856848469
-  model_kind: hist_gradient_boosting
   calibration: true
   model_path: models/boundary_openpss
 classification:

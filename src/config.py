@@ -33,13 +33,6 @@ class IngestionConfig:
 
 
 @dataclass
-class FeatureConfig:
-    embedding_model: str = "BAAI/bge-small-en-v1.5"
-    visual_model: str = "openai/clip-vit-base-patch32"
-    use_optional_models: bool = False
-
-
-@dataclass
 class BoundaryConfig:
     threshold: float = 0.5
     model_kind: str = "hist_gradient_boosting"
@@ -77,7 +70,6 @@ class AppConfig:
     paths: PathsConfig = field(default_factory=PathsConfig)
     runtime: RuntimeConfig = field(default_factory=RuntimeConfig)
     ingestion: IngestionConfig = field(default_factory=IngestionConfig)
-    features: FeatureConfig = field(default_factory=FeatureConfig)
     boundary: BoundaryConfig = field(default_factory=BoundaryConfig)
     classification: ClassificationConfig = field(default_factory=ClassificationConfig)
     chunking: ChunkingConfig = field(default_factory=ChunkingConfig)

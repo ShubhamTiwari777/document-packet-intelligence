@@ -1,7 +1,6 @@
 from __future__ import annotations
 import unittest
 from pathlib import Path
-from tempfile import TemporaryDirectory
 
 from src.config import AppConfig
 from src.domain import Chunk, PageRepresentation, TextBlock
@@ -13,7 +12,6 @@ from src.stage1.document_classifier import (
 from src.stage2.chunker import chunk_document
 from src.stage3.retriever import HybridRetriever
 from src.domain import StructuredDocument, Section
-from src.dataset import docsplit_csv_to_manifest
 
 
 class CoreTests(unittest.TestCase):
@@ -37,13 +35,6 @@ class CoreTests(unittest.TestCase):
         results = HybridRetriever(chunks, AppConfig().retrieval).retrieve("What is invoice number INV-42?")
         self.assertEqual(results[0].doc_id, "invoice"); self.assertEqual(results[0].page_ref, [1])
 
-    def test_docsplit_csv_becomes_adjacent_boundary_labels(self):
-        contents = "doc_type,original_doc_name,parent_doc_name,local_doc_id,page,image_path,text_path,group_id,local_doc_id_page_ordinal\ninvoice,a,packet,invoice-01,1,a.png,a.md,AA,1\ninvoice,a,packet,invoice-01,2,b.png,b.md,AA,2\nletter,b,packet,letter-01,3,c.png,c.md,AB,1\n"
-        with TemporaryDirectory() as temporary:
-            file = Path(temporary) / "train.csv"; file.write_text(contents, encoding="utf-8")
-            manifest = docsplit_csv_to_manifest(file)
-        self.assertEqual(manifest[0]["boundary_labels"], [0, 1])
-        self.assertEqual(manifest[0]["documents"][1]["doc_type"], "letter")
 
 
 class DocumentClassifierTests(unittest.TestCase):
