@@ -123,14 +123,17 @@ half of it. Encoders were made pluggable and all three measured (§6.3).
 
 | Stage | Evaluation set | Labels from |
 |---|---|---|
-| 1 — boundaries | OpenPSS SHORT test, 12 streams / 2,488 page pairs | dataset ground truth |
+| 1 — boundaries | OpenPSS SHORT test, 108 streams / 11,354 page pairs | dataset ground truth |
+| 1 — boundaries (target) | DocSplit benchmark `our200`, 200 streams / 694 pairs | dataset ground truth (evaluation only) |
 | 1 — classification | RVL-CDIP held-out 20%, 2,222 documents | dataset ground truth |
 | 2 — structure | two authored fixtures, 12 pages | authored annotations |
 | 2 — coverage | OpenPSS SHORT test, 2,500 pages | none (label-free) |
 | 3 — retrieval | 35 queries over a 515-chunk corpus | authored judgments |
 
-**Train/test discipline.** Stage 1 boundary training uses 95 OpenPSS streams; evaluation uses 12
-held-out streams processed by a separate script. The classifier holds out 20% by seeded shuffle.
+**Train/test discipline.** Stage 1 boundary training uses 95 OpenPSS streams; evaluation uses the
+full 108-stream test split, with the decision threshold fitted on 54 tuning streams and scored on
+54 held-out streams (split by stream, since pairs within a stream are not independent). The
+DocSplit benchmark is scored but never trained on. The classifier holds out 20% by seeded shuffle.
 
 **Why authored fixtures for Stage 2.** No public page-stream dataset ships heading/table/caption
 annotations. I generate the fixtures programmatically (`scripts/generate_sample_packet.py`,
@@ -234,6 +237,44 @@ variant, which is not publicly available; the benchmark itself is gated.)
 
 `boundary_lift` is now part of the metric set, and OpenPSS is retained as the training corpus.
 Reported honestly, the shipped model's lift over trivial is **+0.191**.
+
+#### Evaluation on the actual DocSplit benchmark — the system does not transfer
+
+`nutrientdocs/doc-split-benchmark` turns out to be publicly readable (config `our200`) and, as the
+guidance stated, ships **a test split only**. It is therefore used strictly for evaluation and
+never for training — scoring on it is what a benchmark is for; fitting to it is what the brief
+prohibits. Its schema mirrors OpenPSS with renamed fields, so it normalises into the same
+manifest structure.
+
+| Model (both trained elsewhere) | F1 | Precision | Recall | Trivial F1 | **Lift** |
+|---|---|---|---|---|---|
+| OpenPSS-trained (shipped) | 0.823 | 0.703 | 0.992 | 0.815 | **+0.008** |
+| RVL-CDIP-trained | 0.815 | 0.688 | 1.000 | 0.815 | **+0.000** |
+
+**F1 0.82 on the target benchmark is not a good result — it is the trivial result.** Recall 0.99
+against precision ≈ the base rate means the model marks nearly every pair a boundary. Even with a
+perfect oracle threshold the ceiling is 0.854, a lift of +0.039. This is the clearest possible
+demonstration of why `boundary_lift` was added: reported as raw F1, 0.823 would have looked like
+the strongest number in this report.
+
+The cause is a **regime inversion**, not a tuning problem:
+
+| Corpus | Streams | Median pages/stream | Boundary rate | Minority class |
+|---|---|---|---|---|
+| OpenPSS (trained on) | 108 | 21 | 11.4% | boundary |
+| DocSplit (target) | 200 | 4 | 72.3% | **continuation** |
+
+OpenPSS packets are long streams where boundaries are rare, so the model learned that a boundary
+requires strong evidence. DocSplit packets are short — a median of four pages, mostly one-page
+documents — so the rare, informative event is a *continuation*. The model was trained to detect
+the opposite minority class, which no threshold can repair.
+
+The remedy is a training corpus in the target regime: short packets built from multi-page
+documents, so both boundaries and continuations are genuinely represented. `jordyvl/rvl_cdip_n_mp`
+(the multi-page RVL-CDIP variant DocSplit itself is assembled from) is public and is the obvious
+candidate; it is not served by the datasets-server auto-converter, so it needs direct download.
+That work is not done here, and the honest position is that **Stage 1 is tuned for long-stream
+segmentation and underperforms on short packets.**
 
 F1 0.377 on OpenPSS is a modest score and I am not dressing it up. OpenPSS is scanned Dutch
 government material supplied as OCR text with no layout metadata, so the layout half of the
@@ -409,9 +450,14 @@ about what it actually does.
 
 ## 8. Future improvements (in priority order)
 
-1. **A labelled corpus for `passport`/`bank_statement`.** The largest unmeasured area; every claim
+1. **Retrain in the target regime.** The DocSplit evaluation (§5.1) shows the shipped model is at
+   the trivial baseline on short packets because it was trained where boundaries are rare and the
+   target has them common. Building packets from `jordyvl/rvl_cdip_n_mp` — multi-page documents,
+   so continuations are real rather than fabricated — directly addresses this and is the single
+   highest-value change available. It supersedes everything else on this list.
+2. **A labelled corpus for `passport`/`bank_statement`.** The largest unmeasured area; every claim
    about those classes currently rests on a 4-document fixture.
-2. **Boundary detection needs a different model class, not more hand-built features.** Three
+3. **Boundary detection needs a different model class, not more hand-built features.** Three
    feature/calibration changes were measured and all landed on the same precision/recall curve
    (§5.1), which says the ceiling is representational. Two directions follow from that, in order
    of expected value:
@@ -423,12 +469,12 @@ about what it actually does.
      vocabulary; consecutive pages of one report and two different reports on one topic look alike
      to it. A cross-encoder over page-pair text would model *continuation* rather than *overlap*.
      torch and sentence-transformers are already installed for Stage 3, so this is reachable.
-3. **Transformer embeddings as default**, once dependency installation is reliable — worth
+4. **Transformer embeddings as default**, once dependency installation is reliable — worth
    +0.115 R@1 and a perfect R@5 on the current evaluation set.
-4. **Grow the retrieval evaluation set.** 35 queries gives ±0.07 confidence intervals; conclusions
+5. **Grow the retrieval evaluation set.** 35 queries gives ±0.07 confidence intervals; conclusions
    about ~0.05 differences are not statistically safe.
-5. **Persist the SVD index** rather than refitting per corpus (8 s today).
-6. **Recover the visual signal.** `visual_delta` is a 16-bin grey histogram over 224×224
+6. **Persist the SVD index** rather than refitting per corpus (8 s today).
+7. **Recover the visual signal.** `visual_delta` is a 16-bin grey histogram over 224×224
    thumbnails and was constant on the RVL-CDIP packets — a downsampled ink-density grid would
    capture layout rather than tone.
 

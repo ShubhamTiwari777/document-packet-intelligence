@@ -12,12 +12,12 @@
     "train_streams": 95,
     "held_out_streams": 12,
     "held_out_pairs": 2488,
-    "boundary_precision": 0.29829545454545453,
-    "boundary_recall": 0.5121951219512195,
-    "boundary_f1": 0.37701974865350085,
-    "decision_threshold": 0.6334265856848469,
+    "boundary_precision": 0.13114754098360656,
+    "boundary_recall": 0.5217391304347826,
+    "boundary_f1": 0.20960698689956334,
+    "decision_threshold": 0.6030339952900109,
     "sample_packet_boundary_accuracy": "4/4 documents correctly split (data/samples/sample_packet.pdf)",
-    "inference_latency_ms_per_8page_packet": 86.73,
+    "inference_latency_ms_per_8page_packet": 89.38,
     "status": "measured on OpenPSS SHORT held-out test streams (DocSplit-v2 has no public train/val split; see technical_report.md)"
   },
   {
@@ -53,9 +53,9 @@
     "list_precision": 1.0,
     "list_recall": 1.0,
     "list_f1": 1.0,
-    "caption_precision": 0.0,
-    "caption_recall": 0.0,
-    "caption_f1": 0.0,
+    "caption_precision": null,
+    "caption_recall": null,
+    "caption_f1": null,
     "document_title_accuracy": 1.0,
     "type_field_accuracy": 1.0,
     "type_fields_correct": 10,
@@ -77,8 +77,8 @@
     "chunk_tokens_max": 53,
     "chunks_with_page_refs_ratio": 1.0,
     "single_page_chunk_ratio": 1.0,
-    "processing_seconds": 0.3769,
-    "seconds_per_page": 0.0419,
+    "processing_seconds": 0.365,
+    "seconds_per_page": 0.0406,
     "status": "labeled structure metrics; fixture is authored because no public page-stream dataset ships heading/table annotations"
   }
 ]
