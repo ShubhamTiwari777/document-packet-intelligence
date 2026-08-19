@@ -209,6 +209,32 @@ back, and a saved model now scores with the feature list it was **trained** on r
 whatever `FEATURE_NAMES` currently holds. Without the latter, adding the seven new features
 would have silently broken every previously saved model.
 
+#### Fourth attempt: a different training corpus, and why F1 alone misled
+
+Since OpenPSS supplies no geometry, the natural move is a corpus that does. RVL-CDIP ships
+word-level bounding boxes, so synthetic packets were assembled from it — word boxes grouped into
+lines and blocks, documents of differing types concatenated, a boundary defined as a document
+change. This raised live features from 6/14 to **18/21** and produced **F1 0.517**, apparently a
+large gain over 0.379.
+
+**It is not a gain.** F1 cannot be compared across corpora with different boundary densities.
+Predicting *every* pair a boundary scores precision = base rate and recall = 1:
+
+| Corpus | Base rate | Trivial all-boundary F1 | Model F1 | **Lift** |
+|---|---|---|---|---|
+| OpenPSS | 10.4% | 0.188 | 0.379 | **+0.191** |
+| RVL-CDIP synthetic packets | 32.1% | 0.486 | 0.517 | **+0.031** |
+
+The higher-scoring model is barely better than doing nothing. The cause is a flaw in the corpus,
+not the model: **RVL-CDIP rows are independent single-page documents** — 5,449 pages carry 5,449
+distinct filenames — so grouping several same-class pages into a "document" fabricates continuity
+that does not exist. There is no genuine within-document signal to learn, which is precisely what
+the near-zero lift reports. (DocSplit avoids this by building on RVL-CDIP-N-MP, the multi-page
+variant, which is not publicly available; the benchmark itself is gated.)
+
+`boundary_lift` is now part of the metric set, and OpenPSS is retained as the training corpus.
+Reported honestly, the shipped model's lift over trivial is **+0.191**.
+
 F1 0.377 on OpenPSS is a modest score and I am not dressing it up. OpenPSS is scanned Dutch
 government material supplied as OCR text with no layout metadata, so the layout half of the
 feature set is inert there. Inspecting the training matrix confirms it: **8 of the 14 features are

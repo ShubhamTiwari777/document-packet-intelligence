@@ -28,6 +28,58 @@ LABEL_NAMES = [
 ]
 
 
+def fetch_rvlcdip_pages(
+    output_path: str | Path,
+    max_rows: int = 6_000,
+    split: str = "train",
+    min_words: int = 15,
+    progress: bool = True,
+) -> dict[str, Any]:
+    """Download OCR words WITH bounding boxes, for building synthetic packets.
+
+    The text-only fetcher above is enough to train a type classifier, but boundary detection
+    needs geometry: eight of the fourteen pairwise features are computed from block positions and
+    are inert without it. RVL-CDIP ships word-level boxes, so packets assembled from it carry the
+    real layout that OpenPSS (OCR text only) cannot provide.
+    """
+    quoted = urllib.parse.quote(DATASET, safe="")
+    output = Path(output_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    records: list[dict[str, Any]] = []
+    offset = 0
+    while offset < max_rows:
+        length = min(PAGE_SIZE, max_rows - offset)
+        url = (
+            f"https://datasets-server.huggingface.co/rows?dataset={quoted}"
+            f"&config=default&split={split}&offset={offset}&length={length}"
+        )
+        payload = json.loads(_get_with_backoff(url, retries=8, base_delay=3.0))
+        rows = payload["rows"]
+        if not rows:
+            break
+        for item in rows:
+            row = item["row"]
+            words = row.get("words") or []
+            boxes = row.get("bounding_boxes") or []
+            if len(words) < min_words or len(boxes) != len(words):
+                continue
+            records.append({
+                "label": LABEL_NAMES[row["label"]], "filename": row.get("filename", ""),
+                "width": row.get("width", 754), "height": row.get("height", 1000),
+                "words": words, "boxes": boxes,
+            })
+        offset += len(rows)
+        if progress and offset % 500 == 0:
+            print(f"  fetched {offset} rows -> {len(records)} usable pages")
+        if offset % 500 == 0:
+            output.write_text(json.dumps({"dataset": DATASET, "pages": records}), encoding="utf-8")
+        if len(rows) < length:
+            break
+    manifest = {"dataset": DATASET, "split": split, "page_count": len(records), "pages": records}
+    output.write_text(json.dumps(manifest), encoding="utf-8")
+    return manifest
+
+
 def fetch_rvlcdip_text(
     output_path: str | Path,
     max_rows: int = 10_000,

@@ -9,7 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.config import load_config
 from src.openpss_dataset import pages_from_stream
-from src.evaluation.stage1_metrics import boundary_metrics
+from src.evaluation.stage1_metrics import boundary_lift, boundary_metrics
 from src.features.extractor import packet_feature_rows
 from src.features.text_features import TfidfTextEmbedder
 from src.stage1.boundary_classifier import SklearnBoundaryModel
@@ -81,7 +81,7 @@ test_labels = [l for sid, pairs in stream_probabilities if sid in holdout_ids fo
 honest_threshold, honest_metrics = (None, None)
 if tune_probs and test_probs:
     honest_threshold, _ = _tune(tune_probs, tune_labels)
-    honest_metrics = boundary_metrics([int(p >= honest_threshold) for p in test_probs], test_labels)
+    honest_metrics = boundary_lift([int(p >= honest_threshold) for p in test_probs], test_labels)
 
 best_threshold, best_metrics = _tune(probabilities, labels)
 default_metrics = boundary_metrics([int(score >= config.boundary.threshold) for score in probabilities], labels)
