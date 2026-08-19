@@ -20,6 +20,7 @@ parser.add_argument("--config", default="config/default.yaml")
 parser.add_argument("--calibrate", action="store_true")
 parser.add_argument("--no-tfidf", action="store_true", help="Fall back to the hashed bag-of-words text_delta")
 parser.add_argument("--no-synthetic-blocks", action="store_true", help="Disable text-derived pseudo-blocks (ablation)")
+parser.add_argument("--class-weight", default="balanced", choices=["balanced","none"], help="none keeps the natural boundary prior")
 parser.add_argument("--cache", default=None, help="Optional path to cache the extracted feature rows")
 args = parser.parse_args()
 
@@ -53,7 +54,7 @@ if not rows:
 if args.cache:
     save_feature_cache(rows, args.cache)
 
-model = SklearnBoundaryModel.train(rows, labels, config.runtime.random_seed, calibrate=args.calibrate)
+model = SklearnBoundaryModel.train(rows, labels, config.runtime.random_seed, calibrate=args.calibrate, class_weight=None if args.class_weight == "none" else args.class_weight)
 model.save(args.output, {
     "dataset": manifest.get("dataset"), "config": manifest.get("config"), "split": manifest.get("split"),
     "training_config": config.to_dict(), "stream_count": manifest["stream_count"] - len(skipped),
@@ -61,7 +62,7 @@ model.save(args.output, {
     "tfidf_text_delta": text_embedder is not None,
     # Recorded so evaluation and inference reproduce the exact feature construction used in
     # training; a mismatch here silently changes 4 of the 14 features.
-    "synthetic_blocks": not args.no_synthetic_blocks,
+    "synthetic_blocks": not args.no_synthetic_blocks, "class_weight": args.class_weight,
     "skipped": skipped,
 })
 print(f"Trained boundary model on {len(rows)} adjacent page pairs ({sum(labels)} positive) from "

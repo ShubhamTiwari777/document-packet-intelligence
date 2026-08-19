@@ -32,6 +32,44 @@ def extract_page_number(page: PageRepresentation) -> int | None:
     return None
 
 
+SENTENCE_END = re.compile(r"[.!?:;,]['\")\]]?\s*$")
+DATE_START = re.compile(r"^\s*(?:\d{1,2}[-/. ]\d{1,2}[-/. ]\d{2,4}|\d{1,2}\s+\w+\s+\d{4}|\w+\s+\d{1,2},\s*\d{4})")
+DOCUMENT_OPENER = re.compile(r"^\s*(?:dear\b|geachte\b|betreft\b|subject\b|to\b|from\b|re:|memorandum\b|invoice\b|contract\b|agreement\b|report\b)", re.I)
+
+
+def _lines(page: PageRepresentation) -> list[str]:
+    return [line.strip() for line in page.text.splitlines() if line.strip()]
+
+
+def continuation_features(left: PageRepresentation, right: PageRepresentation) -> dict[str, float]:
+    """Sentence-flow signals across the page break.
+
+    For OCR-only sources these are the strongest available evidence, because they need no layout
+    metadata: prose that runs across a page break is almost never a document boundary, while a
+    page opening with a salutation, a date line, or a capitalised title usually starts one. The
+    existing feature set had nothing capturing this, which is why eight of fourteen features were
+    inert on OpenPSS.
+    """
+    left_lines, right_lines = _lines(left), _lines(right)
+    last = left_lines[-1] if left_lines else ""
+    first = right_lines[0] if right_lines else ""
+
+    # Unterminated last line + lowercase opener = the sentence flows on = same document.
+    ends_open = bool(last) and not SENTENCE_END.search(last)
+    starts_lower = bool(first) and first[0].islower()
+    starts_upper = bool(first) and first[0].isupper()
+
+    return {
+        "ends_mid_sentence": float(ends_open),
+        "starts_lowercase": float(starts_lower),
+        "sentence_continues": float(ends_open and starts_lower),
+        "starts_new_sentence": float((not ends_open) and starts_upper),
+        "starts_with_date": float(bool(DATE_START.match(first))),
+        "starts_with_opener": float(bool(DOCUMENT_OPENER.match(first))),
+        "first_line_similarity": edge_similarity(first, left_lines[0] if left_lines else ""),
+    }
+
+
 def pair_heuristics(left: PageRepresentation, right: PageRepresentation) -> dict[str, float]:
     left_no, right_no = extract_page_number(left), extract_page_number(right)
     return {
@@ -39,4 +77,5 @@ def pair_heuristics(left: PageRepresentation, right: PageRepresentation) -> dict
         "page_number_continuation": float(left_no is not None and right_no == left_no + 1),
         "header_similarity": edge_similarity(_edge(left, True), _edge(right, True)),
         "footer_similarity": edge_similarity(_edge(left, False), _edge(right, False)),
+        **continuation_features(left, right),
     }

@@ -40,12 +40,15 @@ class WeightedFusionBoundary:
 class SklearnBoundaryModel:
     """Our trained model wrapper. Uses HistGradientBoosting for a reliable CPU default."""
 
-    def __init__(self, estimator: Any):
+    def __init__(self, estimator: Any, feature_names: list[str] | None = None):
         self.estimator = estimator
-        self.feature_names = FEATURE_NAMES
+        # A model must score with the feature list it was TRAINED on, not whatever the current
+        # code defines. Without this, adding a feature to FEATURE_NAMES silently breaks every
+        # previously saved model — the estimator receives a wider matrix than it was fitted with.
+        self.feature_names = feature_names or FEATURE_NAMES
 
     @classmethod
-    def train(cls, rows: list[dict[str, float]], labels: list[int], seed: int = 42, calibrate: bool = False) -> "SklearnBoundaryModel":
+    def train(cls, rows: list[dict[str, float]], labels: list[int], seed: int = 42, calibrate: bool = False, class_weight: str | None = "balanced") -> "SklearnBoundaryModel":
         if len(rows) != len(labels) or not rows:
             raise ValueError("Non-empty aligned training rows and labels are required.")
         try:
@@ -55,8 +58,11 @@ class SklearnBoundaryModel:
             raise RuntimeError("scikit-learn is required to train the boundary classifier.") from exc
         if len(set(labels)) < 2:
             raise ValueError("Boundary training labels require both boundary and non-boundary examples.")
-        matrix = [[row[name] for name in FEATURE_NAMES] for row in rows]
-        sample_weight = compute_sample_weight("balanced", labels)
+        matrix = [[row[name] for name in FEATURE_NAMES] for row in rows]  # training defines the set
+        # "balanced" reweights the training set to an effective 50/50 prior. That is a poor match
+        # when boundaries are ~11% of adjacent pairs in deployment: it biases the model toward
+        # predicting boundaries and depresses precision. Passing None keeps the natural prior.
+        sample_weight = compute_sample_weight(class_weight, labels) if class_weight else None
         estimator = HistGradientBoostingClassifier(random_state=seed, max_iter=150, learning_rate=0.08, max_leaf_nodes=15)
         if calibrate:
             # Raw HistGradientBoosting probabilities on an imbalanced boundary/non-boundary split are
@@ -71,7 +77,7 @@ class SklearnBoundaryModel:
         return cls(estimator)
 
     def predict_proba(self, rows: list[dict[str, float]]) -> list[float]:
-        matrix = [[row[name] for name in FEATURE_NAMES] for row in rows]
+        matrix = [[row[name] for name in self.feature_names] for row in rows]
         learned = [float(item[1]) for item in self.estimator.predict_proba(matrix)]
         # A printed page number resetting (e.g. back to "1") is a near-unambiguous, domain-
         # invariant boundary cue -- unlike the learned score, it doesn't depend on the visual/
@@ -83,13 +89,16 @@ class SklearnBoundaryModel:
         output = Path(directory); output.mkdir(parents=True, exist_ok=True)
         with (output / "boundary_model.pkl").open("wb") as handle:
             pickle.dump(self.estimator, handle)
-        (output / "feature_names.json").write_text(json.dumps(FEATURE_NAMES, indent=2), encoding="utf-8")
+        (output / "feature_names.json").write_text(json.dumps(self.feature_names, indent=2), encoding="utf-8")
         (output / "metadata.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
 
     @classmethod
     def load(cls, directory: str | Path) -> "SklearnBoundaryModel":
-        with (Path(directory) / "boundary_model.pkl").open("rb") as handle:
-            return cls(pickle.load(handle))
+        target = Path(directory)
+        names_path = target / "feature_names.json"
+        names = json.loads(names_path.read_text(encoding="utf-8")) if names_path.exists() else None
+        with (target / "boundary_model.pkl").open("rb") as handle:
+            return cls(pickle.load(handle), names)
 
 
 def predict(model: Any, rows: list[dict[str, float]], threshold: float) -> list[BoundaryPrediction]:

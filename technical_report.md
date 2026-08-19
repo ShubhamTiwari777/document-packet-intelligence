@@ -152,18 +152,62 @@ correct behaviour as total failure.
 
 ### 5.1 Stage 1 — boundary detection
 
-Held-out OpenPSS SHORT, 12 streams, 2,488 adjacent pairs, 205 true boundaries.
+Full OpenPSS SHORT test split: **108 streams, 11,354 adjacent pairs, 1,296 true boundaries**
+(11.4% base rate). Threshold is fitted on 54 tuning streams and scored on 54 held-out streams.
 
 | Metric | Value |
 |---|---|
-| Precision | 0.298 |
-| Recall | 0.512 |
-| F1 | 0.377 |
-| Decision threshold | 0.633 |
+| Precision | 0.289 |
+| Recall | 0.551 |
+| **F1 (held-out threshold)** | **0.379** |
+| F1 (threshold tuned on the scored data) | 0.406 — biased, shown for contrast |
 | Inference | 96 ms per 8-page packet |
 | Model size | 0.5 MB (+ 2.0 MB vectoriser) |
 
 Verification packet (4 documents / 9 pages): **4/4 documents split correctly**.
+
+#### How this number was corrected
+
+The first version of this evaluation was wrong in two ways, and both were found by inspection
+rather than by the score looking suspicious.
+
+1. **The threshold was selected on the data it was scored on.** The script chose the F1-optimal
+   threshold over the test probabilities and then reported F1 at that threshold.
+2. **The test set was far too small to measure anything.** It held 12 streams. Splitting it in
+   half gave F1 **0.21** on one half and **0.44** on the other — for the same model.
+
+Enlarging the test set to the full split and separating threshold selection from scoring fixes
+both. The optimism gap collapses from 0.167 to 0.027, and the honest figure (0.379) lands close
+to the originally reported 0.377 — which was therefore roughly right by luck, not by method.
+
+| Test set | Honest held-out F1 | Threshold-on-test F1 | Gap |
+|---|---|---|---|
+| 12 streams | 0.210 | 0.377 | 0.167 |
+| 108 streams | **0.379** | 0.406 | 0.027 |
+
+#### Three attempts to raise F1 — all negative
+
+The training matrix showed **8 of 14 features constant** across all 15,905 rows, so three
+hypotheses were tested against the corrected protocol:
+
+| Variant | Live features | Precision | Recall | F1 |
+|---|---|---|---|---|
+| Baseline | 6 / 14 | 0.289 | 0.551 | **0.379** |
+| Pseudo-blocks reconstructed from text | 10 / 14 | 0.287 | 0.478 | 0.359 |
+| Natural class prior (no `balanced` weighting) | 6 / 14 | 0.301 | 0.486 | 0.371 |
+| + 7 sentence-flow features | 13 / 21 | 0.311 | 0.458 | 0.371 |
+
+None improved F1, and the *shape* of the failures is the useful result: every variant traded
+precision up against recall down and landed on the same F1. They are moving **along one
+precision/recall curve**, not shifting the curve. The decision threshold already exposes that
+trade-off, so recalibration and these feature families cannot help — the limit is the model's
+ability to separate boundary from non-boundary pairs at all.
+
+Two defects were fixed while running these experiments, both of the same class: training now
+records `synthetic_blocks` and `class_weight` in the model metadata and evaluation reads them
+back, and a saved model now scores with the feature list it was **trained** on rather than
+whatever `FEATURE_NAMES` currently holds. Without the latter, adding the seven new features
+would have silently broken every previously saved model.
 
 F1 0.377 on OpenPSS is a modest score and I am not dressing it up. OpenPSS is scanned Dutch
 government material supplied as OCR text with no layout metadata, so the layout half of the
@@ -338,11 +382,18 @@ real structure-confidence signal or deleted; it is currently neither.
 
 1. **A labelled corpus for `passport`/`bank_statement`.** The largest unmeasured area; every claim
    about those classes currently rests on a 4-document fixture.
-2. **Boundary features that survive OCR-only input — via real word boxes, not inferred ones.**
-   Eight of fourteen features are constant during OpenPSS training. Inferring pseudo-layout from
-   text was measured and did not help (§5.1), so the next attempt should use genuine word-level
-   bounding boxes — RVL-CDIP already ships them, and an OCR engine emits them directly — to give
-   `header_similarity` and `footer_similarity` real geometry rather than guessed positions.
+2. **Boundary detection needs a different model class, not more hand-built features.** Three
+   feature/calibration changes were measured and all landed on the same precision/recall curve
+   (§5.1), which says the ceiling is representational. Two directions follow from that, in order
+   of expected value:
+   * **Sequence modelling.** Every current feature compares page *i* with page *i+1* in isolation,
+     while document boundaries are a sequence-labelling problem — documents have length priors and
+     boundaries do not cluster. Adding neighbouring-pair context and decoding with a length prior
+     is the standard remedy and is untried here.
+   * **Learned page-pair representations.** `text_delta` is TF-IDF cosine, which fires on shared
+     vocabulary; consecutive pages of one report and two different reports on one topic look alike
+     to it. A cross-encoder over page-pair text would model *continuation* rather than *overlap*.
+     torch and sentence-transformers are already installed for Stage 3, so this is reachable.
 3. **Transformer embeddings as default**, once dependency installation is reliable — worth
    +0.115 R@1 and a perfect R@5 on the current evaluation set.
 4. **Grow the retrieval evaluation set.** 35 queries gives ±0.07 confidence intervals; conclusions

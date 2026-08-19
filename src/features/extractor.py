@@ -18,6 +18,10 @@ FEATURE_NAMES = [
     "font_mean_delta", "font_std_delta", "whitespace_ratio_delta", "header_similarity",
     "footer_similarity", "text_length_ratio", "block_count_delta", "image_area_ratio_delta",
     "text_density_delta", "dominant_font_size_delta",
+    # Sentence-flow signals: the only strong evidence available when a source carries text but
+    # no layout metadata, which is the case for every scanned/OCR packet.
+    "ends_mid_sentence", "starts_lowercase", "sentence_continues", "starts_new_sentence",
+    "starts_with_date", "starts_with_opener", "first_line_similarity",
 ]
 
 
