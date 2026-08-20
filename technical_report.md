@@ -55,14 +55,14 @@ Full diagrams: **[docs/architecture.md](docs/architecture.md)**.
 ```
 PDF → PDFParser (PyMuPDF) → [Stage 1] pairwise features → calibrated GBM → grouping → classifier
                           → [Stage 2] boilerplate → headings → elements/tables → section tree → chunks
-                          → [Stage 3] BM25 + dense → RRF → reranker → evidence + page + confidence
-                          → FastAPI /process, /retrieve
+                          → [Stage 3] BM25 + dense → RRF → reranker → MMR → evidence + page + confidence
+                          → FastAPI /process, /retrieve, /context
 ```
 
 **Stage 1** computes 21 features per adjacent page pair (text delta, visual delta, page-number
 reset/continuation, header/footer similarity, font and layout deltas), scores them with a
-calibrated gradient-boosted tree, and splits where `p ≥ 0.633`. Grouping is deterministic from
-those decisions. Types come from a hybrid classifier described in §3.2.
+calibrated gradient-boosted tree, and splits at the highest-scoring pairs using the expected-count
+rule (§5.1). Grouping is deterministic from those decisions. Types come from a hybrid classifier described in §3.2.
 
 **Stage 2** detects running headers/footers first, then classifies each remaining block as
 heading, list, caption or paragraph, extracts tables separately, and assembles a section tree
