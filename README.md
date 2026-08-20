@@ -12,8 +12,8 @@ Architecture: **[docs/architecture.pdf](docs/architecture.pdf)**.
 ```
 PDF → PDFParser (PyMuPDF) → [Stage 1] 21 pairwise features → calibrated GBM → grouping → classifier
                           → [Stage 2] boilerplate → headings → elements/tables → section tree → chunks
-                          → [Stage 3] BM25 + dense → RRF → reranker → evidence + page + confidence
-                          → FastAPI /process, /retrieve
+                          → [Stage 3] BM25 + dense → RRF → reranker → MMR → evidence + page + confidence
+                          → FastAPI /process, /retrieve, /context
 ```
 
 Everything runs CPU-only. Committed models total 5.8 MB; no GPU, no external API, no network call
@@ -24,13 +24,14 @@ at inference.
 | Stage | Measurement | Result |
 |---|---|---|
 | 1 — boundaries | OpenPSS SHORT test, 108 streams | F1 0.379 (lift +0.191 over trivial) |
-| 1 — boundaries | DocSplit `our200` benchmark | F1 0.823 — but **trivial is 0.815**, lift +0.008 |
+| 1 — boundaries | DocSplit `our200` benchmark | F1 0.537, **page grouping accuracy 0.615** |
 | 1 — classification | RVL-CDIP held-out, 16 classes | 0.807 accuracy / 0.786 macro-F1 |
 | 2 — structure | annotated fixtures | heading / table / list / caption F1 1.00 |
-| 3 — retrieval | 35 queries, 515-chunk corpus | R@1 0.771, MRR 0.821 (0.886 / 0.929 with bge) |
+| 3 — retrieval | 35 queries, 515-chunk corpus | R@1 0.771, R@5 0.914, MRR 0.829 |
 
-The DocSplit row is the important one and is discussed in §5.1 of the report: raw F1 flatters the
-system there, and the system does not transfer to short packets. Read `lift_over_trivial`, not F1.
+Read **page grouping accuracy, not boundary F1**, on any corpus whose boundary density differs from
+training: at DocSplit's 72% density a classifier marking every pair a boundary scores F1 0.815.
+Report §5.1 covers this and the calibration-driven decision rule that lifted grouping from 0.216.
 
 ## Installation
 
@@ -72,6 +73,7 @@ uvicorn src.api:create_app --factory --host 0.0.0.0 --port 8000
 |---|---|
 | `POST /process` | Upload a PDF; returns groups, structure and chunks. `?include_structure=false&include_chunks=false` trims the payload. |
 | `POST /retrieve` | `{query, processed_dir, top_k}` → evidence with `doc_id`, `page_ref`, `breadcrumb`, `confidence`. |
+| `POST /context` | `{query, processed_dir, top_k, token_budget}` → one grounded block: deduplicated, budgeted to a context window, with `[n]` citations resolving to document and page. The RAG hand-off point; no text is generated. |
 | `GET /health` | Reports whether a trained boundary model is configured. |
 
 Docker:
@@ -120,7 +122,7 @@ Results are written to `outputs/benchmarks/`. Negative results reproduce via
 pytest tests/ -q
 ```
 
-34 tests covering the pipeline contracts plus regressions for every defect found during
+43 tests covering the pipeline contracts plus regressions for every defect found during
 development — table flattening, frozen breadcrumbs, silent classifier fallback, a dense index
 that scored worse than its own lexical half, and threshold selection leaking into scoring.
 
@@ -130,10 +132,13 @@ All settings live in [`config/default.yaml`](config/default.yaml). Notable ones:
 
 | Key | Default | Effect |
 |---|---|---|
-| `boundary.threshold` | 0.6334 | split where pair probability ≥ this |
+| `boundary.decision` | `expected_count` | per-packet split count from calibrated probabilities; `threshold` for a fixed cut-off |
+| `boundary.threshold` | 0.6334 | only used when `decision: threshold` |
 | `classification.min_confidence` | 0.35 | below this, type is reported `unknown` |
 | `retrieval.encoder` | `svd` | `hashed`, `svd`, or `transformer` |
-| `retrieval.rerank` | `true` | feature reranker; +0.171 R@1 for ~0 ms |
+| `retrieval.rerank` | `true` | feature reranker; +0.171 R@1 for ~2 ms |
+| `retrieval.mmr_lambda` | `0.7` | MMR diversity; R@5 0.886 → 0.914 at no cost to R@1 |
+| `retrieval.context_token_budget` | `1500` | token budget for `/context` assembly |
 | `ingestion.enable_ocr` | `false` | requires Tesseract when enabled |
 
 Do not compare experiments across different data splits, render DPIs or label schemas. Rendered

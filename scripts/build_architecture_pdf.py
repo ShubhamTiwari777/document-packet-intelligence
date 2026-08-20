@@ -34,7 +34,7 @@ COLUMNS = [
         ("21 pairwise features", "text · visual · layout · heuristic"),
         ("Calibrated GBM", "HistGradientBoosting + isotonic\n0.5 MB"),
         ("Page-number-reset override", "domain-invariant cue"),
-        ("Grouping", "split where p >= 0.633"),
+        ("Grouping", "expected-count from\ncalibrated probabilities"),
         ("Hybrid classifier", "TF-IDF+LR, 16 classes\n+ lexicon extension"),
         ("Abstention", "below 0.35 -> unknown"),
     ]),
@@ -51,7 +51,8 @@ COLUMNS = [
         ("Dense index", "TF-IDF+SVD default,\nbge-small optional"),
         ("Reciprocal rank fusion", "k = 60"),
         ("Feature reranker", "coverage · phrase · exactness"),
-        ("Confidence normalisation", "relative to candidates"),
+        ("MMR diversity", "lambda = 0.7"),
+        ("Context assembly", "dedup · token budget · citations"),
     ]),
 ]
 
@@ -147,7 +148,7 @@ def draw_pipeline(page: pymupdf.Page) -> None:
     page.draw_rect(footer, color=RULE, fill=FILL, width=0.7)
     page.insert_textbox(pymupdf.Rect(footer.x0 + 8, footer.y0 + 5, footer.x1 - 8, footer.y1 - 4),
                         safe("Output:  evidence + doc_id + page_ref + breadcrumb + confidence      |      "
-                        "Served by FastAPI:  POST /process  ·  POST /retrieve      |      "
+                        "FastAPI:  /process  ·  /retrieve  ·  /context      |      "
                         "No GPU, no external API, no network call at inference"),
                         fontsize=7.2, fontname="helv", color=INK, align=1)
 

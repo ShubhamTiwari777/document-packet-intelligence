@@ -19,7 +19,7 @@ flowchart TB
         FEAT["Pairwise features (14)<br/>text · visual · layout · heuristics"]
         BM["HistGradientBoosting<br/>isotonic-calibrated · 0.5 MB"]
         OVR["page-number-reset override"]
-        GRP["Grouping<br/>split where p ≥ 0.633"]
+        GRP["Grouping<br/>expected-count from calibrated p"]
         CLS["Hybrid classifier<br/>TF-IDF+LR (16 RVL-CDIP classes)<br/>+ lexicon extension"]
         ABS{"conf ≥ 0.35?"}
         FEAT --> BM --> OVR --> GRP --> CLS --> ABS
@@ -49,8 +49,9 @@ flowchart TB
         DENSE["Dense index<br/>TF-IDF+SVD (default)<br/>or bge-small"]
         RRF["Reciprocal rank fusion<br/>k=60"]
         RR["Feature reranker<br/>coverage · phrase · exactness"]
-        CONF["Confidence normalisation"]
-        Q --> BM25 & DENSE --> RRF --> RR --> CONF
+        MMR["MMR diversity<br/>lambda = 0.7"]
+        CONF["Confidence + context assembly<br/>dedup · token budget · citations"]
+        Q --> BM25 & DENSE --> RRF --> RR --> MMR --> CONF
     end
 
     OUT[/"Evidence + doc_id + page_ref<br/>+ breadcrumb + confidence"/]
@@ -61,7 +62,7 @@ flowchart TB
     CHUNK --> DENSE
     CONF --> OUT
 
-    API(["FastAPI · /process · /retrieve"])
+    API(["FastAPI · /process · /retrieve · /context"])
     API -.drives.-> PDF
     API -.serves.-> OUT
 
