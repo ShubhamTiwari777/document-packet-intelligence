@@ -1,0 +1,59 @@
+{
+  "dataset": "nutrientdocs/openpss-mirror",
+  "config": "SHORT",
+  "split": "train",
+  "training_config": {
+    "paths": {
+      "data_dir": "data",
+      "models_dir": "models",
+      "outputs_dir": "outputs",
+      "cache_dir": "data/processed/cache"
+    },
+    "runtime": {
+      "device": "cpu",
+      "random_seed": 42,
+      "render_dpi": 150,
+      "max_render_pixels": 30000000,
+      "log_level": "INFO"
+    },
+    "ingestion": {
+      "min_native_characters": 20,
+      "min_text_density": 5e-05,
+      "enable_ocr": false,
+      "ocr_engine": "tesseract"
+    },
+    "features": {
+      "embedding_model": "BAAI/bge-small-en-v1.5",
+      "visual_model": "openai/clip-vit-base-patch32",
+      "use_optional_models": false
+    },
+    "boundary": {
+      "threshold": 0.8569069285568591,
+      "model_kind": "hist_gradient_boosting",
+      "calibration": false,
+      "model_path": "models/boundary"
+    },
+    "classification": {
+      "model_kind": "tfidf_logistic_regression",
+      "min_confidence": 0.35,
+      "model_path": null
+    },
+    "chunking": {
+      "max_tokens": 256,
+      "overlap_tokens": 32
+    },
+    "retrieval": {
+      "top_k": 5,
+      "dense_top_k": 20,
+      "bm25_top_k": 20,
+      "rrf_k": 60,
+      "rerank": false
+    }
+  },
+  "stream_count": 95,
+  "feature_row_count": 15905,
+  "positive_boundaries": 3110,
+  "calibrated": true,
+  "tfidf_text_delta": true,
+  "skipped": []
+}

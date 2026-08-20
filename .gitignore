@@ -3,7 +3,13 @@ __pycache__/
 *.py[cod]
 data/raw/
 data/processed/
-models/
+# Trained models are excluded by default, except the two the shipped config points at: without
+# them a fresh clone cannot run the pipeline at all, and together they are only 5.6 MB. The
+# experimental variants from the ablations (boundary_openpss_v2/_prior/_flow, boundary_rvlcdip)
+# stay out -- they are reproducible from scripts/ and add ~11 MB.
+models/*
+!models/boundary_openpss/
+!models/document_classifier/
 
 # Generated outputs are excluded by default, except the submission deliverables: the benchmark
 # reports (Deliverable 6) and representative sample outputs (Deliverable 7). Note `outputs/*`
