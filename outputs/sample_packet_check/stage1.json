@@ -11,8 +11,8 @@
       "doc_type": "invoice",
       "classification_confidence": 0.3980279809459974,
       "boundary_confidences": [
-        0.0,
-        0.0
+        0.04604920655239544,
+        0.12256144790003043
       ],
       "classification_source": "trained",
       "classification_alternatives": [
@@ -39,7 +39,7 @@
       "doc_type": "resume",
       "classification_confidence": 0.6,
       "boundary_confidences": [
-        0.0
+        0.016780479072287784
       ],
       "classification_source": "lexicon_backoff",
       "classification_alternatives": [
@@ -66,7 +66,7 @@
       "doc_type": "passport",
       "classification_confidence": 0.8222222222222222,
       "boundary_confidences": [
-        0.0
+        0.04604920655239544
       ],
       "classification_source": "lexicon_extension",
       "classification_alternatives": [
@@ -93,7 +93,7 @@
       "doc_type": "bank_statement",
       "classification_confidence": 0.8297872340425532,
       "boundary_confidences": [
-        0.0
+        0.02379956708990291
       ],
       "classification_source": "lexicon_extension",
       "classification_alternatives": [

@@ -286,6 +286,50 @@ The model learned that boundaries need strong evidence, because in its training 
 rare. In the target corpus the rare and informative event is a continuation. The decision rule
 mitigates this; only retraining in the target regime removes it (§8).
 
+#### What finally moved the number: matching the training regime
+
+Every earlier attempt changed the model. The one that worked changed the *data*.
+
+OpenPSS boundary labels delimit real multi-page documents, and 67% of them are 1-3 pages. Cutting
+those documents out and reassembling them into short packets produces training data with the
+target's shape — median 4 pages, 58% boundary density against DocSplit's 4 and 72% — while both
+boundaries and continuations remain genuine. This is what the RVL-CDIP attempt could not do, since
+its rows are independent single pages.
+
+| Model | DocSplit F1 | DocSplit grouping | OpenPSS F1 | OpenPSS grouping |
+|---|---|---|---|---|
+| Trained on long streams | 0.537 | 0.615 | 0.353 | 0.772 |
+| **Trained on short packets** *(shipped)* | **0.678** | **0.701** | 0.347 | 0.761 |
+| Trained on both, mixed | 0.518 | 0.588 | **0.388** | **0.789** |
+| *Trivial all-boundary* | *0.840* | *0.854* | *0.200* | *0.683* |
+
+Regime-matched training is worth **+0.141 F1 and +0.086 grouping** on the target for −0.011
+grouping on long streams. Mixing the two corpora does *not* split the difference: at an 8:1 pair
+ratio the long-stream data dominates and the model reverts to the low-density prior, scoring best
+on OpenPSS and worst on DocSplit. The regime you train on is the regime you are good at.
+
+#### The honest ceiling
+
+Measured against the right baseline, the system does not yet beat a one-line heuristic on the
+target regime:
+
+| | Our model | Trivial "every page is a document" |
+|---|---|---|
+| DocSplit page grouping | 0.701 | **0.854** |
+| DocSplit boundary F1 | 0.678 | **0.840** |
+| OpenPSS page grouping | **0.761** | 0.683 |
+| OpenPSS boundary F1 | **0.347** | 0.200 |
+
+On long streams the model adds real value (+0.078 grouping over trivial). On short packets it does
+not: at 72% boundary density, splitting everything is a strong strategy, and beating it requires
+reliably detecting the minority event — a *continuation* — which these features do not capture well
+enough. Precision 0.80 against a 0.72 base rate is only marginally better than chance.
+
+This is stated rather than presented as a success because the earlier framing of grouping 0.615 as
+an improvement, without its baseline, was the same mistake this report criticises elsewhere. The
+remedy is a learned page-pair representation that models continuation semantically (§8), not more
+hand-built features -- four feature sets and four learners have now failed to move this ceiling.
+
 #### Summary of Stage 1 boundary detection
 
 | Corpus | Role | Boundary F1 | Page grouping accuracy |

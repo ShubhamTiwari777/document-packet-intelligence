@@ -9,6 +9,7 @@ data/processed/
 # stay out -- they are reproducible from scripts/ and add ~11 MB.
 models/*
 !models/boundary_openpss/
+!models/boundary_shortpackets/
 !models/document_classifier/
 
 # Generated outputs are excluded by default, except the submission deliverables: the benchmark
