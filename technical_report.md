@@ -381,10 +381,17 @@ configured default; the cross-encoder ships as a reproducible alternative
 
 #### Summary of Stage 1 boundary detection
 
-| Corpus | Role | Boundary F1 | Page grouping accuracy |
-|---|---|---|---|
-| OpenPSS SHORT test (108 streams) | held-out, same regime as training | 0.379 | 0.772 |
-| DocSplit `our200` (200 streams) | the assignment's target task | 0.537 | 0.615 |
+Shipped configuration: `models/boundary_shortpackets` (trained on regime-matched packets) with the
+expected-count decision rule.
+
+| Corpus | Role | Boundary F1 | Page grouping | Trivial grouping |
+|---|---|---|---|---|
+| OpenPSS SHORT test | held-out, same regime as training | 0.347 | **0.761** | 0.683 |
+| DocSplit `our200` (200 streams) | the assignment's target task | 0.678 | **0.701** | 0.854 |
+
+The system beats the trivial baseline on long streams (+0.078) and does not on short packets
+(−0.153). The experimental cross-encoder narrows the short-packet gap to −0.049 but is not the
+shipped path, for the cost reasons above.
 
 Read grouping accuracy, not boundary F1, on any corpus whose boundary density differs from
 training: at DocSplit's 72% density a classifier marking every pair a boundary scores F1 0.815, so
