@@ -1,0 +1,29 @@
+{
+  "model": "models/boundary_cross_encoder_large",
+  "metadata": {
+    "backbone": "distilbert-base-multilingual-cased",
+    "manifest": "data/raw/openpss/short_packets_large/manifest.json",
+    "epochs": 3,
+    "window_words": 110,
+    "max_length": 256,
+    "train_pairs": 8429,
+    "validation_pairs": 2146
+  },
+  "results": [
+    {
+      "manifest": "data/raw/docsplit_benchmark/manifest.json",
+      "streams": 200,
+      "pairs": 694,
+      "precision": 0.8434579439252337,
+      "recall": 0.7191235059760956,
+      "f1": 0.7763440860215055,
+      "base_rate": 0.7233,
+      "trivial_f1": 0.8395,
+      "lift_over_trivial": -0.0631,
+      "grouping_accuracy": 0.8042,
+      "trivial_grouping_accuracy": 0.8535,
+      "grouping_lift": -0.0493,
+      "seconds": 72.3
+    }
+  ]
+}

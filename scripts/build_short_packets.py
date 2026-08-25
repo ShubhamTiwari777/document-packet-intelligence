@@ -23,7 +23,8 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--manifest", default="data/raw/openpss/train/manifest.json")
+parser.add_argument("--manifests", nargs="+", default=["data/raw/openpss/train/manifest.json"],
+                    help="one or more OpenPSS manifests to pool documents from")
 parser.add_argument("--output", default="data/raw/openpss/short_packets/manifest.json")
 parser.add_argument("--packets", type=int, default=900)
 parser.add_argument("--max-document-pages", type=int, default=3, help="only reuse short documents")
@@ -32,11 +33,14 @@ parser.add_argument("--max-documents", type=int, default=6)
 parser.add_argument("--seed", type=int, default=42)
 args = parser.parse_args()
 
-source = json.loads(Path(args.manifest).read_text(encoding="utf-8"))
+# Pool documents across every supplied manifest. More source streams means more distinct
+# documents, which is the binding constraint on how many non-overlapping packets can be built.
+sources = [json.loads(Path(path).read_text(encoding="utf-8")) for path in args.manifests]
+all_streams = [stream for source in sources for stream in source["streams"]]
 
 # Cut each stream into its constituent documents using the boundary labels.
 documents: list[list[dict]] = []
-for stream in source["streams"]:
+for stream in all_streams:
     pages, labels = stream["pages"], stream["boundary_labels"]
     current = [pages[0]]
     for index, page in enumerate(pages[1:]):
@@ -79,7 +83,7 @@ pairs = sum(len(s["boundary_labels"]) for s in streams)
 positives = sum(sum(s["boundary_labels"]) for s in streams)
 manifest = {
     "dataset": "openpss-short-packets (rebuilt from nutrientdocs/openpss-mirror)",
-    "config": source.get("config"), "split": "train",
+    "config": "+".join(str(s.get("config")) for s in sources), "split": "train",
     "stream_count": len(streams), "page_count": sum(s["page_count"] for s in streams),
     "positive_boundaries": positives, "streams": streams,
 }

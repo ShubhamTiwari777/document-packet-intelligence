@@ -330,45 +330,54 @@ an improvement, without its baseline, was the same mistake this report criticise
 remedy is a learned page-pair representation that models continuation semantically (§8), not more
 hand-built features -- four feature sets and four learners have now failed to move this ceiling.
 
-#### Sixth attempt: a cross-encoder over the page seam -- the first partial success
+#### Sixth attempt: a cross-encoder over the page seam, and what scaling its data did
 
-Five attempts had failed and all pointed the same way: lexical features cannot represent whether
-text *continues* across a page break. A cross-encoder can, because it attends jointly over both
-pages rather than comparing two independent vectors.
+Five attempts had failed identically: lexical features cannot represent whether text *continues*
+across a page break. A cross-encoder attends jointly over both pages and can.
 
-`distilbert-base-multilingual-cased` (135M) was fine-tuned as a binary classifier on the
-regime-matched short packets. Two design choices carried it: only the **seam** is fed in -- the
-last ~110 words of page *i* and the first ~110 words of page *i+1*, since continuation evidence
-lives at the break and not in body text -- and the backbone is **multilingual**, because OpenPSS and
-DocSplit are both Dutch. The loss is class-weighted, or a boundary-heavy corpus pushes the model
-toward the trivial always-split behaviour it exists to beat.
+`distilbert-base-multilingual-cased` (135M) was fine-tuned as a binary classifier. Three choices
+carried it: only the **seam** is fed in (the last ~110 words of page *i*, the first ~110 of page
+*i+1*), since continuation evidence lives at the break and not in body text; the backbone is
+**multilingual**, because OpenPSS and DocSplit are both Dutch; and the loss is **class-weighted**,
+or a boundary-heavy corpus pushes the model toward the trivial always-split behaviour it exists to
+beat.
 
-Measured on identical 40-stream subsets, with page grouping accuracy against its own trivial
-baseline:
+It was then trained twice, changing only the amount of data. Fetching page *text without images*
+made the larger corpus practical — images are ~2 orders of magnitude larger and only the feature
+model's `visual_delta` needs them — which allowed pooling the full SHORT split with the LONG config
+into 15,485 documents and 3,105 short packets.
 
-| Model | DocSplit grouping | lift | OpenPSS grouping | lift |
+Measured on the **full 200-stream** DocSplit benchmark:
+
+| Model | Training pairs | Boundary F1 | Page grouping | Lift vs trivial |
 |---|---|---|---|---|
-| Feature model (21 features, GBM) | 0.624 | −0.151 | 0.761 | +0.078 |
-| **Cross-encoder** | **0.679** | **−0.097** | **0.817** | **+0.134** |
-| *Trivial "every page is a document"* | *0.775* | *0.000* | *0.683* | *0.000* |
+| Feature model (21 features, GBM) | 2,002 | 0.537 | 0.701 | −0.153 |
+| Cross-encoder | 1,600 | 0.568 | 0.636 | −0.218 |
+| **Cross-encoder, 5.3x data** | **8,460** | **0.776** | **0.804** | **−0.049** |
+| *Trivial "every page is a document"* | — | *0.839* | *0.854* | *0.000* |
 
-**This is the first change to improve both regimes.** It nearly doubles the lift on long streams
-(+0.078 → +0.134) and cuts the short-packet deficit by more than a third (−0.151 → −0.097). The
-hypothesis was right: modelling continuation semantically beats comparing lexical overlap.
+**Data volume was the dominant factor.** Holding architecture, seam window, density and evaluation
+fixed, going from 1,600 to 8,460 training pairs moved page grouping from 0.636 to 0.804 and closed
+roughly two thirds of the gap to the trivial baseline. The earlier model was badly underfitted, not
+badly designed.
 
-It is nonetheless **not a solution**. On short packets the cross-encoder still loses to splitting
-everything. Two things bound it, and both are addressable rather than fundamental:
+It still does not beat trivial on short packets, by 0.049. That is far closer than anything else
+tried, and the trend across three points is monotone in data, so more data is the obvious next step
+rather than another architecture.
 
-* **Training data.** It saw 1,600 examples. That is very thin for a 135M-parameter model, and
-  OpenPSS has ~90,000 rows still unused. This is now the highest-value remaining lever, and it is a
-  data problem rather than an architecture one.
-* **Cost.** Inference ran ~0.27 s per page pair against microseconds for the feature model — three
-  orders of magnitude slower, and 18 minutes for 40 long OpenPSS streams. It is viable for short
-  packets and impractical for long streams without batching or a smaller backbone.
+**A caution about the measurement.** An intermediate evaluation on a 40-stream subset reported this
+model at grouping 0.835 against a trivial 0.775 — a *positive* lift of +0.059, which would have
+been the project's headline result. It does not survive the full benchmark: the subset's trivial
+baseline was 0.775 against the full set's 0.854, so the subset was materially easier. Both numbers
+are honest measurements of different samples, and only the 200-stream one is reported above. The
+40-stream figure is recorded here because nearly publishing it was the closest this project came to
+repeating exactly the error it documents elsewhere.
 
-The feature model therefore remains the default and the cross-encoder ships as a measured,
-reproducible alternative (`scripts/train_cross_encoder.py`, `scripts/evaluate_cross_encoder.py`)
-rather than as the configured path.
+**Cost.** Inference runs ~0.27 s per page pair against microseconds for the feature model, and
+training took 2h15m on CPU at 256-token sequences. The feature model therefore remains the
+configured default; the cross-encoder ships as a reproducible alternative
+(`scripts/train_cross_encoder.py`, `scripts/evaluate_cross_encoder.py`,
+`scripts/fetch_openpss_text.py`, `scripts/build_short_packets.py`).
 
 #### Summary of Stage 1 boundary detection
 
