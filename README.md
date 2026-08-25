@@ -1,120 +1,114 @@
 # Document Packet Intelligence & Evidence Retrieval
 
-Splits a PDF packet containing several independent documents, converts each into a structured
-representation, and retrieves supporting evidence for a query. It does not generate answers:
-every result carries the retrieved text, document id, page reference and a confidence score.
+## What problem does this solve?
 
-Full measurements and design rationale: **[technical_report.pdf](technical_report.pdf)**.
-Architecture: **[docs/architecture.pdf](docs/architecture.pdf)**.
+Sometimes one PDF contains several completely different documents scanned together — an invoice,
+then a resume, then a passport scan, all in one file. A computer sees one 9-page PDF. A person sees
+three separate documents.
 
-## Pipeline
+This project does three things with such a file:
 
-```
-PDF → PDFParser (PyMuPDF) → [Stage 1] 21 pairwise features → calibrated GBM → grouping → classifier
-                          → [Stage 2] boilerplate → headings → elements/tables → section tree → chunks
-                          → [Stage 3] BM25 + dense → RRF → reranker → MMR → evidence + page + confidence
-                          → FastAPI /process, /retrieve, /context
-```
+1. **Splits it** into the separate documents it actually contains, and says what type each one is
+2. **Reads the structure** of each document — headings, tables, lists, which page everything is on
+3. **Finds evidence** for a question, and tells you which document and page it came from
 
-Everything runs CPU-only. Committed models total 5.8 MB; no GPU, no external API, no network call
-at inference.
+It does **not** write answers for you. Ask *"What is the closing balance?"* and it returns the exact
+text that answers it, plus the document and page number — so you can verify it yourself. That was a
+deliberate requirement, not a limitation.
 
-## Headline results
-
-| Stage | Measurement | Result |
-|---|---|---|
-| 1 — boundaries | OpenPSS SHORT test, 108 streams | F1 0.379 (lift +0.191 over trivial) |
-| 1 — boundaries | DocSplit `our200` benchmark | F1 0.537, **page grouping accuracy 0.615** |
-| 1 — classification | RVL-CDIP held-out, 16 classes | 0.807 accuracy / 0.786 macro-F1 |
-| 2 — structure | annotated fixtures | heading / table / list / caption F1 1.00 |
-| 3 — retrieval | 35 queries, 515-chunk corpus | R@1 0.771, R@5 0.914, MRR 0.829 |
-
-Read **page grouping accuracy, not boundary F1**, on any corpus whose boundary density differs from
-training: at DocSplit's 72% density a classifier marking every pair a boundary scores F1 0.815.
-Report §5.1 covers this and the calibration-driven decision rule that lifted grouping from 0.216.
-
-## Installation
-
-Python 3.11+ (developed on 3.14).
+## See it work
 
 ```bash
-python -m venv .venv
-.venv/Scripts/activate          # Windows;  source .venv/bin/activate on Linux/macOS
 pip install -r requirements.txt
-```
-
-Optional extras, neither required for the default pipeline:
-
-- **Tesseract** — only when `ingestion.enable_ocr: true` in the config.
-- **sentence-transformers + torch** (~1 GB) — enables `retrieval.encoder: transformer`, worth
-  +0.115 R@1. Measured numbers are in `requirements.txt`.
-
-## Run it
-
-```bash
-# Generate the sample packet, then process it end to end
 python scripts/generate_sample_packet.py
 python scripts/run_pipeline.py --input data/samples/sample_packet.pdf --output outputs/sample
+```
 
-# Retrieve evidence (never an answer)
+The sample file is a 9-page PDF holding four documents. The system correctly splits it into:
+
+| Pages | Detected as |
+|---|---|
+| 1–3 | invoice |
+| 4–5 | resume |
+| 6–7 | passport |
+| 8–9 | bank statement |
+
+Then ask it something:
+
+```bash
 python scripts/run_pipeline.py --query "What is the closing balance?" --processed-dir outputs/sample --top-k 5
 ```
 
-A processed packet directory contains `pages.json`, `boundary_features.json`, `stage1.json`,
-`structured_documents.json`, `chunks.json`, `markdown/*.md`, rendered pages, and the dense index.
+It answers with the evidence, the document, the page, and a confidence score.
 
-## API
+## How it works, in plain terms
+
+```
+PDF file
+   ↓  read every page (text, position of each word, font sizes)
+STAGE 1 — split into documents, and label each one
+   ↓  for every pair of neighbouring pages, decide: same document, or new one?
+STAGE 2 — understand each document
+   ↓  find headings, tables, lists; remember which page everything came from
+STAGE 3 — answer questions with evidence
+   ↓  search two different ways, combine, re-rank, return with page citations
+```
+
+**Stage 1** looks at each pair of neighbouring pages and asks "do these belong together?" It uses 21
+clues — does the text suddenly change topic, does the page number restart, do the headers differ,
+does the layout change. A trained model turns those clues into a probability.
+
+**Stage 2** turns each document into structured data. It first removes repeated headers and footers
+(so a company letterhead on every page doesn't get mistaken for a real heading), then finds real
+headings, tables and lists, keeping track of the page each piece came from.
+
+**Stage 3** searches in two different ways at once — keyword matching (good for exact things like
+invoice numbers) and meaning-based matching (good for questions worded differently from the
+document). It merges both result lists, re-ranks them, and returns the best evidence with citations.
+
+Everything runs on a normal CPU. No GPU, no paid API, no internet needed once set up. All the
+trained models together are only **5.8 MB**.
+
+## Results, and how to read them
+
+| What | Measured on | Result |
+|---|---|---|
+| Splitting documents | OpenPSS, 108 real page streams | page grouping accuracy **0.76** |
+| Splitting documents | DocSplit benchmark, 200 packets | page grouping accuracy **0.70** |
+| Identifying document type | 2,222 held-out documents, 16 types | **80.7%** accuracy |
+| Finding the right evidence | 35 questions, 515 text chunks | correct answer ranked #1 **77%** of the time |
+| Structure extraction | annotated test files | headings, tables, lists all correct |
+
+**One number needs explaining honestly.** On the DocSplit benchmark, 72% of page pairs are document
+boundaries — most documents there are a single page. So a lazy program that just says *"every page
+is its own document"* already scores **0.854**. Our 0.70 is *below* that.
+
+This is stated plainly because it's the truth: **the system works well on long documents and is not
+yet good enough on very short ones.** Full analysis is in section 5.1 of the technical report,
+including six experiments that failed and what each one ruled out.
+
+Full details: **[technical_report.pdf](technical_report.pdf)** ·
+Diagram: **[docs/architecture.pdf](docs/architecture.pdf)**
+
+## Using it as a web service
 
 ```bash
 uvicorn src.api:create_app --factory --host 0.0.0.0 --port 8000
 ```
 
-| Endpoint | Purpose |
+| Endpoint | What it does |
 |---|---|
-| `POST /process` | Upload a PDF; returns groups, structure and chunks. `?include_structure=false&include_chunks=false` trims the payload. |
-| `POST /retrieve` | `{query, processed_dir, top_k}` → evidence with `doc_id`, `page_ref`, `breadcrumb`, `confidence`. |
-| `POST /context` | `{query, processed_dir, top_k, token_budget}` → one grounded block: deduplicated, budgeted to a context window, with `[n]` citations resolving to document and page. The RAG hand-off point; no text is generated. |
-| `GET /health` | Reports whether a trained boundary model is configured. |
+| `POST /process` | Send a PDF, get back the split documents and their structure |
+| `POST /retrieve` | Ask a question, get evidence with document and page numbers |
+| `POST /context` | Same, but packaged as one block with `[1] [2]` citations, ready to hand to an AI assistant |
+| `GET /health` | Check the service is running |
 
-Docker:
+With Docker:
 
 ```bash
 docker build -t document-packet-intelligence .
 docker run -p 8000:8000 document-packet-intelligence
 ```
-
-## Reproducing the models and benchmarks
-
-Datasets download themselves through the HuggingFace datasets-server REST API — no manual
-downloads, and no `datasets`/`pyarrow` dependency (neither has a Python 3.14 wheel).
-
-```bash
-# Stage 1 — boundary detection
-python scripts/fetch_openpss.py --config SHORT --split train --output data/raw/openpss/train --max-rows 16000
-python scripts/fetch_openpss.py --config SHORT --split test  --output data/raw/openpss/test_full --max-rows 11462
-python scripts/train_openpss_boundary.py --manifest data/raw/openpss/train/manifest.json --output models/boundary_openpss --calibrate
-python scripts/evaluate_openpss_boundary.py --manifest data/raw/openpss/test_full/manifest.json --model models/boundary_openpss --output outputs/benchmarks/boundary_validation_full.json
-
-# Score against the DocSplit benchmark (evaluation only -- never trained on)
-python scripts/fetch_docsplit_benchmark.py
-python scripts/evaluate_openpss_boundary.py --manifest data/raw/docsplit_benchmark/manifest.json --model models/boundary_openpss --output outputs/benchmarks/boundary_validation_docsplit.json
-
-# Stage 1 — document type classification
-python scripts/fetch_rvlcdip_text.py --output data/raw/rvlcdip/train_text.json --max-rows 12000
-python scripts/train_document_classifier.py --training_json data/raw/rvlcdip/train_text.json --output models/document_classifier/tfidf_lr.pkl
-
-# Stages 2 and 3
-python scripts/generate_sample_packet.py && python scripts/generate_benchmark_report.py
-python scripts/evaluate_stage2.py --packet data/samples/benchmark_report.pdf --ground-truth data/samples/benchmark_ground_truth.json
-python scripts/evaluate_stage3.py --distractors data/raw/openpss/test_full/manifest.json --distractor-streams 2
-
-# Reports
-python scripts/generate_stage1_report.py
-python scripts/build_report_pdf.py && python scripts/build_architecture_pdf.py
-```
-
-Results are written to `outputs/benchmarks/`. Negative results reproduce via
-`--no-synthetic-blocks`, `--class-weight none`, and `scripts/train_rvlcdip_boundary.py`.
 
 ## Tests
 
@@ -122,34 +116,51 @@ Results are written to `outputs/benchmarks/`. Negative results reproduce via
 pytest tests/ -q
 ```
 
-43 tests covering the pipeline contracts plus regressions for every defect found during
-development — table flattening, frozen breadcrumbs, silent classifier fallback, a dense index
-that scored worse than its own lexical half, and threshold selection leaking into scoring.
+**43 tests.** Most exist because something was genuinely broken and got fixed — tables being
+flattened into plain text, a search index that made results *worse*, a settings flag that crashed
+the program when switched on. Each test stops that specific bug coming back.
 
-## Configuration
+## Rebuilding the models yourself
 
-All settings live in [`config/default.yaml`](config/default.yaml). Notable ones:
+Everything downloads automatically; no manual dataset setup.
 
-| Key | Default | Effect |
+```bash
+# Split-detection model
+python scripts/fetch_openpss.py --config SHORT --split train --output data/raw/openpss/train --max-rows 16000
+python scripts/train_openpss_boundary.py --manifest data/raw/openpss/train/manifest.json --output models/boundary_openpss --calibrate
+
+# Document-type model
+python scripts/fetch_rvlcdip_text.py --output data/raw/rvlcdip/train_text.json --max-rows 12000
+python scripts/train_document_classifier.py --training_json data/raw/rvlcdip/train_text.json --output models/document_classifier/tfidf_lr.pkl
+
+# Test files and benchmarks
+python scripts/generate_sample_packet.py && python scripts/generate_benchmark_report.py
+python scripts/evaluate_stage2.py --packet data/samples/benchmark_report.pdf --ground-truth data/samples/benchmark_ground_truth.json
+python scripts/evaluate_stage3.py --distractors data/raw/openpss/test_full/manifest.json --distractor-streams 2
+```
+
+Results land in `outputs/benchmarks/`. There is also an experimental AI-based splitter
+(`scripts/train_cross_encoder.py`) that performs better but is far slower — see report section 5.1.
+
+## Settings
+
+All in [`config/default.yaml`](config/default.yaml). The ones worth knowing:
+
+| Setting | Default | What it changes |
 |---|---|---|
-| `boundary.decision` | `expected_count` | per-packet split count from calibrated probabilities; `threshold` for a fixed cut-off |
-| `boundary.threshold` | 0.6334 | only used when `decision: threshold` |
-| `classification.min_confidence` | 0.35 | below this, type is reported `unknown` |
-| `retrieval.encoder` | `svd` | `hashed`, `svd`, or `transformer` |
-| `retrieval.rerank` | `true` | feature reranker; +0.171 R@1 for ~2 ms |
-| `retrieval.mmr_lambda` | `0.7` | MMR diversity; R@5 0.886 → 0.914 at no cost to R@1 |
-| `retrieval.context_token_budget` | `1500` | token budget for `/context` assembly |
-| `ingestion.enable_ocr` | `false` | requires Tesseract when enabled |
+| `boundary.decision` | `expected_count` | How it decides where to split. This setting works across different document types; a fixed cut-off did not |
+| `classification.min_confidence` | `0.35` | Below this, the type is reported as `unknown` instead of guessing |
+| `retrieval.encoder` | `svd` | Meaning-based search method. `transformer` is more accurate but needs ~1 GB of extra downloads |
+| `retrieval.rerank` | `true` | Re-orders results. Big accuracy gain, costs ~2 milliseconds |
+| `ingestion.enable_ocr` | `false` | Turn on for scanned images; needs Tesseract installed |
 
-Do not compare experiments across different data splits, render DPIs or label schemas. Rendered
-visual features are capped at `runtime.max_render_pixels` so unusually large pages cannot exhaust
-RAM.
+## What this does not do well
 
-## Known limitations
+Stated up front rather than buried:
 
-- Boundary detection is tuned for long page streams and is at the trivial baseline on short
-  packets (report §5.1). Retraining in the target regime is the top future-work item.
-- `passport` and `bank_statement` are lexicon-scored with **no held-out measurement**; no public
-  labelled corpus for them was available.
-- Stage 2's 1.00 scores are on authored fixtures — they measure conformance to chosen constructs,
-  not generalisation. The label-free OpenPSS coverage run sits beside them for that reason.
+- **Very short packets** (mostly 1-page documents) — the split detector is below a trivial baseline
+  here. This is the main open problem, and the report explains why and what would fix it.
+- **Passport and bank statement types** have no proper accuracy measurement — no public labelled
+  data for them exists, so they use a keyword-based fallback with an honest confidence score.
+- **The structure tests use files I created myself**, so a perfect score there means the code handles
+  those cases, not that it handles every PDF in the world.
