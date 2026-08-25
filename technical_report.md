@@ -330,6 +330,46 @@ an improvement, without its baseline, was the same mistake this report criticise
 remedy is a learned page-pair representation that models continuation semantically (§8), not more
 hand-built features -- four feature sets and four learners have now failed to move this ceiling.
 
+#### Sixth attempt: a cross-encoder over the page seam -- the first partial success
+
+Five attempts had failed and all pointed the same way: lexical features cannot represent whether
+text *continues* across a page break. A cross-encoder can, because it attends jointly over both
+pages rather than comparing two independent vectors.
+
+`distilbert-base-multilingual-cased` (135M) was fine-tuned as a binary classifier on the
+regime-matched short packets. Two design choices carried it: only the **seam** is fed in -- the
+last ~110 words of page *i* and the first ~110 words of page *i+1*, since continuation evidence
+lives at the break and not in body text -- and the backbone is **multilingual**, because OpenPSS and
+DocSplit are both Dutch. The loss is class-weighted, or a boundary-heavy corpus pushes the model
+toward the trivial always-split behaviour it exists to beat.
+
+Measured on identical 40-stream subsets, with page grouping accuracy against its own trivial
+baseline:
+
+| Model | DocSplit grouping | lift | OpenPSS grouping | lift |
+|---|---|---|---|---|
+| Feature model (21 features, GBM) | 0.624 | −0.151 | 0.761 | +0.078 |
+| **Cross-encoder** | **0.679** | **−0.097** | **0.817** | **+0.134** |
+| *Trivial "every page is a document"* | *0.775* | *0.000* | *0.683* | *0.000* |
+
+**This is the first change to improve both regimes.** It nearly doubles the lift on long streams
+(+0.078 → +0.134) and cuts the short-packet deficit by more than a third (−0.151 → −0.097). The
+hypothesis was right: modelling continuation semantically beats comparing lexical overlap.
+
+It is nonetheless **not a solution**. On short packets the cross-encoder still loses to splitting
+everything. Two things bound it, and both are addressable rather than fundamental:
+
+* **Training data.** It saw 1,600 examples. That is very thin for a 135M-parameter model, and
+  OpenPSS has ~90,000 rows still unused. This is now the highest-value remaining lever, and it is a
+  data problem rather than an architecture one.
+* **Cost.** Inference ran ~0.27 s per page pair against microseconds for the feature model — three
+  orders of magnitude slower, and 18 minutes for 40 long OpenPSS streams. It is viable for short
+  packets and impractical for long streams without batching or a smaller backbone.
+
+The feature model therefore remains the default and the cross-encoder ships as a measured,
+reproducible alternative (`scripts/train_cross_encoder.py`, `scripts/evaluate_cross_encoder.py`)
+rather than as the configured path.
+
 #### Summary of Stage 1 boundary detection
 
 | Corpus | Role | Boundary F1 | Page grouping accuracy |
@@ -561,10 +601,14 @@ measured failure.
    highest-value change available. It supersedes everything else on this list.
 2. **A labelled corpus for `passport`/`bank_statement`.** The largest unmeasured area; every claim
    about those classes currently rests on a 4-document fixture.
-3. **Boundary detection needs a different model class, not more hand-built features.** Three
-   feature/calibration changes were measured and all landed on the same precision/recall curve
-   (§5.1), which says the ceiling is representational. Two directions follow from that, in order
-   of expected value:
+3. **Scale the cross-encoder's training data.** §5.1 shows the cross-encoder is the first change
+   to improve both regimes, trained on only 1,600 examples. OpenPSS has ~90,000 rows unused. This
+   is now a data problem rather than an architecture one, and it is the highest-value lever left.
+   Batching or a smaller backbone would also address its ~0.27 s per page pair, which is three
+   orders of magnitude slower than the feature model.
+4. **Sequence decoding, still untried.** Each pair is decided in isolation before `expected_count`
+   picks the top K globally. A Viterbi pass with a document-length prior would use the fact that
+   boundaries do not cluster. Two further directions, lower priority:
    * **Sequence modelling.** Every current feature compares page *i* with page *i+1* in isolation,
      while document boundaries are a sequence-labelling problem — documents have length priors and
      boundaries do not cluster. Adding neighbouring-pair context and decoding with a length prior
