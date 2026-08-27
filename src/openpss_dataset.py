@@ -130,9 +130,20 @@ def pages_from_stream(stream: dict[str, Any], synthesize_blocks_from_text: bool 
         )
         for page in stream["pages"]
     ]
-    if not synthesize_blocks_from_text:
-        return pages
-    return [_replace(page, blocks=synthesize_blocks(page)) for page in pages]
+    # TABME++ pages carry real per-word boxes. Real geometry beats both alternatives: inferred
+    # pseudo-blocks (measured, did not help) and no blocks at all (leaves 8 features constant).
+    from src.synthetic_packets import blocks_from_words
+    rebuilt = []
+    for page, raw in zip(pages, stream["pages"]):
+        if raw.get("words") and raw.get("boxes"):
+            blocks = blocks_from_words(raw["words"], raw["boxes"], page.width, page.height)
+            rebuilt.append(_replace(page, blocks=blocks,
+                                    fonts=[{"size": size} for b in blocks for size in b.font_sizes]))
+        elif synthesize_blocks_from_text:
+            rebuilt.append(_replace(page, blocks=synthesize_blocks(page)))
+        else:
+            rebuilt.append(page)
+    return rebuilt
 
 
 def fetch_openpss_manifest(

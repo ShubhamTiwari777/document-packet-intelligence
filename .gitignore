@@ -3,11 +3,14 @@ __pycache__/
 *.py[cod]
 data/raw/
 data/processed/
-# Trained models are excluded by default, except the two the shipped config points at: without
-# them a fresh clone cannot run the pipeline at all, and together they are only 5.6 MB. The
-# experimental variants from the ablations (boundary_openpss_v2/_prior/_flow, boundary_rvlcdip)
-# stay out -- they are reproducible from scripts/ and add ~11 MB.
+# Trained models are excluded by default, except the ones the shipped config points at: without
+# them a fresh clone cannot run the pipeline at all. `boundary_tabme` is the shipped default
+# (English) and MUST stay included -- omitting it once already produced a repository whose config
+# named a model the clone did not contain. `boundary_shortpackets` is the documented Dutch
+# alternative. The experimental variants from the ablations (boundary_openpss_v2/_prior/_flow,
+# boundary_rvlcdip, boundary_cross_encoder*) stay out -- they are reproducible from scripts/.
 models/*
+!models/boundary_tabme/
 !models/boundary_openpss/
 !models/boundary_shortpackets/
 !models/document_classifier/

@@ -1,0 +1,61 @@
+{
+  "dataset": "bevaya/TABMEpp (packets rebuilt from doc_id groups)",
+  "config": "TABMEpp",
+  "split": "train",
+  "training_config": {
+    "paths": {
+      "data_dir": "data",
+      "models_dir": "models",
+      "outputs_dir": "outputs",
+      "cache_dir": "data/processed/cache"
+    },
+    "runtime": {
+      "device": "cpu",
+      "random_seed": 42,
+      "render_dpi": 150,
+      "max_render_pixels": 30000000,
+      "log_level": "INFO"
+    },
+    "ingestion": {
+      "min_native_characters": 20,
+      "min_text_density": 5e-05,
+      "enable_ocr": false,
+      "ocr_engine": "tesseract"
+    },
+    "boundary": {
+      "decision": "expected_count",
+      "threshold": 0.6334265856848469,
+      "model_kind": "hist_gradient_boosting",
+      "calibration": true,
+      "model_path": "models/boundary_shortpackets"
+    },
+    "classification": {
+      "model_kind": "tfidf_logistic_regression",
+      "min_confidence": 0.35,
+      "model_path": "models/document_classifier/tfidf_lr.pkl"
+    },
+    "chunking": {
+      "max_tokens": 256,
+      "overlap_tokens": 32
+    },
+    "retrieval": {
+      "top_k": 5,
+      "dense_top_k": 20,
+      "bm25_top_k": 20,
+      "rrf_k": 60,
+      "rerank": true,
+      "encoder": "svd",
+      "embedding_model": "BAAI/bge-small-en-v1.5",
+      "mmr_lambda": 0.7,
+      "context_token_budget": 1500
+    }
+  },
+  "stream_count": 504,
+  "feature_row_count": 2269,
+  "positive_boundaries": 1291,
+  "calibrated": true,
+  "tfidf_text_delta": true,
+  "synthetic_blocks": true,
+  "class_weight": "balanced",
+  "skipped": []
+}
