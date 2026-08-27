@@ -1,0 +1,61 @@
+{
+  "packet": "stress_packet.pdf",
+  "page_count": 13,
+  "documents": [
+    {
+      "pages": [
+        1,
+        2
+      ],
+      "doc_type": "invoice",
+      "title": "TAX INVOICE"
+    },
+    {
+      "pages": [
+        3,
+        4
+      ],
+      "doc_type": "budget",
+      "title": "DEPARTMENTAL BUDGET"
+    },
+    {
+      "pages": [
+        5
+      ],
+      "doc_type": "letter",
+      "title": "MERIDIAN LEGAL ASSOCIATES"
+    },
+    {
+      "pages": [
+        6
+      ],
+      "doc_type": "memo",
+      "title": "INTERNAL MEMORANDUM"
+    },
+    {
+      "pages": [
+        7,
+        8
+      ],
+      "doc_type": "resume",
+      "title": "CURRICULUM VITAE"
+    },
+    {
+      "pages": [
+        9,
+        10
+      ],
+      "doc_type": "bank_statement",
+      "title": "ACCOUNT STATEMENT"
+    },
+    {
+      "pages": [
+        11,
+        12,
+        13
+      ],
+      "doc_type": "passport",
+      "title": "TRAVEL DOCUMENT"
+    }
+  ]
+}
