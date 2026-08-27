@@ -32,6 +32,9 @@ def extract_page_number(page: PageRepresentation) -> int | None:
     return None
 
 
+# How many opening lines of a page count as its "header block" for date/opener detection.
+HEAD_LINES = 5
+
 SENTENCE_END = re.compile(r"[.!?:;,]['\")\]]?\s*$")
 DATE_START = re.compile(r"^\s*(?:\d{1,2}[-/. ]\d{1,2}[-/. ]\d{2,4}|\d{1,2}\s+\w+\s+\d{4}|\w+\s+\d{1,2},\s*\d{4})")
 DOCUMENT_OPENER = re.compile(r"^\s*(?:dear\b|geachte\b|betreft\b|subject\b|to\b|from\b|re:|memorandum\b|invoice\b|contract\b|agreement\b|report\b)", re.I)
@@ -53,6 +56,11 @@ def continuation_features(left: PageRepresentation, right: PageRepresentation) -
     left_lines, right_lines = _lines(left), _lines(right)
     last = left_lines[-1] if left_lines else ""
     first = right_lines[0] if right_lines else ""
+    # Opening furniture is almost never on line 1: a letter runs letterhead -> date -> address
+    # block -> salutation, and a memo runs title -> TO/FROM/SUBJECT. Matching only the first line
+    # left `starts_with_date` and `starts_with_opener` constant zero on entire packets that plainly
+    # contained both cues, so they could carry no information. Scan the opening block instead.
+    head = right_lines[:HEAD_LINES]
 
     # Unterminated last line + lowercase opener = the sentence flows on = same document.
     ends_open = bool(last) and not SENTENCE_END.search(last)
@@ -64,8 +72,8 @@ def continuation_features(left: PageRepresentation, right: PageRepresentation) -
         "starts_lowercase": float(starts_lower),
         "sentence_continues": float(ends_open and starts_lower),
         "starts_new_sentence": float((not ends_open) and starts_upper),
-        "starts_with_date": float(bool(DATE_START.match(first))),
-        "starts_with_opener": float(bool(DOCUMENT_OPENER.match(first))),
+        "starts_with_date": float(any(DATE_START.match(line) for line in head)),
+        "starts_with_opener": float(any(DOCUMENT_OPENER.match(line) for line in head)),
         "first_line_similarity": edge_similarity(first, left_lines[0] if left_lines else ""),
     }
 
