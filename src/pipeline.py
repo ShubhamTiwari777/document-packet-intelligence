@@ -56,7 +56,9 @@ class DocumentPipeline:
         for document in structured:
             (markdown_dir / f"{document.doc_id}.md").write_text(render_markdown(document), encoding="utf-8")
         HybridRetriever(chunks, self.config.retrieval).save(str(target / "index"))
-        result: dict[str, Any] = {"packet_id": packet, "documents": [asdict(group) for group in groups], "chunk_count": len(chunks), "output_dir": str(target), "model_status": {"boundary": "trained" if selected_boundary_model else "weighted_fusion_fallback", "document_classifier": classifier_status}}
+        # The raw per-pair probabilities are the actual Stage 1 decision surface. Groups only
+        # retain the within-document ones, so the values at the splits would otherwise be lost.
+        result: dict[str, Any] = {"packet_id": packet, "documents": [asdict(group) for group in groups], "chunk_count": len(chunks), "output_dir": str(target), "boundary_probabilities": [float(probability) for probability in probabilities], "model_status": {"boundary": "trained" if selected_boundary_model else "weighted_fusion_fallback", "document_classifier": classifier_status}}
         # Additive: the Stage 2 structure and chunks are returned alongside the original keys so
         # callers do not have to read the JSON written to disk to see the structured output.
         if include_structure:

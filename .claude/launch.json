@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dpi-ui",
+      "runtimeExecutable": ".venv/Scripts/python.exe",
+      "runtimeArgs": [
+        "-m", "uvicorn", "src.api:create_app",
+        "--factory", "--host", "127.0.0.1", "--port", "8000"
+      ],
+      "port": 8000
+    }
+  ]
+}

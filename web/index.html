@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Document Packet Intelligence</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="logo" aria-hidden="true">◧</span>
+    <div>
+      <strong>Document Packet Intelligence</strong>
+      <span class="tagline">Split · Structure · Retrieve</span>
+    </div>
+  </div>
+  <nav id="nav">
+    <a href="#panel-upload" class="active">Upload</a>
+    <a href="#panel-documents">Documents</a>
+    <a href="#panel-search">Search</a>
+    <a href="#panel-benchmarks">Benchmarks</a>
+  </nav>
+  <div class="status" id="status" title="Backend status">
+    <span class="dot" data-state="pending"></span><span id="status-text">connecting…</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- ------------------------------------------------------------ upload -->
+  <section id="panel-upload" class="panel">
+    <h1>Split a multi-document PDF</h1>
+    <p class="lede">
+      Upload a packet that contains several documents stitched together. The pipeline finds where
+      each document starts and ends, identifies what type it is, extracts its structure, and gives
+      you every document back as its own PDF.
+    </p>
+
+    <div id="dropzone" class="dropzone" tabindex="0" role="button"
+         aria-label="Choose a PDF, or drag one here">
+      <input type="file" id="file-input" accept="application/pdf,.pdf" hidden>
+      <div class="dz-icon" aria-hidden="true">⬆</div>
+      <div class="dz-main">Drop a PDF here, or <span class="link">browse</span></div>
+      <div class="dz-sub">One packet at a time · processed locally · nothing leaves your machine</div>
+    </div>
+
+    <details class="advanced">
+      <summary>Add ground truth to measure accuracy <span class="hint">optional</span></summary>
+      <p class="small">
+        Without ground truth the system can report how <em>confident</em> it is, but not how
+        <em>correct</em> it is — there is nothing to compare against. Paste a JSON list of the real
+        documents to get accuracy, precision, recall and F1 for this packet.
+      </p>
+      <textarea id="truth" rows="5" spellcheck="false"
+        placeholder='{"documents":[{"pages":[1,2,3],"doc_type":"invoice"},{"pages":[4,5],"doc_type":"resume"}]}'></textarea>
+    </details>
+
+    <div class="actions">
+      <button id="btn-upload" class="btn primary" disabled>Process packet</button>
+      <button id="btn-sample" class="btn ghost">Try the bundled 9-page sample</button>
+    </div>
+    <p class="small muted" id="sample-note">
+      The sample ships with ground truth, so it reports real accuracy and precision.
+    </p>
+
+    <div id="progress" class="progress" hidden>
+      <div class="bar"><div class="fill"></div></div>
+      <span id="progress-text">Processing…</span>
+    </div>
+    <div id="error" class="error" hidden></div>
+  </section>
+
+  <!-- ------------------------------------------------------------ results -->
+  <section id="panel-results" class="panel" hidden>
+    <div class="panel-head">
+      <h2>Result</h2>
+      <div class="head-actions">
+        <a id="dl-all" class="btn primary" download>Download all as .zip</a>
+        <a id="dl-source" class="btn ghost" target="_blank" rel="noopener">View original</a>
+      </div>
+    </div>
+    <div id="summary" class="summary"></div>
+    <div id="seams"></div>
+    <div id="evaluation"></div>
+  </section>
+
+  <!-- ------------------------------------------------------------ documents -->
+  <section id="panel-documents" class="panel" hidden>
+    <div class="panel-head">
+      <h2>Documents found</h2>
+      <span class="count" id="doc-count"></span>
+    </div>
+    <p class="small muted">
+      <strong>Confidence</strong> is the model's own certainty about the document type — not a
+      measure of correctness (see the accuracy panel above when ground truth is supplied). Read it
+      together with the scorer named under each bar: a <em>trained model</em> score is spread over
+      16 classes, where 6% is chance, while a <em>keyword</em> score is chosen among 4 and mostly
+      reflects how many identifying phrases were found. A lower number from the trained model can
+      easily be the stronger result.
+    </p>
+    <div id="documents" class="cards"></div>
+  </section>
+
+  <!-- ------------------------------------------------------------ search -->
+  <section id="panel-search" class="panel" hidden>
+    <div class="panel-head"><h2>Find evidence</h2></div>
+    <p class="small muted">
+      Ask a question about the packet. The system returns the passages that answer it, with the
+      document and page they came from. It does not write an answer for you — that is deliberate,
+      so every result stays verifiable.
+    </p>
+    <form id="search-form" class="searchbar">
+      <input id="search-input" type="search" placeholder="e.g. What is the closing balance?"
+             autocomplete="off">
+      <button class="btn primary" type="submit">Search</button>
+    </form>
+    <div id="search-examples" class="chips"></div>
+    <div id="search-results" class="results"></div>
+  </section>
+
+  <!-- ------------------------------------------------------------ benchmarks -->
+  <section id="panel-benchmarks" class="panel">
+    <div class="panel-head"><h2>Model benchmarks</h2></div>
+    <p class="small muted" id="bench-note"></p>
+    <div id="benchmarks" class="bench"></div>
+  </section>
+
+</main>
+
+<footer>
+  <span>CPU-only · 5.8 MB of models · no external API calls</span>
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
