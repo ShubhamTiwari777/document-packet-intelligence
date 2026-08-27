@@ -1,0 +1,27 @@
+{
+  "manifest": "data/raw/tabme_val/manifest.json",
+  "results": {
+    "shipped (Dutch / OpenPSS)": {
+      "precision": 0.809437386569873,
+      "recall": 0.34202453987730064,
+      "f1": 0.4808625336927224,
+      "base_rate": 0.5824,
+      "trivial_f1": 0.7361,
+      "lift_over_trivial": -0.2552,
+      "grouping": 0.518001998001998,
+      "packets": 510,
+      "vocab_coverage": 0.275723442262817
+    },
+    "NEW (English / TABME++)": {
+      "precision": 0.9383886255924171,
+      "recall": 0.911042944785276,
+      "f1": 0.9245136186770427,
+      "base_rate": 0.5824,
+      "trivial_f1": 0.7361,
+      "lift_over_trivial": 0.1884,
+      "grouping": 0.9471762007056124,
+      "packets": 510,
+      "vocab_coverage": 0.8099930445830705
+    }
+  }
+}

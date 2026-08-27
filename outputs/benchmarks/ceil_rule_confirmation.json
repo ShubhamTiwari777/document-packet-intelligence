@@ -1,0 +1,64 @@
+{
+  "preregistered_candidate": "ceil(sum p)",
+  "primary_metric": "page_grouping_accuracy",
+  "validation": {
+    "ceil": 0.9637,
+    "round": 0.9472,
+    "threshold": 0.9603
+  },
+  "test_manifest": "data/raw/tabme_test/manifest.json",
+  "packets": 501,
+  "seams": 2284,
+  "results": {
+    "round(sum p)  [historical]": {
+      "precision": 0.9402045633359559,
+      "recall": 0.9299610894941635,
+      "f1": 0.935054773082942,
+      "base_rate": 0.5626,
+      "trivial_f1": 0.7201,
+      "lift_over_trivial": 0.215,
+      "grouping": 0.9570274591232676,
+      "starved": 42,
+      "forced": 4,
+      "splits": 1271
+    },
+    "ceil(sum p)   [locked candidate]": {
+      "precision": 0.89900426742532,
+      "recall": 0.9836575875486381,
+      "f1": 0.9394277220364177,
+      "base_rate": 0.5626,
+      "trivial_f1": 0.7201,
+      "lift_over_trivial": 0.2193,
+      "grouping": 0.9595681320232219,
+      "starved": 2,
+      "forced": 75,
+      "splits": 1406
+    },
+    "p >= 0.185011  [in production]": {
+      "precision": 0.8971106412966878,
+      "recall": 0.9906614785992218,
+      "f1": 0.9415680473372781,
+      "base_rate": 0.5626,
+      "trivial_f1": 0.7201,
+      "lift_over_trivial": 0.2215,
+      "grouping": 0.9682203801964281,
+      "starved": 0,
+      "forced": 83,
+      "splits": 1419
+    }
+  },
+  "bootstrap": {
+    "ceil(sum p)   [locked candidate] minus round(sum p)  [historical]": {
+      "point": 0.00254,
+      "ci_low": -0.00618,
+      "ci_high": 0.01184,
+      "significant": false
+    },
+    "ceil(sum p)   [locked candidate] minus p >= 0.185011  [in production]": {
+      "point": -0.00865,
+      "ci_low": -0.01368,
+      "ci_high": -0.00417,
+      "significant": true
+    }
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "model": "models/boundary_shortpackets",
+  "val": "data/raw/openpss/test_full/manifest.json",
+  "test": null,
+  "selection_metric": "page_grouping_accuracy",
+  "locked": {
+    "rule": "threshold",
+    "params": {
+      "threshold": 0.030199
+    }
+  },
+  "validation": {
+    "baseline_threshold": {
+      "precision": 0.25308056872037915,
+      "recall": 0.4009009009009009,
+      "f1": 0.31028471818710057,
+      "base_rate": 0.1186,
+      "trivial_f1": 0.2121,
+      "lift_over_trivial": 0.0982,
+      "grouping": 0.6608448086832003,
+      "rule": "threshold",
+      "params": {
+        "threshold": 0.6334265856848469
+      }
+    },
+    "expected_count": {
+      "precision": 0.25949367088607594,
+      "recall": 0.4924924924924925,
+      "f1": 0.33989637305699477,
+      "base_rate": 0.1186,
+      "trivial_f1": 0.2121,
+      "lift_over_trivial": 0.1278,
+      "grouping": 0.7048040920361797,
+      "rule": "expected_count",
+      "params": {}
+    },
+    "tuned_threshold": {
+      "precision": 0.19260293091416608,
+      "recall": 0.8288288288288288,
+      "f1": 0.31257078142695355,
+      "base_rate": 0.1186,
+      "trivial_f1": 0.2121,
+      "lift_over_trivial": 0.1005,
+      "grouping": 0.7723310076307587,
+      "rule": "threshold",
+      "params": {
+        "threshold": 0.030199
+      }
+    },
+    "tuned_hybrid": {
+      "precision": 0.20399201596806388,
+      "recall": 0.7672672672672672,
+      "f1": 0.32229580573951433,
+      "base_rate": 0.1186,
+      "trivial_f1": 0.2121,
+      "lift_over_trivial": 0.1102,
+      "grouping": 0.7561724771330646,
+      "rule": "hybrid",
+      "params": {
+        "floor": 0.0,
+        "ceiling": 0.04245908695652174
+      }
+    }
+  },
+  "test_results": {
+    "expected_count (production)": {
+      "precision": 0.28108581436077057,
+      "recall": 0.5095238095238095,
+      "f1": 0.3623024830699774,
+      "base_rate": 0.1098,
+      "trivial_f1": 0.1978,
+      "lift_over_trivial": 0.1645,
+      "grouping": 0.7179426890157311,
+      "rule": "expected_count",
+      "params": {}
+    },
+    "tuned threshold 0.0302": {
+      "precision": 0.17210682492581603,
+      "recall": 0.8285714285714286,
+      "f1": 0.285012285012285,
+      "base_rate": 0.1098,
+      "trivial_f1": 0.1978,
+      "lift_over_trivial": 0.0872,
+      "grouping": 0.6914548962850793,
+      "rule": "threshold",
+      "params": {
+        "threshold": 0.030199
+      }
+    },
+    "tuned hybrid": {
+      "precision": 0.1895424836601307,
+      "recall": 0.7825396825396825,
+      "f1": 0.3051686784277314,
+      "base_rate": 0.1098,
+      "trivial_f1": 0.1978,
+      "lift_over_trivial": 0.1073,
+      "grouping": 0.6963652175677908,
+      "rule": "hybrid",
+      "params": {
+        "floor": 0.0,
+        "ceiling": 0.04245908695652174
+      }
+    },
+    "inherited threshold 0.6334": {
+      "precision": 0.29271070615034167,
+      "recall": 0.40793650793650793,
+      "f1": 0.34084880636604775,
+      "base_rate": 0.1098,
+      "trivial_f1": 0.1978,
+      "lift_over_trivial": 0.143,
+      "grouping": 0.6684474876406783,
+      "rule": "threshold",
+      "params": {
+        "threshold": 0.6334265856848469
+      }
+    }
+  }
+}

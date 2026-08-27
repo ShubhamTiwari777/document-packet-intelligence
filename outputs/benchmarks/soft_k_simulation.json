@@ -1,0 +1,248 @@
+{
+  "TABME++ validation": {
+    "expected_count (baseline)": {
+      "precision": 0.9383886255924171,
+      "recall": 0.911042944785276,
+      "f1": 0.9245136186770427,
+      "lift_over_trivial": 0.1884,
+      "grouping": 0.9471762007056124,
+      "starved": 45,
+      "forced": 5,
+      "splits": 1266
+    },
+    "A  ceil(sum p) instead of round": {
+      "precision": 0.9142651296829971,
+      "recall": 0.973159509202454,
+      "f1": 0.9427934621099554,
+      "lift_over_trivial": 0.2067,
+      "grouping": 0.9636975769328711,
+      "starved": 2,
+      "forced": 73,
+      "splits": 1388
+    },
+    "B  top-K + admit p>0.5  (two-pass)": {
+      "precision": 0.9298642533936652,
+      "recall": 0.9455521472392638,
+      "f1": 0.9376425855513307,
+      "lift_over_trivial": 0.2015,
+      "grouping": 0.9538193832311479,
+      "starved": 0,
+      "forced": 5,
+      "splits": 1326
+    },
+    "C  top-K - drop p<0.5": {
+      "precision": 0.9405233941316415,
+      "recall": 0.9095092024539877,
+      "f1": 0.924756335282651,
+      "lift_over_trivial": 0.1887,
+      "grouping": 0.9466486563545388,
+      "starved": 45,
+      "forced": 0,
+      "splits": 1261
+    },
+    "D  soft-K both directions": {
+      "precision": 0.9318697956093869,
+      "recall": 0.9440184049079755,
+      "f1": 0.9379047619047619,
+      "lift_over_trivial": 0.2018,
+      "grouping": 0.9532918388800742,
+      "starved": 0,
+      "forced": 0,
+      "splits": 1321
+    },
+    "E  residual-mass top-up": {
+      "precision": 0.9287321830457614,
+      "recall": 0.9493865030674846,
+      "f1": 0.9389457717102769,
+      "lift_over_trivial": 0.2028,
+      "grouping": 0.9546857499798675,
+      "starved": 0,
+      "forced": 12,
+      "splits": 1333
+    },
+    "F  p>0.5 only, no K": {
+      "precision": 0.9318697956093869,
+      "recall": 0.9440184049079755,
+      "f1": 0.9379047619047619,
+      "lift_over_trivial": 0.2018,
+      "grouping": 0.9532918388800742,
+      "starved": 0,
+      "forced": 0,
+      "splits": 1321
+    },
+    "*  tuned threshold 0.185 (reference)": {
+      "precision": 0.9043231750531537,
+      "recall": 0.9785276073619632,
+      "f1": 0.9399631675874769,
+      "lift_over_trivial": 0.2039,
+      "grouping": 0.9602753999812823,
+      "starved": 0,
+      "forced": 90,
+      "splits": 1411
+    }
+  },
+  "OpenPSS test_full": {
+    "expected_count (baseline)": {
+      "precision": 0.26974231088944306,
+      "recall": 0.5007716049382716,
+      "f1": 0.3506212857914641,
+      "lift_over_trivial": 0.1457,
+      "grouping": 0.7113733905259555,
+      "starved": 8,
+      "forced": 134,
+      "splits": 2406
+    },
+    "A  ceil(sum p) instead of round": {
+      "precision": 0.2696810658054098,
+      "recall": 0.5154320987654321,
+      "f1": 0.35409488470712963,
+      "lift_over_trivial": 0.1492,
+      "grouping": 0.7375863986345031,
+      "starved": 7,
+      "forced": 198,
+      "splits": 2477
+    },
+    "B  top-K + admit p>0.5  (two-pass)": {
+      "precision": 0.2691519868906186,
+      "recall": 0.5069444444444444,
+      "f1": 0.3516189456783516,
+      "lift_over_trivial": 0.1467,
+      "grouping": 0.7121211364622299,
+      "starved": 0,
+      "forced": 134,
+      "splits": 2441
+    },
+    "C  top-K - drop p<0.5": {
+      "precision": 0.2658450704225352,
+      "recall": 0.4660493827160494,
+      "f1": 0.33856502242152464,
+      "lift_over_trivial": 0.1337,
+      "grouping": 0.6752507487678497,
+      "starved": 8,
+      "forced": 0,
+      "splits": 2272
+    },
+    "D  soft-K both directions": {
+      "precision": 0.26527958387516254,
+      "recall": 0.4722222222222222,
+      "f1": 0.3397169025811823,
+      "lift_over_trivial": 0.1348,
+      "grouping": 0.6759984947041241,
+      "starved": 0,
+      "forced": 0,
+      "splits": 2307
+    },
+    "E  residual-mass top-up": {
+      "precision": 0.13286227267462064,
+      "recall": 0.8850308641975309,
+      "f1": 0.23104038674589583,
+      "lift_over_trivial": 0.0261,
+      "grouping": 0.7114289024161716,
+      "starved": 0,
+      "forced": 6326,
+      "splits": 8633
+    },
+    "F  p>0.5 only, no K": {
+      "precision": 0.26527958387516254,
+      "recall": 0.4722222222222222,
+      "f1": 0.3397169025811823,
+      "lift_over_trivial": 0.1348,
+      "grouping": 0.6759984947041241,
+      "starved": 0,
+      "forced": 0,
+      "splits": 2307
+    },
+    "*  tuned threshold 0.185 (reference)": {
+      "precision": 0.2530197075651621,
+      "recall": 0.6141975308641975,
+      "f1": 0.35839711841512834,
+      "lift_over_trivial": 0.1535,
+      "grouping": 0.7335572008183282,
+      "starved": 0,
+      "forced": 839,
+      "splits": 3146
+    }
+  },
+  "DocSplit our200": {
+    "expected_count (baseline)": {
+      "precision": 0.8016304347826086,
+      "recall": 0.5876494023904383,
+      "f1": 0.6781609195402298,
+      "lift_over_trivial": -0.1613,
+      "grouping": 0.7006071428571429,
+      "starved": 49,
+      "forced": 17,
+      "splits": 368
+    },
+    "A  ceil(sum p) instead of round": {
+      "precision": 0.7880658436213992,
+      "recall": 0.7629482071713147,
+      "f1": 0.7753036437246964,
+      "lift_over_trivial": -0.0642,
+      "grouping": 0.8209761904761905,
+      "starved": 14,
+      "forced": 83,
+      "splits": 486
+    },
+    "B  top-K + admit p>0.5  (two-pass)": {
+      "precision": 0.7871853546910755,
+      "recall": 0.6852589641434262,
+      "f1": 0.7326943556975505,
+      "lift_over_trivial": -0.1068,
+      "grouping": 0.7362142857142857,
+      "starved": 0,
+      "forced": 17,
+      "splits": 437
+    },
+    "C  top-K - drop p<0.5": {
+      "precision": 0.8034188034188035,
+      "recall": 0.5617529880478087,
+      "f1": 0.6611957796014067,
+      "lift_over_trivial": -0.1783,
+      "grouping": 0.6708214285714286,
+      "starved": 49,
+      "forced": 0,
+      "splits": 351
+    },
+    "D  soft-K both directions": {
+      "precision": 0.7880952380952381,
+      "recall": 0.6593625498007968,
+      "f1": 0.7180043383947939,
+      "lift_over_trivial": -0.1215,
+      "grouping": 0.7064285714285714,
+      "starved": 0,
+      "forced": 0,
+      "splits": 420
+    },
+    "E  residual-mass top-up": {
+      "precision": 0.7894736842105263,
+      "recall": 0.7171314741035857,
+      "f1": 0.7515657620041754,
+      "lift_over_trivial": -0.0879,
+      "grouping": 0.7431309523809524,
+      "starved": 0,
+      "forced": 36,
+      "splits": 456
+    },
+    "F  p>0.5 only, no K": {
+      "precision": 0.7880952380952381,
+      "recall": 0.6593625498007968,
+      "f1": 0.7180043383947939,
+      "lift_over_trivial": -0.1215,
+      "grouping": 0.7064285714285714,
+      "starved": 0,
+      "forced": 0,
+      "splits": 420
+    },
+    "*  tuned threshold 0.185 (reference)": {
+      "precision": 0.7889733840304183,
+      "recall": 0.8266932270916335,
+      "f1": 0.8073929961089495,
+      "lift_over_trivial": -0.0321,
+      "grouping": 0.7962142857142857,
+      "starved": 0,
+      "forced": 106,
+      "splits": 526
+    }
+  }
+}
