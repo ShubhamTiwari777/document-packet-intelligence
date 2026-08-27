@@ -12,6 +12,11 @@ pytest>=8,<10
 pytesseract>=0.3,<1
 pdfplumber>=0.11,<1
 
+# Document builders. Only needed to regenerate technical_report.pdf and docs/architecture.pdf
+# from their Markdown sources; the pipeline itself does not import either.
+markdown>=3.5,<4
+reportlab>=4,<5
+
 # Alternative gradient-boosting learners. Measured against the shipped scikit-learn
 # HistGradientBoosting on identical features: all within 0.005 F1 and 0.005 lift, so none is
 # installed by default. LightGBM fits 13x faster if you retrain often.

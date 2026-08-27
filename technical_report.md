@@ -330,6 +330,13 @@ an improvement, without its baseline, was the same mistake this report criticise
 remedy is a learned page-pair representation that models continuation semantically (§8), not more
 hand-built features -- four feature sets and four learners have now failed to move this ceiling.
 
+> **Superseded.** This ceiling held for six attempts and turned out to be language-bound, not
+> fundamental. Every corpus named in this section is Dutch, while the model is deployed on English.
+> Retraining in the deployment language clears the trivial baseline by +0.188. The analysis above
+> is retained because it was the honest reading of the evidence available at the time, and because
+> the reason it was wrong is itself the finding — see *Seventh attempt: the ceiling was a language
+> artefact* below.
+
 #### Sixth attempt: a cross-encoder over the page seam, and what scaling its data did
 
 Five attempts had failed identically: lexical features cannot represent whether text *continues*
@@ -379,19 +386,114 @@ configured default; the cross-encoder ships as a reproducible alternative
 (`scripts/train_cross_encoder.py`, `scripts/evaluate_cross_encoder.py`,
 `scripts/fetch_openpss_text.py`, `scripts/build_short_packets.py`).
 
+#### Seventh attempt: the ceiling was a language artefact
+
+Every number above was measured on Dutch. OpenPSS is Amsterdam municipal correspondence and the
+DocSplit benchmark is drawn from the same source. The report states this two paragraphs earlier —
+it is the stated reason the cross-encoder backbone is multilingual — but the consequence for the
+*feature* model was never followed through.
+
+`text_delta`, the first and most heavily weighted feature, is `1 - cosine(tfidf(left),
+tfidf(right))`, and the vectoriser is fitted on the training corpus. Fitted on Dutch, its 50,000
+terms are Dutch: `haarlem`, `haarlemmerdijk`, `haarlemmersluis`. Scored against an English packet
+it recognises **27.6%** of tokens, so the model's strongest text signal was computed on
+three-quarters out-of-vocabulary input.
+
+A second, sharper defect sits in `heuristic_features.PAGE_NUMBER`. The pattern matches
+`Page 2 of 2` and bare digits, but not `Pagina 2 van 2` — which is literally what the OpenPSS
+pages say. Both `page_number_reset` and `page_number_continuation` were therefore constant zero
+across the whole Dutch training set, joining the eight already-dead features documented above.
+
+Retraining the identical architecture on TABME++ (English, 504 packets / 2,269 pairs) and
+evaluating on its **held-out validation split** — 510 packets, 2,239 seams, 58.2% boundary
+density, no document shared with training:
+
+| Model | Boundary F1 | Precision | Recall | Page grouping | Lift vs trivial | Vocab coverage |
+|---|---|---|---|---|---|---|
+| `boundary_shortpackets` (Dutch) | 0.481 | 0.809 | 0.342 | 0.518 | −0.255 | 27.6% |
+| **`boundary_tabme` (English)** | **0.925** | **0.938** | **0.911** | **0.947** | **+0.188** | **81.0%** |
+| *Trivial "every page is a document"* | *0.736* | — | — | — | *0.000* | — |
+
+**This is the first configuration in the project to beat the trivial baseline by a margin that is
+not arguable** (+0.188 at 58% density). The failure mode of the Dutch model on English is visible
+in its recall: 0.342, against precision 0.809. It splits rarely and is usually right when it does —
+it silently merges documents rather than over-splitting them.
+
+The direction reverses on Dutch, as it must: on OpenPSS the English model scores 0.606 grouping
+against the Dutch model's 0.761, and on DocSplit 0.651 against 0.701. Neither model is better in
+general. **The choice of model is a choice of language**, and the ceiling documented in *The
+honest ceiling* above is a Dutch ceiling, not a property of the approach.
+
+*Caveat on the measurement.* The validation split shares a corpus with training, which is the
+friendliest test available and makes 0.947 an optimistic figure. The corroborating evidence is an
+independently authored 13-page English packet (`scripts/generate_stress_packet.py`, 7 documents,
+50% density, no relation to the training corpus): the Dutch model scores 0.846 grouping there with
+lift −0.121, the English model 0.936 with lift **+0.133**. Two unrelated English sources agreeing
+near 0.94 is what makes the result credible rather than memorised.
+
+*Why this was missed for so long.* Every benchmark in this project was Dutch, so a Dutch-trained
+model was always evaluated in its own language and never looked broken. It took running the system
+on an English packet — the language of every document the pipeline was demonstrated on — for the
+mismatch to surface. Choosing an evaluation set in the deployment language is not a refinement; it
+is the difference between 0.518 and 0.947.
+
+#### Eighth attempt: selecting the decision rule under a no-leakage protocol
+
+Every result so far used `expected_count`. Choosing between it and a tuned threshold is a
+selection problem, and this project has already been burned once by selecting on the data it then
+reported (§*How this number was corrected*). The protocol was therefore fixed in advance: sweep on
+validation, commit to page grouping accuracy as the selection metric *before* looking, freeze the
+parameter, then open the test split exactly once. A third rule was included — `hybrid`, splitting
+where `p >= ceiling` regardless of rank, or where the seam is in the top K and `p >= floor` — since
+it addresses both directions in which `expected_count` fails.
+
+Held-out test results, each set opened once, each corpus paired with its language-matched model:
+
+| Corpus | Density | expected_count | tuned threshold | hybrid | inherited 0.6334 |
+|---|---|---|---|---|---|
+| TABME++ test (English) | 56.3% | 0.9570 | **0.9682** | 0.9679 | 0.9516 |
+| OpenPSS test (Dutch) | 11.0% | **0.7179** | 0.6915 | 0.6964 | 0.6684 |
+| DocSplit test (Dutch) | 69.8% | 0.6784 | *0.8381* | *0.8414* | 0.6370 |
+
+**Only the English arm produced a transferable win.** Threshold 0.185011 beat `expected_count` by
+**+0.0112, 95% bootstrap CI [+0.0040, +0.0192]**, having also led on validation — and it is not
+degenerate: precision 0.897 against a 0.563 base rate.
+
+The other two arms are the instructive ones.
+
+*OpenPSS shows the protocol earning its keep.* The tuned threshold won validation by **+0.068** and
+lost test by **−0.027**, with a CI spanning zero. Selecting and reporting on one set would have
+published a phantom improvement of exactly the kind this report documents elsewhere.
+
+*DocSplit shows the selection metric being gamed.* The sweep picked threshold **0.0037** with
+recall **1.000** — it wins by abandoning the model and splitting everywhere. Grouping accuracy rose
+0.678 → 0.838 while lift over trivial stayed at **+0.000**. Any future tuning must report lift
+alongside grouping, or a sweep will happily select a rule that ignores the model entirely.
+
+*The hybrid did not earn its place.* It tied the plain threshold on English (0.9679 vs 0.9682) and
+lost on OpenPSS, adding a second parameter for no measurable gain. Recorded as a negative result.
+
+The threshold is a property of `models/boundary_tabme`'s calibrated score distribution, not a
+general setting — the inherited 0.6334, fitted for the Dutch model, scores 0.9516 on the same data.
+Dutch deployments keep `expected_count`, which wins there and needs no tuning.
+
 #### Summary of Stage 1 boundary detection
 
-Shipped configuration: `models/boundary_shortpackets` (trained on regime-matched packets) with the
-expected-count decision rule.
+Shipped configuration: `models/boundary_tabme` (English, TABME++) with `decision: threshold` at
+**0.185011**. `models/boundary_shortpackets` with `expected_count` ships alongside for Dutch.
 
-| Corpus | Role | Boundary F1 | Page grouping | Trivial grouping |
-|---|---|---|---|---|
-| OpenPSS SHORT test | held-out, same regime as training | 0.347 | **0.761** | 0.683 |
-| DocSplit `our200` (200 streams) | the assignment's target task | 0.678 | **0.701** | 0.854 |
+| Corpus | Language | Role | Boundary F1 | Page grouping | Trivial grouping |
+|---|---|---|---|---|---|
+| TABME++ test (501 packets) | English | held-out, deployment language | **0.942** | **0.968** | 0.746 |
+| Stress packet (13 pages, 7 docs) | English | independent, hand-authored | 0.909 | **0.974** | 0.803 |
+| OpenPSS SHORT test | Dutch | wrong language for this model | 0.200 | 0.606 | 0.683 |
+| DocSplit `our200` | Dutch | wrong language for this model | 0.625 | 0.651 | 0.854 |
 
-The system beats the trivial baseline on long streams (+0.078) and does not on short packets
-(−0.153). The experimental cross-encoder narrows the short-packet gap to −0.049 but is not the
-shipped path, for the cost reasons above.
+In the language it was trained for the system beats the trivial baseline by **+0.222**; pointed at
+another language it falls below it. On the independent stress packet the decision-rule change alone
+lifted page grouping 0.936 → 0.974 and recovered a one-page memo that `expected_count` had dropped
+for ranking fifth against K=4 — which in turn raised document-type accuracy on that packet from
+0.571 to 0.714, since a document that is never separated can never be classified.
 
 Read grouping accuracy, not boundary F1, on any corpus whose boundary density differs from
 training: at DocSplit's 72% density a classifier marking every pair a boundary scores F1 0.815, so
@@ -557,13 +659,19 @@ Everything runs CPU-only. No GPU, no external API, no network call at inference.
 
 ### 6.1 Boundary detection
 
-Dominant failure is **recall on visually similar adjacent documents** — two same-template forms
-concatenated share fonts, margins and header text, so every layout feature reads "continuation".
-Precision 0.289 means roughly two false splits per true one; the threshold favours recall
-because an over-split document is recoverable downstream whereas a merged one loses a document
-entirely. The larger failure is structural rather than per-pair: on short packets (§5.1) the model
-is at the trivial baseline, because it was trained where boundaries are rare and the target has
-them common.
+Dominant failure is **recall on adjacent short documents**. Two same-template forms concatenated
+share fonts, margins and header text, so every layout feature reads "continuation", and a pair of
+one-page documents offers no continuation cue to reject. On the held-out English set the shipped
+model runs precision 0.938 against recall 0.911, so it now errs toward merging rather than
+over-splitting — the worse direction, since an over-split document is recoverable downstream
+whereas a merged one loses a document entirely.
+
+The limit is structural rather than per-feature. On the hand-authored stress packet a one-page
+letter followed by a one-page memo is merged: both are formal business prose, so `text_delta`
+reads 0.596 — *lower* than four seams that sit inside single documents, where a page of fielded
+data is followed by a page of tabular data. Cosine distance measures topic change, and a document
+boundary is not a topic change. That is the ceiling of comparing page *i* with page *i+1* in
+isolation, and is what §8 item 6 addresses.
 
 ### 6.2 Classification
 
@@ -610,19 +718,33 @@ measured failure.
 
 ## 8. Future improvements (in priority order)
 
-1. **Retrain in the target regime.** The DocSplit evaluation (§5.1) shows the shipped model is at
-   the trivial baseline on short packets because it was trained where boundaries are rare and the
-   target has them common. Building packets from `jordyvl/rvl_cdip_n_mp` — multi-page documents,
-   so continuations are real rather than fabricated — directly addresses this and is the single
-   highest-value change available. It supersedes everything else on this list.
-2. **A labelled corpus for `passport`/`bank_statement`.** The largest unmeasured area; every claim
+1. **Done — retrain in the target regime, where "regime" turned out to include language.** §5.1
+   (seventh attempt) shows the shipped model had been trained on Dutch and deployed on English,
+   scoring 27.6% of its tokens in vocabulary. Retraining on TABME++ moved held-out English page
+   grouping from 0.518 to 0.947 and cleared the trivial baseline by +0.188. The transferable
+   lesson — evaluate in the deployment language, or the benchmark measures nothing — outranks
+   every model change attempted before it.
+2. **Done — select the decision rule properly.** §5.1 (eighth attempt) swept threshold,
+   `expected_count` and a hybrid on validation, froze the choice, and evaluated once on held-out
+   test. English deployment moved to `decision: threshold` at 0.185011 (+0.0112 grouping, CI
+   [+0.0040, +0.0192]); Dutch keeps `expected_count`, which wins there. The hybrid was a negative
+   result. What remains open is the *reason* a threshold helps: `expected_count` cannot express
+   "I found four boundaries I trust and one I do not", and a fixed threshold cannot adapt to
+   packet density. A rule that does both — top-K with an abstention floor and a confidence
+   override — was tried here and tied; a per-packet density estimate rather than a global
+   parameter is the untried version.
+3. **Fix `PAGE_NUMBER` for non-English page furniture.** The pattern matches `Page 2 of 2` but not
+   `Pagina 2 van 2`, which is what the Dutch corpus actually prints, so `page_number_reset` and
+   `page_number_continuation` were constant zero throughout that training run. A one-line change
+   that silently cost two of twenty-one features.
+4. **A labelled corpus for `passport`/`bank_statement`.** The largest unmeasured area; every claim
    about those classes currently rests on a 4-document fixture.
-3. **Scale the cross-encoder's training data.** §5.1 shows the cross-encoder is the first change
+5. **Scale the cross-encoder's training data.** §5.1 shows the cross-encoder is the first change
    to improve both regimes, trained on only 1,600 examples. OpenPSS has ~90,000 rows unused. This
-   is now a data problem rather than an architecture one, and it is the highest-value lever left.
-   Batching or a smaller backbone would also address its ~0.27 s per page pair, which is three
-   orders of magnitude slower than the feature model.
-4. **Sequence decoding, still untried.** Each pair is decided in isolation before `expected_count`
+   is now a data problem rather than an architecture one. Batching or a smaller backbone would also
+   address its ~0.27 s per page pair, which is three orders of magnitude slower than the feature
+   model.
+6. **Sequence decoding, still untried.** Each pair is decided in isolation before `expected_count`
    picks the top K globally. A Viterbi pass with a document-length prior would use the fact that
    boundaries do not cluster. Two further directions, lower priority:
    * **Sequence modelling.** Every current feature compares page *i* with page *i+1* in isolation,
@@ -720,9 +842,15 @@ generated by a model, and the repository's commit history reflects the same tool
 
 ## Reproducing every number
 
-Full command sequence in [README.md](README.md). In short: fetch OpenPSS (train + full test) and
-RVL-CDIP text, train the boundary and classifier models, generate the two annotated fixtures, then
-run `evaluate_openpss_boundary.py` (against both the OpenPSS and DocSplit manifests),
-`evaluate_stage2.py` and `evaluate_stage3.py`. Every table above is written to
-`outputs/benchmarks/`. The negative results reproduce via `--no-synthetic-blocks`,
-`--class-weight none`, and `train_rvlcdip_boundary.py`. `pytest tests/ -q` runs 35 tests.
+Full command sequence in [README.md](README.md). In short: fetch TABME++ (train + val) for the
+shipped English boundary model, OpenPSS (train + full test) for the Dutch alternative, and
+RVL-CDIP text for the classifier; train the models; generate the two annotated fixtures plus the
+stress packet (`generate_stress_packet.py`); then run `evaluate_openpss_boundary.py` against the
+TABME++, OpenPSS and DocSplit manifests, followed by `evaluate_stage2.py` and
+`evaluate_stage3.py`. Every table above is written to `outputs/benchmarks/`.
+
+The negative results reproduce via `--no-synthetic-blocks`, `--class-weight none`, and
+`train_rvlcdip_boundary.py`. The cosine-only ablation behind §6.1 reproduces via
+`ablate_cosine_boundary.py`, and the language finding in §5.1 by training the same architecture on
+both `data/raw/tabme/manifest.json` and `data/raw/openpss/train/manifest.json` and evaluating each
+on the other's held-out split. `pytest tests/ -q` runs 43 tests.

@@ -73,19 +73,23 @@ trained models together are only **5.8 MB**.
 
 | What | Measured on | Result |
 |---|---|---|
-| Splitting documents | OpenPSS, 108 real page streams | page grouping accuracy **0.76** |
-| Splitting documents | DocSplit benchmark, 200 packets | page grouping accuracy **0.70** |
+| Splitting documents | TABME++ held-out, 510 English packets | page grouping accuracy **0.95** |
 | Identifying document type | 2,222 held-out documents, 16 types | **80.7%** accuracy |
 | Finding the right evidence | 35 questions, 515 text chunks | correct answer ranked #1 **77%** of the time |
 | Structure extraction | annotated test files | headings, tables, lists all correct |
 
-**One number needs explaining honestly.** On the DocSplit benchmark, 72% of page pairs are document
-boundaries — most documents there are a single page. So a lazy program that just says *"every page
-is its own document"* already scores **0.854**. Our 0.70 is *below* that.
+**The splitter is language-specific, and that matters more here than any other single fact.**
+The shipped model is trained on English. On 510 held-out English packets it scores 0.947 page
+grouping and beats the lazy *"every page is its own document"* baseline by **+0.188** — the first
+result in this project to clear that baseline by a real margin.
 
-This is stated plainly because it's the truth: **the system works well on long documents and is not
-yet good enough on very short ones.** Full analysis is in section 5.1 of the technical report,
-including six experiments that failed and what each one ruled out.
+Point the same model at Dutch and it falls to 0.606, because its vocabulary recognises barely a
+quarter of the words. A Dutch-trained model is included: set `boundary.model_path` to
+`models/boundary_shortpackets` and it scores **0.761** on the Dutch OpenPSS set, where the English
+model gets 0.606. Neither is better in general — the choice is a language choice.
+
+Full analysis, including the six experiments that failed first, is in section 5.1 of the technical
+report.
 
 Full details: **[technical_report.pdf](technical_report.pdf)** ·
 Diagram: **[docs/architecture.pdf](docs/architecture.pdf)**
@@ -125,7 +129,14 @@ the program when switched on. Each test stops that specific bug coming back.
 Everything downloads automatically; no manual dataset setup.
 
 ```bash
-# Split-detection model
+# Split-detection model (English, the shipped default)
+python scripts/fetch_tabme.py --split train --max-rows 6000 --output data/raw/tabme/manifest.json
+python scripts/train_openpss_boundary.py --manifest data/raw/tabme/manifest.json --output models/boundary_tabme --calibrate
+
+# ...and to check it on held-out English packets
+python scripts/fetch_tabme.py --split val --max-rows 6000 --output data/raw/tabme_val/manifest.json
+
+# Split-detection model (Dutch, optional alternative)
 python scripts/fetch_openpss.py --config SHORT --split train --output data/raw/openpss/train --max-rows 16000
 python scripts/train_openpss_boundary.py --manifest data/raw/openpss/train/manifest.json --output models/boundary_openpss --calibrate
 
@@ -158,8 +169,13 @@ All in [`config/default.yaml`](config/default.yaml). The ones worth knowing:
 
 Stated up front rather than buried:
 
-- **Very short packets** (mostly 1-page documents) — the split detector is below a trivial baseline
-  here. This is the main open problem, and the report explains why and what would fix it.
+- **Documents in a language the splitter was not trained on.** The shipped model is English. On
+  Dutch its recall for document boundaries collapses to 0.34, meaning it silently merges documents
+  rather than splitting them. Retrain, or switch to the bundled Dutch model.
+- **Packets of mostly single-page documents.** Boundary recall is the weak side even in English
+  (0.911 on held-out data, but lower when documents are one page each), and the decision rule is
+  forced to commit to a fixed number of splits per packet, so it cannot say "I only found three
+  boundaries I trust". This is the main open problem; the report explains what would fix it.
 - **Passport and bank statement types** have no proper accuracy measurement — no public labelled
   data for them exists, so they use a keyword-based fallback with an honest confidence score.
 - **The structure tests use files I created myself**, so a perfect score there means the code handles
