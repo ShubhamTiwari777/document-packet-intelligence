@@ -15,17 +15,40 @@ ingestion:
   enable_ocr: false
   ocr_engine: tesseract
 boundary:
-  # decision: expected_count uses the calibrated probabilities' sum as the expected number of
-  # boundaries per packet, so it adapts to packets far denser or sparser than the training corpus.
-  # Measured on the DocSplit benchmark: page grouping accuracy 0.615 vs 0.216 for a fixed
-  # threshold, at a cost of 0.012 on OpenPSS. Set to "threshold" to use boundary.threshold.
-  decision: expected_count
-  threshold: 0.6334265856848469
+  # How per-seam probabilities become splits. Two rules are implemented in stage1/grouping.py:
+  #   threshold      -- split wherever probability >= boundary.threshold.
+  #   expected_count -- K = round(sum of probabilities), split at the K highest-scoring seams.
+  #                     Parameter-free and density-adaptive, but must commit to exactly K, so it
+  #                     drops a confident seam ranked K+1 and promotes a weak one ranked K.
+  #
+  # Selected by sweeping on the TABME++ validation split (510 packets) on page grouping accuracy,
+  # freezing the value, then evaluating once on the held-out test split (501 packets, 2,284 seams,
+  # 56.3% density). Held-out test result, English model:
+  #   expected_count            grouping 0.9570  F1 0.935  recall 0.930  lift +0.215
+  #   threshold 0.185011        grouping 0.9682  F1 0.942  recall 0.991  lift +0.222
+  #   difference +0.0112, 95% bootstrap CI [+0.0040, +0.0192] -- significant, and it transferred.
+  #
+  # THE THRESHOLD BELONGS TO models/boundary_tabme. It is a property of that model's calibrated
+  # score distribution, not a general setting: the previous value, 0.6334, was fitted for
+  # models/boundary_shortpackets and scores 0.9516 here. Retune after changing the model, or
+  # switch decision to expected_count, which needs no tuning.
+  #
+  # For Dutch (models/boundary_shortpackets) use expected_count: on held-out OpenPSS it scores
+  # 0.7179 grouping against 0.6915 for a threshold tuned the same way, which overfitted its
+  # validation half (+0.068) and failed to transfer (-0.027).
+  decision: threshold
+  threshold: 0.185011
   calibration: true
-  # Trained on OpenPSS documents reassembled into short, boundary-dense packets so the training
-  # regime matches deployment. On the DocSplit benchmark this raises page grouping accuracy from
-  # 0.615 to 0.701 and boundary F1 from 0.537 to 0.678, for -0.011 grouping on long streams.
-  model_path: models/boundary_shortpackets
+  # Trained on TABME++ (English, 504 packets / 2,269 pairs, real per-word geometry). The previous
+  # default, models/boundary_shortpackets, was trained on OpenPSS -- which is Dutch (Amsterdam
+  # municipal letters), so its TF-IDF vocabulary recognises only ~28% of the tokens in an English
+  # packet and its strongest text feature was running on mostly out-of-vocabulary input.
+  # Measured on the held-out TABME++ validation split (510 packets, 2,239 seams, 58.2% density):
+  #   models/boundary_shortpackets (Dutch)   F1 0.481  recall 0.342  grouping 0.518  lift -0.255
+  #   models/boundary_tabme        (English) F1 0.925  recall 0.911  grouping 0.947  lift +0.188
+  # Switch back to models/boundary_shortpackets for Dutch documents: it scores 0.761 grouping on
+  # the OpenPSS held-out set against 0.606 for this model. The choice is a language choice.
+  model_path: models/boundary_tabme
 classification:
   model_kind: tfidf_logistic_regression
   min_confidence: 0.35
