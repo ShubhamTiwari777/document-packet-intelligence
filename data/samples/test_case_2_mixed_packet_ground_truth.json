@@ -1,0 +1,36 @@
+{
+  "packet": "test_case_2_mixed_packet.pdf",
+  "page_count": 10,
+  "documents": [
+    {
+      "pages": [1, 2],
+      "doc_type": "invoice",
+      "title": "INVOICE - Northstar Office Supplies #INV-20481",
+      "evidence": "Invoice #INV-20481 on both pages; footers read Page 1 of 2 and Page 2 of 2."
+    },
+    {
+      "pages": [3, 4, 5],
+      "doc_type": "resume",
+      "title": "RESUME / CV - Aarav Mehta",
+      "evidence": "Footers read Page 1 of 3, 2 of 3, 3 of 3; sections Profile, Skills, Experience, Education, Certifications, Contact."
+    },
+    {
+      "pages": [6],
+      "doc_type": "passport",
+      "title": "PASSPORT / ID DOCUMENT - P1234567",
+      "evidence": "Single page, footer reads Page 1 of 1; Passport No. P1234567, nationality and expiry fields."
+    },
+    {
+      "pages": [7, 8],
+      "doc_type": "bank_statement",
+      "title": "BANK STATEMENT - Example National Bank",
+      "evidence": "Account XXXX-4821 on both pages; footers read Page 1 of 2 and Page 2 of 2; opening and closing balances."
+    },
+    {
+      "pages": [9, 10],
+      "doc_type": "letter",
+      "title": "COVER LETTER - Application for AI Engineer Position",
+      "evidence": "Addressed 'To Hiring Manager' with Subject and 'Regards'; footers read Page 1 of 2 and Page 2 of 2. Mapped to the taxonomy class 'letter'."
+    }
+  ]
+}

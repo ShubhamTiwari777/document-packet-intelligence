@@ -1,0 +1,30 @@
+{
+  "packet": "document_packet_test.pdf",
+  "page_count": 9,
+  "documents": [
+    {
+      "pages": [1, 2, 3],
+      "doc_type": "invoice",
+      "title": "INVOICE - TechNova Solutions Pvt. Ltd.",
+      "evidence": "Invoice INV-2026-004471; footers read Page 1/2/3; page 3 closes with 'End of invoice INV-2026-004471.'"
+    },
+    {
+      "pages": [4, 5],
+      "doc_type": "resume",
+      "title": "RESUME - Arjun Mehta",
+      "evidence": "Header restarts at Page 1; sections Professional Summary, Experience, Education, Technical Skills, Projects."
+    },
+    {
+      "pages": [6, 7],
+      "doc_type": "passport",
+      "title": "TRAVEL DOCUMENT - Passport P9876543",
+      "evidence": "Passport No. P9876543 with machine-readable zone; page 7 states 'continuation information for the travel document'."
+    },
+    {
+      "pages": [8, 9],
+      "doc_type": "bank_statement",
+      "title": "BANK STATEMENT - SampleBank",
+      "evidence": "Account XXXXXX4521, statement period 01-15 August 2026; page 9 closes with 'End of synthetic bank statement.'"
+    }
+  ]
+}

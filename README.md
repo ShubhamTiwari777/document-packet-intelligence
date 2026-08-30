@@ -107,6 +107,62 @@ technical report.
 Full details: **[technical_report.pdf](technical_report.pdf)** ·
 Diagram: **[docs/architecture.pdf](docs/architecture.pdf)**
 
+## Testing on real PDFs
+
+The figures above come from public corpora of **thousands** of page pairs, and they are the numbers
+that matter. But those corpora store each page as OCR text — in TABME++ every page is a single line
+of space-joined words — so seven of the twenty-one features are degenerate there and the pipeline
+never runs end to end on an actual PDF.
+
+Four annotated PDFs ship with the repo for that. Run all of them at once:
+
+```bash
+python scripts/evaluate_pdf_suite.py
+```
+
+| Fixture | Pages | Docs | What it is for |
+|---|---|---|---|
+| `sample_packet.pdf` | 9 | 4 | the original smoke test — invoice, resume, passport, bank statement |
+| `document_packet_test.pdf` | 9 | 4 | the same four types with different content, to check nothing is memorised |
+| `test_case_2_mixed_packet.pdf` | 10 | 5 | adds a cover letter, and repeats one boilerplate line on **every** page, which raises text similarity across real boundaries |
+| `stress_packet.pdf` | 13 | 7 | built to fail — see below |
+
+**Pooled over all four: 41 pages, 20 documents.**
+
+| | |
+|---|---|
+| Documents split at **exactly** the right pages | **20 / 20** |
+| Document types identified correctly | **19 / 20** |
+| Mean lift over the always-split baseline | **+0.407** |
+
+The one miss is a cover letter returned as `unknown` rather than `letter` — it landed just under the
+confidence floor and abstained instead of guessing, which is the intended behaviour.
+
+Drop any PDF plus a matching `<name>_ground_truth.json` into `data/samples` and it joins the suite
+automatically.
+
+### The stress packet
+
+`sample_packet.pdf` is scored perfectly by every version of this system, which makes it useless for
+telling whether a change helped. `stress_packet.pdf` exists to be hard:
+
+- an **invoice and a budget sit adjacent**, sharing a letterhead and both leading with a ruled money
+  table, so layout similarity argues for merging two different documents
+- a **one-page letter and a one-page memo sit back to back**, making two consecutive seams both real
+  boundaries, which is where short-document splitting fails
+- a **three-page passport** whose pages look nothing alike — fields, then a table, then prose —
+  inviting a false split *inside* one document
+
+It earned its place. It caught both failures that the corpus benchmarks could not see, and the
+progression below is measured on it because it is the only fixture with room to improve.
+
+### What this does not prove
+
+Four packets is a small sample, and all four are **synthetically generated** — clean digital text,
+tidy `Page N of M` footers, no OCR noise or skew. They are an end-to-end correctness check, not the
+evidence base: the headline accuracy, precision and recall come from the held-out corpora above,
+scored on 501 packets and 2,222 documents. Real scanned documents remain untested.
+
 ## How the splitter got from 0.22 to 0.97
 
 Eight attempts, in order. The numbers below come from two different benchmarks in two different
@@ -135,15 +191,15 @@ this a ceiling and blamed the features. That conclusion was wrong.
 | 7 | **Decision rule chosen on validation, confirmed once on test** | **0.968** | 5 of 7 |
 | 8 | Feature fix: scan the opening block, not just line one | unchanged | **7 of 7** |
 
-The last column counts how many of the 7 documents in the
-[stress packet](scripts/generate_stress_packet.py) were split at **exactly** the right pages —
-one page early or late does not count. It is a harsher measure than page grouping, and the one
-that decides whether you actually get the right PDF out.
+The last column is the stress packet described above: how many of its 7 documents came out split at
+**exactly** the right pages, with one page early or late not counting. It is harsher than page
+grouping, and it is what decides whether you get the right PDF out.
 
-Step 8 shows why both columns are needed. It moved the corpus metric not at all — every TABME++
-page is a single line of text, so a line-based feature cannot fire there — while taking a real
-13-page PDF from 5 correct documents to 7. That gap is a train/serve mismatch: seven of the
-twenty-one features see whole-page text during training and real line structure in production.
+Step 8 is why both columns are there. It moved the corpus metric by **zero** — every TABME++ page
+is a single line of text, so a line-based feature cannot fire there — while taking a real 13-page
+PDF from 5 correct documents to 7. Measured on the corpus alone it looks like nothing happened.
+That gap is a train/serve mismatch: seven of the twenty-one features see whole-page text during
+training and real line structure in production.
 
 The single biggest jump was not a better model. It was noticing that every benchmark was Dutch
 while every document being processed was English — the vocabulary recognised **27.6%** of the
