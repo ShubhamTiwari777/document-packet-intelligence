@@ -128,18 +128,36 @@ this a ceiling and blamed the features. That conclusion was wrong.
 
 **Phase 2 — measured on English held-out data.** Baseline to beat: **0.746**.
 
-| # | What changed | Page grouping |
-|---|---|---|
-| — | *The Phase 1 model, pointed at English documents* | *0.518* |
-| 6 | **Retrain on English data** — the corpora had been Dutch all along | 0.947 |
-| 7 | **Decision rule chosen on validation, confirmed once on test** | **0.968** |
-| 8 | Feature fix: scan the opening block, not just line one | *unchanged on corpus; 5/7 → 7/7 on a hand-built packet* |
+| # | What changed | Page grouping | Stress packet |
+|---|---|---|---|
+| — | *The Phase 1 model, pointed at English documents* | *0.518* | 2 of 7 |
+| 6 | **Retrain on English data** — the corpora had been Dutch all along | 0.947 | 4 of 7 |
+| 7 | **Decision rule chosen on validation, confirmed once on test** | **0.968** | 5 of 7 |
+| 8 | Feature fix: scan the opening block, not just line one | unchanged | **7 of 7** |
+
+The last column counts how many of the 7 documents in the
+[stress packet](scripts/generate_stress_packet.py) were split at **exactly** the right pages —
+one page early or late does not count. It is a harsher measure than page grouping, and the one
+that decides whether you actually get the right PDF out.
+
+Step 8 shows why both columns are needed. It moved the corpus metric not at all — every TABME++
+page is a single line of text, so a line-based feature cannot fire there — while taking a real
+13-page PDF from 5 correct documents to 7. That gap is a train/serve mismatch: seven of the
+twenty-one features see whole-page text during training and real line structure in production.
 
 The single biggest jump was not a better model. It was noticing that every benchmark was Dutch
 while every document being processed was English — the vocabulary recognised **27.6%** of the
 tokens it was scoring. Retraining the *same architecture* on English data moved grouping from
 0.518 to 0.947 and cleared the baseline by **+0.188**, after six attempts at better features and
 better learners had not.
+
+**Why train on Dutch at all?** OpenPSS was the labelled page-stream-segmentation corpus available —
+there are very few — and the benchmark it was evaluated against came from the same source. Training
+and evaluation agreed, so the model was always scored in the language it was trained in, where a
+language mismatch is invisible by construction. The error was not training on Dutch; it was never
+holding out an evaluation set in the language the system would actually process. Nothing was
+discarded when it surfaced: the features, calibration, decision-rule machinery and evaluation
+protocol all carried over unchanged, and the Dutch model still ships for Dutch documents.
 
 ### What was tried and did not work
 
