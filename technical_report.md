@@ -566,22 +566,75 @@ F1 there is dominated by the base rate. Grouping accuracy separates the same two
 
 ### 5.2 Stage 1 — document classification
 
-RVL-CDIP held-out, 2,222 documents, 16 classes.
+RVL-CDIP, split three ways from 27,235 pages: 16,341 train, 5,447 validation, 5,447 test. Variants
+were compared on validation only, macro-F1 was fixed as the selection metric before any model was
+fitted, and test was scored once (`scripts/train_layout_classifier.py`).
 
-| Metric | Value |
+| Variant | Test accuracy | Test macro-F1 |
+|---|---|---|
+| word 1-2 grams *(the previous shipped configuration)* | 0.8153 | 0.7932 |
+| **word + character 3-5 grams** *(shipped)* | **0.8388** | **0.8198** |
+| word + char + 21 page-geometry features | 0.8421 | 0.8179 |
+
+Two changes were tested together and are separable.
+
+**Character n-grams are the real gain: +0.0235 accuracy, +0.0266 macro-F1.** The corpus is OCR of
+scanned pages, so a word-level vocabulary fails in exactly the way that matters — `Invoice` misread
+as `lnvoice` is simply out of vocabulary and the evidence it carried is lost, while most of its
+character trigrams survive. The two views cover different failure modes, so both are kept.
+
+**Data volume contributed independently.** The same word-only configuration scores 0.7844 accuracy
+on 5,449 pages and 0.8153 on 27,235 — roughly +0.031 for nothing but a longer download. This is the
+third time in this project that more data moved a number further than a better model did.
+
+#### The geometry features: selected on validation, and they did not transfer
+
+The third variant adds 21 document-shape descriptors (`src/features/document_shape.py`): column
+count, left-margin regularity, ink density by page third, where the largest text sits. The
+hypothesis was that an invoice, a memo and a scientific paper differ in shape long before they
+differ in vocabulary, and that this should help precisely where OCR text is least reliable.
+
+On validation it led macro-F1 by **+0.0155** and was duly selected. On test it **lost** by 0.0019.
+
+| McNemar, word+char vs word+char+shape, on 5,447 test documents | |
 |---|---|
-| Accuracy | 0.807 |
-| Macro F1 | 0.786 |
-| invoice F1 | 0.885 |
-| resume F1 | 0.952 |
-| Model size | 3.3 MB |
+| word+char right, shape wrong | 153 |
+| shape right, word+char wrong | 171 |
+| χ² = 0.892, **p = 0.345** | not significant |
 
-The two classes most relevant to document packets score highest. A feature-size sweep found
-20k features **beat** 200k (0.807 vs 0.803 accuracy, 0.786 vs 0.775 macro-F1) at **one tenth the
-size** — 3.3 MB vs 33.3 MB. The larger space was mostly noisy OCR tokens.
+The two models are statistically indistinguishable; the apparent validation gain was about
+eighteen documents of noise. **The geometry features are therefore not shipped.** This is the third
+validation winner in this project to fail on held-out test, after an OpenPSS boundary threshold
+(+0.068 → −0.027) and a `ceil(Σp)` decision rule (+0.0165 → +0.0025), and the reason the
+three-way split was used here at all.
+
+The finding is narrower than "layout does not help". It helps the classes text cannot reach —
+`handwritten` gains **+0.120 F1** over the word-only baseline, the largest per-class movement
+anywhere in this table, because handwriting produces garbage OCR and geometry is the only signal
+left. That is not enough to move the aggregate, and an aggregate is what a shipped model is chosen
+on.
+
+#### What still fails
+
+| Class | F1 | Precision | Train examples |
+|---|---|---|---|
+| `file_folder` | **0.418** | 0.311 | 174 |
+| `scientific_report` | 0.701 | 0.692 | ~1,700 |
+| `presentation` | 0.743 | 0.721 | ~1,600 |
+| … | | | |
+| `resume` | 0.958 | 0.956 | ~1,800 |
+
+`file_folder` is the outlier and is not a text-classification problem at all: in RVL-CDIP those
+images are photographs of folder tabs carrying almost no text. Precision 0.311 means two of every
+three `file_folder` predictions are wrong, so it also acts as a sink that steals predictions from
+real classes. Removing it from the taxonomy would raise macro-F1 by roughly 0.025 on arithmetic
+alone; it is retained here only because the taxonomy is inherited from RVL-CDIP rather than chosen.
 
 `passport` and `bank_statement` are lexicon-scored and have **no held-out measurement** — no
-labelled corpus for them was available. This is the largest unmeasured area in the system.
+labelled corpus for them was available. This remains the largest unmeasured area in the system.
+
+The model is 7.8 MB against the previous 3.3 MB, because the character view carries its own 30k
+feature vocabulary. Runtime footprint moves from 5.8 MB to 10.5 MB, still CPU-only.
 
 ### 5.3 Stage 2 — structure
 
@@ -706,7 +759,7 @@ established -- it cannot be reconstructed after generation.
 
 | Resource | Value |
 |---|---|
-| Committed model footprint | **5.8 MB** total |
+| Committed model footprint | **10.5 MB** total |
 | Process RSS (full pipeline) | 153 MB |
 | Index peak RAM — SVD | 112 MB |
 | Index peak RAM — bge | 13.6 MB |
@@ -860,7 +913,7 @@ the target has them common (72%), inverting which class is informative. Secondar
 `passport`/`bank_statement` have no held-out measurement, and the SVD encoder misses low-overlap
 paraphrases.
 
-**6. Resource & performance.** See §5.5 — 5.8 MB of models, 153 MB RSS, CPU-only. To shrink
+**6. Resource & performance.** See §5.5 — 10.5 MB of models, 153 MB RSS, CPU-only. To shrink
 further: drop SVD for BM25 + reranker (1 s index, 9 MB peak). To scale up: the dense scan is O(N)
 per query, fine at 515 chunks and not at 10⁶ — it needs an ANN index.
 

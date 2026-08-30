@@ -74,14 +74,14 @@ invoice numbers) and meaning-based matching (good for questions worded different
 document). It merges both result lists, re-ranks them, and returns the best evidence with citations.
 
 Everything runs on a normal CPU. No GPU, no paid API, no internet needed once set up. All the
-trained models together are only **5.8 MB**.
+trained models together are only **10.5 MB**.
 
 ## Results, and how to read them
 
 | What | Measured on | Result |
 |---|---|---|
 | Splitting documents | TABME++ held-out **test**, 501 English packets | page grouping accuracy **0.97** |
-| Identifying document type | 2,222 held-out documents, 16 types | **80.7%** accuracy |
+| Identifying document type | 5,447 held-out documents, 16 types | **83.9%** accuracy |
 | Finding the right evidence | 35 questions, 515 text chunks | correct answer ranked #1 **77%** of the time |
 | Structure extraction | annotated test files | headings, tables, lists all correct |
 
@@ -161,7 +161,7 @@ progression below is measured on it because it is the only fixture with room to 
 Four packets is a small sample, and all four are **synthetically generated** — clean digital text,
 tidy `Page N of M` footers, no OCR noise or skew. They are an end-to-end correctness check, not the
 evidence base: the headline accuracy, precision and recall come from the held-out corpora above,
-scored on 501 packets and 2,222 documents. Real scanned documents remain untested.
+scored on 501 packets and 5,447 documents. Real scanned documents remain untested.
 
 ## How the splitter got from 0.22 to 0.97
 

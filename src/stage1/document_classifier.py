@@ -118,18 +118,37 @@ class TfidfDocumentClassifier:
     def __init__(self, pipeline: Any): self.pipeline = pipeline
 
     @classmethod
+    def build_vectorizer(cls, word_features: int = 20_000, char_features: int = 30_000):
+        """Word n-grams unioned with character n-grams.
+
+        The training corpus is OCR of scanned documents, so a word-level vocabulary is brittle in
+        exactly the way that matters: `Invoice` read as `lnvoice` and `Total` as `TotaI` are simply
+        out of vocabulary, and the evidence they carried is lost. Character n-grams degrade instead
+        of failing -- most of the substrings survive a one-character misread -- so the two views
+        cover different failure modes and are used together.
+        """
+        from sklearn.feature_extraction.text import TfidfVectorizer  # type: ignore
+        from sklearn.pipeline import FeatureUnion  # type: ignore
+        return FeatureUnion([
+            ("word", TfidfVectorizer(ngram_range=(1, 2), min_df=2,
+                                     max_features=word_features, sublinear_tf=True)),
+            ("char", TfidfVectorizer(analyzer="char_wb", ngram_range=(3, 5), min_df=3,
+                                     max_features=char_features, sublinear_tf=True)),
+        ])
+
+    @classmethod
     def train(cls, texts: list[str], labels: list[str], seed: int = 42) -> "TfidfDocumentClassifier":
         try:
-            from sklearn.feature_extraction.text import TfidfVectorizer  # type: ignore
             from sklearn.linear_model import LogisticRegression  # type: ignore
             from sklearn.pipeline import Pipeline  # type: ignore
         except ImportError as exc:
             raise RuntimeError("scikit-learn is required for the TF-IDF classifier.") from exc
         if len(texts) != len(labels) or len(set(labels)) < 2: raise ValueError("Training needs aligned text and at least two classes.")
-        # 20k features measured marginally *better* than 200k (acc 0.807 vs 0.803, macro-F1 0.786
-        # vs 0.775) at a tenth of the on-disk size -- the larger space mostly added noisy OCR
-        # tokens. Keeping the small model per the resource-efficiency criterion.
-        pipeline = Pipeline([("tfidf", TfidfVectorizer(ngram_range=(1, 2), min_df=2, max_features=20_000, sublinear_tf=True)), ("classifier", LogisticRegression(max_iter=2000, class_weight="balanced", random_state=seed))])
+        # 20k word features measured marginally *better* than 200k (acc 0.807 vs 0.803, macro-F1
+        # 0.786 vs 0.775) at a tenth of the on-disk size -- the larger space mostly added noisy OCR
+        # tokens. The character view is added on top rather than instead: see build_vectorizer.
+        pipeline = Pipeline([("features", cls.build_vectorizer()),
+                             ("classifier", LogisticRegression(max_iter=2000, class_weight="balanced", random_state=seed))])
         pipeline.fit(texts, labels)
         return cls(pipeline)
 
@@ -157,6 +176,88 @@ class TfidfDocumentClassifier:
         with Path(path).open("rb") as handle: return cls(pickle.load(handle))
 
 
+class LayoutTextDocumentClassifier:
+    """Document type from what the page says *and* what it looks like.
+
+    Text alone is a weak signal on scanned documents: the corpus is OCR output, and the classes
+    that fail worst are the ones distinguished by shape rather than vocabulary -- a presentation, a
+    form and a scientific report share most of their words but almost none of their geometry.
+    The layout half is 21 geometry-only descriptors (see features/document_shape.py), scaled and
+    concatenated onto the sparse text matrix.
+
+    Layout is required rather than optional at inference. Passing `None` and quietly substituting
+    zeros would reproduce the exact failure this project already paid for once, where a model was
+    trained on features that meant something different in production.
+    """
+
+    def __init__(self, vectorizer: Any, scaler: Any, classifier: Any):
+        self.vectorizer, self.scaler, self.classifier = vectorizer, scaler, classifier
+
+    @classmethod
+    def train(cls, texts: list[str], layouts: list[list[float]], labels: list[str],
+              seed: int = 42) -> "LayoutTextDocumentClassifier":
+        try:
+            from sklearn.linear_model import LogisticRegression  # type: ignore
+            from sklearn.preprocessing import StandardScaler  # type: ignore
+        except ImportError as exc:
+            raise RuntimeError("scikit-learn is required for the layout classifier.") from exc
+        if not (len(texts) == len(layouts) == len(labels)):
+            raise ValueError("Texts, layout vectors and labels must be aligned.")
+        if len(set(labels)) < 2:
+            raise ValueError("Training needs at least two classes.")
+        vectorizer = TfidfDocumentClassifier.build_vectorizer()
+        text_matrix = vectorizer.fit_transform(texts)
+        scaler = StandardScaler()
+        layout_matrix = scaler.fit_transform(layouts)
+        classifier = LogisticRegression(max_iter=2000, class_weight="balanced", random_state=seed)
+        classifier.fit(cls._combine(text_matrix, layout_matrix), labels)
+        return cls(vectorizer, scaler, classifier)
+
+    @staticmethod
+    def _combine(text_matrix: Any, layout_matrix: Any) -> Any:
+        from scipy.sparse import csr_matrix, hstack  # type: ignore
+        return hstack([text_matrix, csr_matrix(layout_matrix)]).tocsr()
+
+    @property
+    def labels(self) -> list[str]:
+        return [str(label) for label in self.classifier.classes_]
+
+    def _matrix(self, texts: list[str], layouts: list[list[float]] | None) -> Any:
+        if layouts is None:
+            raise ValueError(
+                "This model was trained with layout features; predicting without them would score "
+                "documents on a feature space the model never saw. Pass layout vectors from "
+                "features.document_shape.document_shape_features.")
+        if len(texts) != len(layouts):
+            raise ValueError("Texts and layout vectors must be aligned.")
+        return self._combine(self.vectorizer.transform(texts), self.scaler.transform(layouts))
+
+    def predict_distribution(self, texts: list[str], layouts: list[list[float]] | None = None) -> list[dict[str, float]]:
+        classes = self.labels
+        rows = self.classifier.predict_proba(self._matrix(texts, layouts))
+        return [dict(zip(classes, (float(value) for value in row))) for row in rows]
+
+    def predict(self, texts: list[str], layouts: list[list[float]] | None = None) -> list[ClassPrediction]:
+        results: list[ClassPrediction] = []
+        for distribution in self.predict_distribution(texts, layouts):
+            label, probability = max(distribution.items(), key=lambda item: item[1])
+            results.append(ClassPrediction(label, float(probability), "trained_layout",
+                                           _top_alternatives(distribution)))
+        return results
+
+    def save(self, path: str | Path) -> None:
+        Path(path).parent.mkdir(parents=True, exist_ok=True)
+        with Path(path).open("wb") as handle:
+            pickle.dump({"kind": "layout_text", "vectorizer": self.vectorizer,
+                         "scaler": self.scaler, "classifier": self.classifier}, handle)
+
+    @classmethod
+    def load(cls, path: str | Path) -> "LayoutTextDocumentClassifier":
+        with Path(path).open("rb") as handle:
+            payload = pickle.load(handle)
+        return cls(payload["vectorizer"], payload["scaler"], payload["classifier"])
+
+
 class HybridDocumentClassifier:
     """Trained taxonomy + lexicon extension, with explicit abstention below `min_confidence`."""
 
@@ -168,9 +269,19 @@ class HybridDocumentClassifier:
         # type override the trained model outright, so it should require solid evidence.
         self.extension_min_confidence = extension_min_confidence if extension_min_confidence is not None else max(0.5, min_confidence)
 
-    def predict(self, texts: list[str]) -> list[ClassPrediction]:
+    def predict(self, texts: list[str], layouts: list[list[float]] | None = None) -> list[ClassPrediction]:
+        """`layouts` is forwarded only to a model that was trained with it.
+
+        Text-only models take no layout argument, so passing one is harmless; a layout model
+        raises rather than scoring against zeros if the caller omits it.
+        """
         lexicon_results = self.lexicon.predict(texts)
-        trained_results = self.trained.predict(texts) if self.trained else [None] * len(texts)
+        if self.trained is None:
+            trained_results: list[Any] = [None] * len(texts)
+        elif isinstance(self.trained, LayoutTextDocumentClassifier):
+            trained_results = self.trained.predict(texts, layouts)
+        else:
+            trained_results = self.trained.predict(texts)
         results: list[ClassPrediction] = []
         for lexical, trained in zip(lexicon_results, trained_results):
             results.append(self._reconcile(lexical, trained))
@@ -246,7 +357,17 @@ def build_document_classifier(model_path: str | Path | None, min_confidence: flo
     if str(path).lower().endswith(".json"):
         status.update({"active": "embedding_centroid", "trained_model_loaded": True, "model_path": str(path)})
         return EmbeddingCentroidDocumentClassifier.load(path), status
-    trained = TfidfDocumentClassifier.load(path)
-    status.update({"active": "hybrid_tfidf_lexicon", "trained_model_loaded": True, "model_path": str(path),
+    # A layout model is a dict payload rather than a bare pipeline; sniff rather than trusting the
+    # declared kind, so a config that names the wrong one cannot silently load a mismatched model.
+    with path.open("rb") as handle:
+        payload = pickle.load(handle)
+    if isinstance(payload, dict) and payload.get("kind") == "layout_text":
+        trained: Any = LayoutTextDocumentClassifier(payload["vectorizer"], payload["scaler"], payload["classifier"])
+        active, needs_layout = "hybrid_layout_text_lexicon", True
+    else:
+        trained = TfidfDocumentClassifier(payload)
+        active, needs_layout = "hybrid_tfidf_lexicon", False
+    status.update({"active": active, "trained_model_loaded": True, "model_path": str(path),
+                   "requires_layout": needs_layout,
                    "trained_labels": trained.labels, "extension_labels": sorted(EXTENSION_CLASSES)})
     return HybridDocumentClassifier(trained, min_confidence=min_confidence), status

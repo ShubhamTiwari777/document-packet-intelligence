@@ -52,7 +52,17 @@ boundary:
 classification:
   model_kind: tfidf_logistic_regression
   min_confidence: 0.35
-  model_path: models/document_classifier/tfidf_lr.pkl
+  # Word 1-2 grams unioned with character 3-5 grams, trained on 21,788 RVL-CDIP documents.
+  # The corpus is OCR of scanned pages, so a word-only vocabulary fails exactly where it matters:
+  # "Invoice" misread as "lnvoice" is out of vocabulary and its evidence is lost, while most
+  # character n-grams survive a one-character error.
+  # Selected on validation, scored once on a held-out test split of 5,447 documents:
+  #   word only              accuracy 0.8153  macro-F1 0.7932
+  #   word + char (shipped)  accuracy 0.8388  macro-F1 0.8198
+  # A third variant adding 21 page-geometry features led validation by +0.0155 macro-F1 and did
+  # not transfer: on test it lost by 0.0019, McNemar p=0.345 over 5,447 documents. It is not
+  # shipped. See outputs/benchmarks/classification_ablation.json.
+  model_path: models/document_classifier/tfidf_char_lr.pkl
 chunking:
   max_tokens: 256
   overlap_tokens: 32

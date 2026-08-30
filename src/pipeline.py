@@ -9,6 +9,7 @@ import json
 from src.config import AppConfig
 from src.domain import Chunk, dump_json
 from src.features.extractor import packet_feature_rows, save_feature_cache
+from src.features.document_shape import document_shape_features, shape_vector
 from src.features.text_features import TfidfTextEmbedder
 from src.ingestion.pdf_parser import PDFParser
 from src.stage1.boundary_classifier import WeightedFusionBoundary, SklearnBoundaryModel
@@ -42,7 +43,12 @@ class DocumentPipeline:
         if classifier_status.get("warning"):
             print(f"[warning] {classifier_status['warning']}")
         by_page = {page.page_number: page for page in pages}
-        predictions = classifier.predict(["\n".join(by_page[number].text for number in group.pages) for group in groups])
+        # Layout descriptors come from the same pages as the text, so a layout-aware classifier
+        # sees geometry built by the same code path at training and inference.
+        group_texts = ["\n".join(by_page[number].text for number in group.pages) for group in groups]
+        group_layouts = [shape_vector(document_shape_features([by_page[number] for number in group.pages]))
+                         for group in groups]
+        predictions = classifier.predict(group_texts, group_layouts)
         for group, prediction in zip(groups, predictions):
             group.doc_type, group.classification_confidence = prediction.label, prediction.confidence
             group.classification_source, group.classification_alternatives = prediction.source, prediction.alternatives

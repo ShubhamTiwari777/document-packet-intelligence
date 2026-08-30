@@ -1,0 +1,337 @@
+{
+  "pages_manifest": "data/raw/rvlcdip/pages_boxes.json",
+  "usable_pages": 5449,
+  "train": 4359,
+  "holdout": 1090,
+  "layout_features": [
+    "block_count",
+    "text_coverage",
+    "mean_block_area",
+    "max_block_area",
+    "mean_block_width",
+    "block_width_spread",
+    "left_margin_mean",
+    "left_margin_spread",
+    "column_estimate",
+    "density_top",
+    "density_middle",
+    "density_bottom",
+    "font_mean",
+    "font_spread",
+    "font_max_ratio",
+    "largest_font_position",
+    "mean_words_per_block",
+    "short_block_ratio",
+    "gap_mean",
+    "gap_spread",
+    "aspect_ratio"
+  ],
+  "results": {
+    "word only (baseline)": {
+      "accuracy": 0.7844,
+      "macro_f1": 0.7362,
+      "per_class": {
+        "advertisement": {
+          "precision": 0.7714,
+          "recall": 0.7013,
+          "f1": 0.7347,
+          "support": 77
+        },
+        "budget": {
+          "precision": 0.7471,
+          "recall": 0.8333,
+          "f1": 0.7879,
+          "support": 78
+        },
+        "email": {
+          "precision": 0.9848,
+          "recall": 0.8442,
+          "f1": 0.9091,
+          "support": 77
+        },
+        "file_folder": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 7
+        },
+        "form": {
+          "precision": 0.8545,
+          "recall": 0.6351,
+          "f1": 0.7287,
+          "support": 74
+        },
+        "handwritten": {
+          "precision": 0.5714,
+          "recall": 0.9315,
+          "f1": 0.7083,
+          "support": 73
+        },
+        "invoice": {
+          "precision": 0.8116,
+          "recall": 0.8615,
+          "f1": 0.8358,
+          "support": 65
+        },
+        "letter": {
+          "precision": 0.746,
+          "recall": 0.7015,
+          "f1": 0.7231,
+          "support": 67
+        },
+        "memo": {
+          "precision": 0.7647,
+          "recall": 0.8,
+          "f1": 0.782,
+          "support": 65
+        },
+        "news_article": {
+          "precision": 0.6933,
+          "recall": 0.7324,
+          "f1": 0.7123,
+          "support": 71
+        },
+        "presentation": {
+          "precision": 0.6825,
+          "recall": 0.6418,
+          "f1": 0.6615,
+          "support": 67
+        },
+        "questionnaire": {
+          "precision": 0.9167,
+          "recall": 0.8209,
+          "f1": 0.8661,
+          "support": 67
+        },
+        "resume": {
+          "precision": 0.9692,
+          "recall": 0.9265,
+          "f1": 0.9474,
+          "support": 68
+        },
+        "scientific_publication": {
+          "precision": 0.8111,
+          "recall": 0.8902,
+          "f1": 0.8488,
+          "support": 82
+        },
+        "scientific_report": {
+          "precision": 0.6552,
+          "recall": 0.5938,
+          "f1": 0.623,
+          "support": 64
+        },
+        "specification": {
+          "precision": 0.9506,
+          "recall": 0.875,
+          "f1": 0.9112,
+          "support": 88
+        }
+      }
+    },
+    "word + char": {
+      "accuracy": 0.8239,
+      "macro_f1": 0.7732,
+      "per_class": {
+        "advertisement": {
+          "precision": 0.8333,
+          "recall": 0.7792,
+          "f1": 0.8054,
+          "support": 77
+        },
+        "budget": {
+          "precision": 0.8125,
+          "recall": 0.8333,
+          "f1": 0.8228,
+          "support": 78
+        },
+        "email": {
+          "precision": 0.9851,
+          "recall": 0.8571,
+          "f1": 0.9167,
+          "support": 77
+        },
+        "file_folder": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 7
+        },
+        "form": {
+          "precision": 0.8065,
+          "recall": 0.6757,
+          "f1": 0.7353,
+          "support": 74
+        },
+        "handwritten": {
+          "precision": 0.6635,
+          "recall": 0.9452,
+          "f1": 0.7797,
+          "support": 73
+        },
+        "invoice": {
+          "precision": 0.8261,
+          "recall": 0.8769,
+          "f1": 0.8507,
+          "support": 65
+        },
+        "letter": {
+          "precision": 0.7966,
+          "recall": 0.7015,
+          "f1": 0.746,
+          "support": 67
+        },
+        "memo": {
+          "precision": 0.8615,
+          "recall": 0.8615,
+          "f1": 0.8615,
+          "support": 65
+        },
+        "news_article": {
+          "precision": 0.7639,
+          "recall": 0.7746,
+          "f1": 0.7692,
+          "support": 71
+        },
+        "presentation": {
+          "precision": 0.6944,
+          "recall": 0.7463,
+          "f1": 0.7194,
+          "support": 67
+        },
+        "questionnaire": {
+          "precision": 0.9355,
+          "recall": 0.8657,
+          "f1": 0.8992,
+          "support": 67
+        },
+        "resume": {
+          "precision": 0.9706,
+          "recall": 0.9706,
+          "f1": 0.9706,
+          "support": 68
+        },
+        "scientific_publication": {
+          "precision": 0.8721,
+          "recall": 0.9146,
+          "f1": 0.8929,
+          "support": 82
+        },
+        "scientific_report": {
+          "precision": 0.6471,
+          "recall": 0.6875,
+          "f1": 0.6667,
+          "support": 64
+        },
+        "specification": {
+          "precision": 0.9639,
+          "recall": 0.9091,
+          "f1": 0.9357,
+          "support": 88
+        }
+      }
+    },
+    "word + char + layout": {
+      "accuracy": 0.8073,
+      "macro_f1": 0.7789,
+      "per_class": {
+        "advertisement": {
+          "precision": 0.759,
+          "recall": 0.8182,
+          "f1": 0.7875,
+          "support": 77
+        },
+        "budget": {
+          "precision": 0.8267,
+          "recall": 0.7949,
+          "f1": 0.8105,
+          "support": 78
+        },
+        "email": {
+          "precision": 0.8947,
+          "recall": 0.8831,
+          "f1": 0.8889,
+          "support": 77
+        },
+        "file_folder": {
+          "precision": 0.25,
+          "recall": 0.4286,
+          "f1": 0.3158,
+          "support": 7
+        },
+        "form": {
+          "precision": 0.8361,
+          "recall": 0.6892,
+          "f1": 0.7556,
+          "support": 74
+        },
+        "handwritten": {
+          "precision": 0.8148,
+          "recall": 0.9041,
+          "f1": 0.8571,
+          "support": 73
+        },
+        "invoice": {
+          "precision": 0.7778,
+          "recall": 0.8615,
+          "f1": 0.8175,
+          "support": 65
+        },
+        "letter": {
+          "precision": 0.7302,
+          "recall": 0.6866,
+          "f1": 0.7077,
+          "support": 67
+        },
+        "memo": {
+          "precision": 0.7606,
+          "recall": 0.8308,
+          "f1": 0.7941,
+          "support": 65
+        },
+        "news_article": {
+          "precision": 0.7465,
+          "recall": 0.7465,
+          "f1": 0.7465,
+          "support": 71
+        },
+        "presentation": {
+          "precision": 0.6769,
+          "recall": 0.6567,
+          "f1": 0.6667,
+          "support": 67
+        },
+        "questionnaire": {
+          "precision": 0.9828,
+          "recall": 0.8507,
+          "f1": 0.912,
+          "support": 67
+        },
+        "resume": {
+          "precision": 0.9552,
+          "recall": 0.9412,
+          "f1": 0.9481,
+          "support": 68
+        },
+        "scientific_publication": {
+          "precision": 0.8684,
+          "recall": 0.8049,
+          "f1": 0.8354,
+          "support": 82
+        },
+        "scientific_report": {
+          "precision": 0.6375,
+          "recall": 0.7969,
+          "f1": 0.7083,
+          "support": 64
+        },
+        "specification": {
+          "precision": 0.962,
+          "recall": 0.8636,
+          "f1": 0.9102,
+          "support": 88
+        }
+      }
+    }
+  }
+}
