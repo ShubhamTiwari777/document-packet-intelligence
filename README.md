@@ -18,28 +18,35 @@ deliberate requirement, not a limitation.
 
 ## See it work
 
+The quickest way is the browser interface:
+
 ```bash
 pip install -r requirements.txt
-python scripts/generate_sample_packet.py
-python scripts/run_pipeline.py --input data/samples/sample_packet.pdf --output outputs/sample
+uvicorn src.api:create_app --factory --port 8000
 ```
 
-The sample file is a 9-page PDF holding four documents. The system correctly splits it into:
+Open <http://localhost:8000>, then click **"Try the bundled 9-page sample"** — or drag in your own
+PDF. You get back:
 
-| Pages | Detected as |
-|---|---|
-| 1–3 | invoice |
-| 4–5 | resume |
-| 6–7 | passport |
-| 8–9 | bank statement |
+- each document as **its own downloadable PDF**, plus a zip of the whole set
+- what type each one is, and how confident the model is
+- a strip showing the score at every page seam, so you can see *why* it split where it did
+- a search box that answers questions with the document and page the answer came from
 
-Then ask it something:
+The bundled sample is a 9-page PDF holding four documents, and the system splits it into invoice
+(1–3), resume (4–5), passport (6–7) and bank statement (8–9).
+
+If you supply ground truth — a JSON list of the real documents — it also reports **measured
+accuracy, precision, recall and F1** for that packet. Without it, the interface says so plainly
+rather than presenting a confidence score as if it were correctness.
+
+Prefer the command line?
 
 ```bash
+python scripts/generate_sample_packet.py
+python scripts/run_pipeline.py --input data/samples/sample_packet.pdf --output outputs/sample
 python scripts/run_pipeline.py --query "What is the closing balance?" --processed-dir outputs/sample --top-k 5
 ```
-
-It answers with the evidence, the document, the page, and a confidence score.
 
 ## How it works, in plain terms
 
@@ -73,23 +80,29 @@ trained models together are only **5.8 MB**.
 
 | What | Measured on | Result |
 |---|---|---|
-| Splitting documents | TABME++ held-out, 510 English packets | page grouping accuracy **0.95** |
+| Splitting documents | TABME++ held-out **test**, 501 English packets | page grouping accuracy **0.97** |
 | Identifying document type | 2,222 held-out documents, 16 types | **80.7%** accuracy |
 | Finding the right evidence | 35 questions, 515 text chunks | correct answer ranked #1 **77%** of the time |
 | Structure extraction | annotated test files | headings, tables, lists all correct |
 
 **The splitter is language-specific, and that matters more here than any other single fact.**
-The shipped model is trained on English. On 510 held-out English packets it scores 0.947 page
-grouping and beats the lazy *"every page is its own document"* baseline by **+0.188** — the first
-result in this project to clear that baseline by a real margin.
+The shipped model is trained on English. On 501 held-out English packets it scores **0.968** page
+grouping and beats the lazy *"every page is its own document"* baseline by **+0.222** — the first
+result in this project to clear that baseline by a margin that is not arguable.
 
 Point the same model at Dutch and it falls to 0.606, because its vocabulary recognises barely a
 quarter of the words. A Dutch-trained model is included: set `boundary.model_path` to
-`models/boundary_shortpackets` and it scores **0.761** on the Dutch OpenPSS set, where the English
-model gets 0.606. Neither is better in general — the choice is a language choice.
+`models/boundary_shortpackets` and `boundary.decision` to `expected_count`, and it scores **0.761**
+on the Dutch OpenPSS set where the English model gets 0.606. Neither is better in general — the
+choice is a language choice.
 
-Full analysis, including the six experiments that failed first, is in section 5.1 of the technical
-report.
+Every number above was selected on a validation split and then measured **once** on a held-out test
+split. That protocol earned its keep twice: two rules that looked like improvements on validation
+did not survive the test set, and both are written up in the report rather than quietly dropped.
+
+Full analysis — including the six experiments that failed first, and the discovery that the earlier
+performance ceiling was a language artefact rather than a real limit — is in section 5.1 of the
+technical report.
 
 Full details: **[technical_report.pdf](technical_report.pdf)** ·
 Diagram: **[docs/architecture.pdf](docs/architecture.pdf)**
@@ -99,6 +112,25 @@ Diagram: **[docs/architecture.pdf](docs/architecture.pdf)**
 ```bash
 uvicorn src.api:create_app --factory --host 0.0.0.0 --port 8000
 ```
+
+The same command serves both the browser interface at `/` and the API. The interface is plain
+HTML, CSS and JavaScript with no build step — nothing to install beyond `requirements.txt`.
+
+For the UI and for any client that should not be handed filesystem paths:
+
+| Endpoint | What it does |
+|---|---|
+| `POST /api/process` | Upload a PDF (and optionally ground truth), get documents, scores and download links |
+| `POST /api/process-sample` | Run the bundled sample, scored against its shipped ground truth |
+| `GET /api/jobs/{id}/documents/{n}/pdf` | Download one split document as its own PDF |
+| `GET /api/jobs/{id}/archive` | Download every split document as a zip |
+| `POST /api/jobs/{id}/search` | Ask a question about that packet |
+| `GET /api/benchmarks` | The held-out benchmark figures the UI displays |
+
+Jobs are addressed by an opaque id and every path resolves underneath the outputs directory, so a
+client cannot walk the filesystem.
+
+The original path-based endpoints are unchanged, for scripts that already use them:
 
 | Endpoint | What it does |
 |---|---|
@@ -146,12 +178,23 @@ python scripts/train_document_classifier.py --training_json data/raw/rvlcdip/tra
 
 # Test files and benchmarks
 python scripts/generate_sample_packet.py && python scripts/generate_benchmark_report.py
+python scripts/generate_stress_packet.py          # 13 pages, 7 documents, built to be hard
 python scripts/evaluate_stage2.py --packet data/samples/benchmark_report.pdf --ground-truth data/samples/benchmark_ground_truth.json
 python scripts/evaluate_stage3.py --distractors data/raw/openpss/test_full/manifest.json --distractor-streams 2
+
+# How the decision rule was chosen, and why expected_count was not kept
+python scripts/tune_decision_rule.py --val data/raw/tabme_val/manifest.json --test data/raw/tabme_test/manifest.json
+python scripts/analyse_expected_count.py
 ```
 
 Results land in `outputs/benchmarks/`. There is also an experimental AI-based splitter
-(`scripts/train_cross_encoder.py`) that performs better but is far slower — see report section 5.1.
+(`scripts/train_cross_encoder.py`) that performs better on Dutch but is far slower — see report
+section 5.1.
+
+The stress packet is the one worth trying first. The shipped sample is scored perfectly, which
+makes it useless for telling whether a change helped; the stress packet puts an invoice next to a
+budget under the same letterhead, two one-page documents back to back, and a three-page passport
+whose pages look nothing like each other.
 
 ## Settings
 
@@ -159,7 +202,8 @@ All in [`config/default.yaml`](config/default.yaml). The ones worth knowing:
 
 | Setting | Default | What it changes |
 |---|---|---|
-| `boundary.decision` | `expected_count` | How it decides where to split. This setting works across different document types; a fixed cut-off did not |
+| `boundary.decision` | `threshold` | How it decides where to split. `threshold` uses `boundary.threshold`; `expected_count` instead splits at the *N* highest-scoring seams where *N* is the sum of the probabilities. Use `expected_count` with the Dutch model |
+| `boundary.threshold` | `0.185011` | Only used when `decision: threshold`. **Belongs to the shipped English model** — a threshold is a property of one model's scores, so retune it if you change the model |
 | `classification.min_confidence` | `0.35` | Below this, the type is reported as `unknown` instead of guessing |
 | `retrieval.encoder` | `svd` | Meaning-based search method. `transformer` is more accurate but needs ~1 GB of extra downloads |
 | `retrieval.rerank` | `true` | Re-orders results. Big accuracy gain, costs ~2 milliseconds |
@@ -172,10 +216,12 @@ Stated up front rather than buried:
 - **Documents in a language the splitter was not trained on.** The shipped model is English. On
   Dutch its recall for document boundaries collapses to 0.34, meaning it silently merges documents
   rather than splitting them. Retrain, or switch to the bundled Dutch model.
-- **Packets of mostly single-page documents.** Boundary recall is the weak side even in English
-  (0.911 on held-out data, but lower when documents are one page each), and the decision rule is
-  forced to commit to a fixed number of splits per packet, so it cannot say "I only found three
-  boundaries I trust". This is the main open problem; the report explains what would fix it.
+- **Packets of mostly single-page documents.** Two one-page documents side by side give the model
+  no continuation cue to reject, so it tends to merge them. Held-out recall is 0.991, but that is on
+  packets averaging five pages; short documents are harder.
+- **Scanned documents.** Everything measured here is digital text with clean page furniture. OCR
+  noise, skew and missing page numbers are untested, and `ingestion.enable_ocr` is off by default.
+  Do not assume the 0.968 transfers to scans.
 - **Passport and bank statement types** have no proper accuracy measurement — no public labelled
   data for them exists, so they use a keyword-based fallback with an honest confidence score.
 - **The structure tests use files I created myself**, so a perfect score there means the code handles
