@@ -107,6 +107,58 @@ technical report.
 Full details: **[technical_report.pdf](technical_report.pdf)** ·
 Diagram: **[docs/architecture.pdf](docs/architecture.pdf)**
 
+## How the splitter got from 0.22 to 0.97
+
+Eight attempts, in order. The numbers below come from two different benchmarks in two different
+languages, so **they are not one continuous series** — the honest comparison within each phase is
+against that corpus's own *"every page is its own document"* baseline, shown in each caption.
+
+**Phase 1 — measured on Dutch benchmarks.** Baseline to beat: **0.854**.
+
+| # | What changed | Page grouping |
+|---|---|---|
+| 1 | Fixed threshold, fitted on a corpus with 11% boundaries, applied where 72% are | 0.216 |
+| 2 | **Expected-count rule** — split at the *N* best seams, *N* = sum of probabilities | 0.615 |
+| 3 | **Regime-matched training** — rebuild training packets to match deployment shape | 0.701 |
+| 4 | Cross-encoder over the page seam, 1,600 training pairs | 0.636 |
+| 5 | Cross-encoder, same everything, **5.3× the data** (8,460 pairs) | 0.804 |
+
+Five attempts, real gains, and **every one still below the trivial baseline.** The report called
+this a ceiling and blamed the features. That conclusion was wrong.
+
+**Phase 2 — measured on English held-out data.** Baseline to beat: **0.746**.
+
+| # | What changed | Page grouping |
+|---|---|---|
+| — | *The Phase 1 model, pointed at English documents* | *0.518* |
+| 6 | **Retrain on English data** — the corpora had been Dutch all along | 0.947 |
+| 7 | **Decision rule chosen on validation, confirmed once on test** | **0.968** |
+| 8 | Feature fix: scan the opening block, not just line one | *unchanged on corpus; 5/7 → 7/7 on a hand-built packet* |
+
+The single biggest jump was not a better model. It was noticing that every benchmark was Dutch
+while every document being processed was English — the vocabulary recognised **27.6%** of the
+tokens it was scoring. Retraining the *same architecture* on English data moved grouping from
+0.518 to 0.947 and cleared the baseline by **+0.188**, after six attempts at better features and
+better learners had not.
+
+### What was tried and did not work
+
+Kept here because they cost real time and are the reason the shipped design looks like it does:
+
+| Attempt | Outcome |
+|---|---|
+| Pseudo-blocks reconstructed from OCR text | Worse (0.359 vs 0.377) — inferred geometry is not geometry |
+| Four gradient-boosting libraries compared | All within 0.005 — the learner was never the bottleneck |
+| Training on single-page RVL-CDIP documents | Fabricates continuations that do not exist |
+| Training on Dutch and English mixed | Worse than either alone; the larger corpus dominates |
+| **Cosine similarity alone as the splitter** | Scores at real boundaries and inside documents **overlap completely** — no threshold can separate them |
+| Hybrid decision rule (top-*N* plus an override) | Tied the simpler rule, then optimised itself into it |
+| `ceil` instead of `round` for the count estimate | Led validation by +0.0165, did not transfer (+0.0025 on test) |
+
+Two of those last three won on validation and lost on held-out test. They are listed because the
+protocol that caught them — select on validation, measure once on test — is the part of this
+project worth copying.
+
 ## Using it as a web service
 
 ```bash

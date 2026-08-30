@@ -477,6 +477,70 @@ The threshold is a property of `models/boundary_tabme`'s calibrated score distri
 general setting — the inherited 0.6334, fitted for the Dutch model, scores 0.9516 on the same data.
 Dutch deployments keep `expected_count`, which wins there and needs no tuning.
 
+#### Ninth attempt: is the count estimate itself sound, and can K be softened?
+
+`expected_count` rests on one statistical claim: for calibrated probabilities, the sum over a
+packet estimates how many boundaries it contains. That claim is testable
+(`scripts/analyse_expected_count.py`).
+
+| Corpus | ECE | mean Σp | mean true | bias | Pearson r | K exact |
+|---|---|---|---|---|---|---|
+| TABME++ test (English) | **0.025** | 2.450 | 2.565 | −0.115 | **0.900** | **76.2%** |
+| OpenPSS (Dutch) | 0.136 | 22.345 | 12.000 | **+10.345** | 0.559 | 15.7% |
+| DocSplit (Dutch) | **0.244** | 1.881 | 2.510 | −0.629 | 0.506 | 27.0% |
+
+The ordering is identical on both columns: **calibration quality is count-estimation quality.**
+Where the model is calibrated the assumption holds strongly; where it is not, Σp is wrong by ten
+boundaries per packet. Calibration is fitted on the training distribution and does not transfer to
+a corpus of different density.
+
+The two failure modes are opposite by language. On English all ten reliability bins are
+*under*-confident, so Σp under-estimates and K starves real boundaries: **46.7% of missed
+boundaries were seams the model scored ≥ 0.5**, while only 4 weak seams were forced in across 501
+packets, and the median margin between weakest-kept and strongest-dropped is a decisive +0.765. On
+OpenPSS the top bin predicts 0.949 against an observed 0.293, so Σp inflates K, **40.7% of packets
+are forced to admit a sub-0.5 seam** (134 of them, 89 wrong), and the median margin is +0.054 —
+the rule is discriminating between near-identical scores.
+
+Six soft-K variants were then simulated on validation (`scripts/simulate_soft_k.py`), each derived
+rather than tuned: under calibration the expected gain from cutting a seam is `2p − 1`, positive
+exactly when `p > 0.5`, which is the Bayes rule rather than a fitted constant.
+
+| Variant | TABME++ validation grouping |
+|---|---|
+| `expected_count` baseline | 0.9472 |
+| **`ceil(Σp)` instead of `round(Σp)`** | **0.9637** |
+| top-K, plus admit any seam `p > 0.5` | 0.9538 |
+| top-K, minus picks below `p < 0.5` | 0.9466 |
+| residual-mass top-up | 0.9547 |
+| *threshold 0.185 (reference)* | *0.9603* |
+
+`ceil` led by **+0.0165** over the baseline — the minimal correction for a measured negative bias,
+with no new parameter, and ahead of even the tuned threshold on this split. It was pre-registered
+and taken to test once (`scripts/confirm_ceil_rule.py`). **It did not transfer.**
+
+| Rule | Test grouping | vs `round` | vs shipped threshold |
+|---|---|---|---|
+| `round(Σp)` | 0.9570 | — | — |
+| `ceil(Σp)` | 0.9596 | +0.0025, CI [−0.0062, +0.0118] | −0.0087, CI [−0.0137, −0.0042] |
+| threshold 0.185 | **0.9682** | — | — |
+
+Six sevenths of the validation gain was specific to that split, and `ceil` is *significantly worse*
+than the rule already shipped. The mechanism worked exactly as designed — starved boundaries fell
+42 → 2 — but it converges on threshold behaviour by inflating K, and a threshold expresses that
+regime more directly than a count budget does.
+
+The residual-mass variant is recorded as actively unsafe: it looks fine on English (+0.0075) and
+produces **8,633 splits against 2,406** on OpenPSS at precision 0.133, because on 100-seam streams
+the remaining mass stays above 0.5 almost indefinitely. It has no stopping guarantee proportional
+to stream length.
+
+**The conclusion is not that Σp is a bad estimator.** On English it is a good one — r 0.90, exactly
+right three times in four. It is that being a good count estimator does not justify *enforcing*
+that count: K is useful information and a harmful constraint. The hybrid sweep reached the same
+verdict independently by optimising its floor to zero and its ceiling to 0.173, discarding the
+top-K component altogether.
+
 #### Summary of Stage 1 boundary detection
 
 Shipped configuration: `models/boundary_tabme` (English, TABME++) with `decision: threshold` at
