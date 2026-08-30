@@ -566,7 +566,8 @@ F1 there is dominated by the base rate. Grouping accuracy separates the same two
 
 ### 5.2 Stage 1 — document classification
 
-RVL-CDIP, split three ways from 27,235 pages: 16,341 train, 5,447 validation, 5,447 test. Variants
+RVL-CDIP, split three ways from 27,235 pages: 16,341 train, 5,447 validation, 5,447 test. The
+shipped model uses 15 of the 16 classes (see below). Variants
 were compared on validation only, macro-F1 was fixed as the selection metric before any model was
 fitted, and test was scored once (`scripts/train_layout_classifier.py`).
 
@@ -624,11 +625,32 @@ on.
 | … | | | |
 | `resume` | 0.958 | 0.956 | ~1,800 |
 
-`file_folder` is the outlier and is not a text-classification problem at all: in RVL-CDIP those
-images are photographs of folder tabs carrying almost no text. Precision 0.311 means two of every
-three `file_folder` predictions are wrong, so it also acts as a sink that steals predictions from
-real classes. Removing it from the taxonomy would raise macro-F1 by roughly 0.025 on arithmetic
-alone; it is retained here only because the taxonomy is inherited from RVL-CDIP rather than chosen.
+#### Removing `file_folder`, and measuring what that actually bought
+
+`file_folder` is not a text-classification problem at all: in RVL-CDIP those images are
+photographs of folder tabs carrying almost no text, and no user of a document packet asks whether
+something is a file folder. It is dropped, leaving a 15-class taxonomy.
+
+Dropping the worst class raises macro-F1 arithmetically whatever else happens, so that number
+alone proves nothing. The question worth measuring is whether it was also acting as a *sink*,
+absorbing predictions belonging to classes that stay. Both models were therefore scored on the
+**same** documents -- the test split with `file_folder` removed -- so the comparison isolates the
+effect on what remains (`scripts/evaluate_class_removal.py`):
+
+| On the same 5,417 test documents | Accuracy | Macro-F1 | Wrongly called `file_folder` |
+|---|---|---|---|
+| 16-class model | 0.8403 | 0.8400 | 17 |
+| **15-class model** *(shipped)* | **0.8420** | **0.8405** | **0** |
+
+**The sink was real but small: +0.0017 accuracy, +0.0005 macro-F1, seventeen documents.** No
+individual class moves by more than 0.006, which is noise. An earlier estimate in this project put
+the gain at roughly +0.025 macro-F1; that figure was arithmetically correct and analytically
+misleading, since it came entirely from removing a low score from an average rather than from any
+class improving.
+
+The change is therefore justified on product grounds, not performance grounds: a nonsense label
+was reaching 0.3% of documents and now cannot. The headline macro-F1 moving 0.8198 to 0.8405 is
+mostly that arithmetic, and is reported here as such rather than as an improvement.
 
 `passport` and `bank_statement` are lexicon-scored and have **no held-out measurement** — no
 labelled corpus for them was available. This remains the largest unmeasured area in the system.

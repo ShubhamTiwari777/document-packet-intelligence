@@ -240,12 +240,12 @@ function boundaryNote(boundary, evaluation) {
 }
 
 /* Two different scorers can produce the confidence on a card, and their numbers are NOT on the
-   same scale: the trained model spreads probability over 16 classes (chance = 0.06), while the
+   same scale: the trained model spreads probability over 15 classes (chance = 0.07), while the
    keyword lexicon knows only 4 and its score is mostly "how much evidence did I find". Showing
    both as a bare percentage invites a false comparison, so every card names its scorer. */
 const SCORERS = {
   trained: ["trained model",
-    "Probability across 16 document classes, so it is shared among all of them — 6% would be pure chance. Not comparable with a keyword score."],
+    "Probability across 15 document classes, so it is shared among all of them — 7% would be pure chance. Not comparable with a keyword score."],
   lexicon_extension: ["keyword evidence",
     "This type has no class in the trained taxonomy, so weighted identifying phrases decide it. The score reflects how much evidence was found among 4 keyword classes — a much easier field than 16."],
   lexicon_backoff: ["keyword fallback",

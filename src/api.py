@@ -48,8 +48,8 @@ BENCHMARKS: dict[str, Any] = {
     "classification": {
         "label": "Document type",
         "metrics": [
-            {"name": "Accuracy", "value": 0.839, "dataset": "5,447 held-out documents, 16 types"},
-            {"name": "Macro F1", "value": 0.820, "dataset": "5,447 held-out documents, 16 types"},
+            {"name": "Accuracy", "value": 0.842, "dataset": "5,417 held-out documents, 15 types"},
+            {"name": "Macro F1", "value": 0.841, "dataset": "5,417 held-out documents, 15 types"},
         ],
     },
     "retrieval": {

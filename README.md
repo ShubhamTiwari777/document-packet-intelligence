@@ -81,7 +81,7 @@ trained models together are only **10.5 MB**.
 | What | Measured on | Result |
 |---|---|---|
 | Splitting documents | TABME++ held-out **test**, 501 English packets | page grouping accuracy **0.97** |
-| Identifying document type | 5,447 held-out documents, 16 types | **83.9%** accuracy |
+| Identifying document type | 5,417 held-out documents, 15 types | **84.2%** accuracy |
 | Finding the right evidence | 35 questions, 515 text chunks | correct answer ranked #1 **77%** of the time |
 | Structure extraction | annotated test files | headings, tables, lists all correct |
 

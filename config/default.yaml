@@ -56,12 +56,20 @@ classification:
   # The corpus is OCR of scanned pages, so a word-only vocabulary fails exactly where it matters:
   # "Invoice" misread as "lnvoice" is out of vocabulary and its evidence is lost, while most
   # character n-grams survive a one-character error.
-  # Selected on validation, scored once on a held-out test split of 5,447 documents:
+  # Selected on validation, scored once on a held-out test split:
   #   word only              accuracy 0.8153  macro-F1 0.7932
   #   word + char (shipped)  accuracy 0.8388  macro-F1 0.8198
   # A third variant adding 21 page-geometry features led validation by +0.0155 macro-F1 and did
   # not transfer: on test it lost by 0.0019, McNemar p=0.345 over 5,447 documents. It is not
   # shipped. See outputs/benchmarks/classification_ablation.json.
+  #
+  # 15 classes, not RVL-CDIP's 16: `file_folder` is a photograph of a folder tab carrying almost
+  # no text, and no user of a document packet asks for it. Scored at F1 0.418 / precision 0.311,
+  # so two of every three predictions for it were wrong. Removing it is a taxonomy decision, and
+  # its measured effect on the classes that remain is small and honest about it: on the same 5,417
+  # test documents, accuracy 0.8403 -> 0.8420 and macro-F1 0.8400 -> 0.8405, with 17 documents no
+  # longer mislabelled. The larger headline macro-F1 (0.8198 -> 0.8405) is mostly arithmetic --
+  # the worst class left the average. See outputs/benchmarks/class_removal.json.
   model_path: models/document_classifier/tfidf_char_lr.pkl
 chunking:
   max_tokens: 256
